@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="page-login">
+    <main class="auth-card">
+      <div class="brand">
+        <div class="brand-mark">WEB2</div>
+        <p class="brand-tagline">Acesse sua conta para continuar</p>
+      </div>
+
+      <form class="form" action="principal.html" method="get">
+        <label class="field">
+          <span>Email</span>
+          <input type="email" name="email" placeholder="voce@email.com" required />
+        </label>
+
+        <label class="field">
+          <span>Senha</span>
+          <input type="password" name="senha" placeholder="Sua senha" required />
+        </label>
+
+        <label class="checkbox">
+          <input type="checkbox" name="lembrar" />
+          <span>Lembrar de mim</span>
+        </label>
+
+        <button class="btn primary" type="submit">Entrar</button>
+        <button class="btn ghost" type="button">Criar conta</button>
+      </form>
+
+      <div class="links-row">
+        <a href="principal.html">Entrar sem login</a>
+        <a href="#">Esqueci minha senha</a>
+      </div>
+    </main>
+  </body>
+</html>

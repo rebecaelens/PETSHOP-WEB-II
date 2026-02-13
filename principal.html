@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tela Principal</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="page-app">
+    <header class="topbar">
+      <button class="icon-btn" type="button" data-sidebar-toggle>
+        <span class="icon">&#9776;</span>
+      </button>
+      <div class="topbar-title">Painel Principal</div>
+      <div class="topbar-actions">
+        <a class="link" href="favoritos.html">Favoritos</a>
+        <a class="link" href="carrinho.html">Carrinho</a>
+        <a class="link" href="login.html">Sair</a>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" data-sidebar>
+        <div class="sidebar-header">Menu</div>
+        <nav class="menu">
+          <a class="menu-item" href="principal.html">Inicio</a>
+          <a class="menu-item" href="favoritos.html">Produtos favoritados</a>
+          <a class="menu-item" href="carrinho.html">Carrinho</a>
+          <a class="menu-item" href="#">Historico</a>
+          <a class="menu-item" href="#">Configuracoes</a>
+        </nav>
+      </aside>
+
+      <main class="content">
+        <section class="hero">
+          <div>
+            <h1>Bem-vindo ao painel</h1>
+            <p>Gerencie seus produtos, carrinho e favoritos em um so lugar.</p>
+          </div>
+          <button class="btn primary" type="button">Novo produto</button>
+        </section>
+
+        <section class="grid">
+          <article class="card" data-product>
+            <div class="card-title">Produto A</div>
+            <p class="card-text">Descricao rapida do item com pontos principais.</p>
+            <div class="card-actions">
+              <button class="btn ghost" type="button" data-favorito>Favoritar</button>
+              <button class="btn primary" type="button" data-carrinho>Adicionar</button>
+            </div>
+          </article>
+
+          <article class="card" data-product>
+            <div class="card-title">Produto B</div>
+            <p class="card-text">Descricao rapida do item com pontos principais.</p>
+            <div class="card-actions">
+              <button class="btn ghost" type="button" data-favorito>Favoritar</button>
+              <button class="btn primary" type="button" data-carrinho>Adicionar</button>
+            </div>
+          </article>
+
+          <article class="card" data-product>
+            <div class="card-title">Produto C</div>
+            <p class="card-text">Descricao rapida do item com pontos principais.</p>
+            <div class="card-actions">
+              <button class="btn ghost" type="button" data-favorito>Favoritar</button>
+              <button class="btn primary" type="button" data-carrinho>Adicionar</button>
+            </div>
+          </article>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/app.js"></script>
+  </body>
+</html>
