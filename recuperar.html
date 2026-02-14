@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recuperacao de Senha</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="page-login">
+    <header class="login-topbar">
+      <div class="login-brand">
+        <img class="login-logo" src="images/logomr.png" alt="MR Racoes" />
+      </div>
+      <div class="login-secure">
+        <span class="login-secure-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path
+              d="M17 9h-1V7a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zm-7-2a2 2 0 0 1 4 0v2h-4V7zm7 12H7v-8h10v8z"
+            />
+          </svg>
+        </span>
+        <span>Acesso Seguro</span>
+      </div>
+    </header>
+
+    <main class="login-main">
+      <section class="recovery-panel">
+        <div class="recovery-progress" aria-hidden="true">
+          <span class="recovery-progress-fill"></span>
+        </div>
+
+        <div class="recovery-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path
+              d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm0 2v.2l8 4.8 8-4.8V8H4zm16 8V10l-7.2 4.3a2 2 0 0 1-2.1 0L4 10v6h16z"
+            />
+          </svg>
+        </div>
+
+        <h1 class="recovery-title">Qual seu E-mail?</h1>
+        <p class="recovery-subtitle">
+          Com o email voce vai poder recuperar a sua conta.
+        </p>
+
+        <form class="recovery-form" action="inserir-codigo.html" method="get">
+          <input
+            class="login-input"
+            type="email"
+            name="email"
+            placeholder="Digite seu e-mail"
+            required
+          />
+          <button class="login-btn login-btn-muted" type="submit">Continuar</button>
+        </form>
+
+        <p class="recovery-info">
+          Enviaremos as instrucoes de recuperacao para o email informado.
+        </p>
+
+        <a class="recovery-back" href="login.html">Voltar para o login</a>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Insercao de Codigo</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="page-login">
+    <header class="login-topbar">
+      <div class="login-brand">
+        <img class="login-logo" src="images/logomr.png" alt="MR Racoes" />
+      </div>
+      <div class="login-secure">
+        <span class="login-secure-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path
+              d="M17 9h-1V7a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zm-7-2a2 2 0 0 1 4 0v2h-4V7zm7 12H7v-8h10v8z"
+            />
+          </svg>
+        </span>
+        <span>Acesso Seguro</span>
+      </div>
+    </header>
+
+    <main class="login-main">
+      <section class="code-panel">
+        <div class="recovery-progress" aria-hidden="true">
+          <span class="recovery-progress-fill recovery-progress-fill--step2"></span>
+        </div>
+
+        <div class="code-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path
+              d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm0 2v.2l8 4.8 8-4.8V8H4zm16 8V10l-7.2 4.3a2 2 0 0 1-2.1 0L4 10v6h16z"
+            />
+          </svg>
+        </div>
+
+        <h1 class="recovery-title">Codigo Enviado</h1>
+        <p class="recovery-subtitle">Digite o codigo recebido no seu e-mail.</p>
+
+        <form class="code-form" action="#" method="post" data-code-form>
+          <div class="code-inputs" aria-label="Codigo de verificacao">
+            <input
+              class="code-input"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]"
+              maxlength="1"
+              aria-label="Digito 1"
+              data-code-input
+              required
+            />
+            <input
+              class="code-input"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]"
+              maxlength="1"
+              aria-label="Digito 2"
+              data-code-input
+              required
+            />
+            <input
+              class="code-input"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]"
+              maxlength="1"
+              aria-label="Digito 3"
+              data-code-input
+              required
+            />
+            <input
+              class="code-input"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]"
+              maxlength="1"
+              aria-label="Digito 4"
+              data-code-input
+              required
+            />
+            <input
+              class="code-input"
+              type="text"
+              inputmode="numeric"
+              pattern="[0-9]"
+              maxlength="1"
+              aria-label="Digito 5"
+              data-code-input
+              required
+            />
+          </div>
+
+          <button class="login-btn login-btn-outline" type="submit">Validar</button>
+        </form>
+
+        <p class="code-error" role="alert" data-code-error>
+          Codigo incorreto. Verifique o email e tente novamente.
+        </p>
+
+        <div class="modal" data-modal aria-hidden="true">
+          <div class="modal-card" role="dialog" aria-modal="true">
+            <div class="modal-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                <path
+                  d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm0 2v.2l8 4.8 8-4.8V8H4zm16 8V10l-7.2 4.3a2 2 0 0 1-2.1 0L4 10v6h16z"
+                />
+              </svg>
+            </div>
+            <h2 class="modal-title">Codigo Enviado</h2>
+            <p class="modal-text">
+              Verifique se chegou na caixa de entrada ou caixa de spam.
+            </p>
+            <button class="modal-btn" type="button" data-modal-close>
+              Confirmar
+            </button>
+          </div>
+        </div>
+
+        <div class="modal" data-error-modal aria-hidden="true">
+          <div class="modal-card modal-card--error" role="dialog" aria-modal="true">
+            <div class="modal-icon modal-icon--error" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                <path
+                  d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14h-2v-2h2zm0-4h-2V6h2z"
+                />
+              </svg>
+            </div>
+            <h2 class="modal-title">Codigo incorreto</h2>
+            <p class="modal-text">Verifique o codigo e tente novamente.</p>
+            <button class="modal-btn modal-btn--error" type="button" data-error-modal-close>
+              Tentar novamente
+            </button>
+          </div>
+        </div>
+
+        <a class="recovery-back" href="recuperar.html">Voltar</a>
+      </section>
+    </main>
+    <script src="js/recuperacao.js"></script>
+  </body>
+</html>
