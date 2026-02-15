@@ -151,6 +151,58 @@ a {
   background: #ffffff;
 }
 
+.password-field {
+  position: relative;
+  width: 100%;
+}
+
+.password-field .login-input {
+  padding-right: 48px;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 10px;
+  transform: none;
+  border: none;
+  background: transparent;
+  padding: 0;
+  width: 28px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  color: #7a7a7a;
+  cursor: pointer;
+}
+
+.password-toggle svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.password-icon {
+  display: block;
+}
+
+.password-toggle[data-state="hidden"] .password-icon--open {
+  display: none;
+}
+
+.password-toggle[data-state="visible"] .password-icon--closed {
+  display: none;
+}
+
+.password-toggle:focus-visible {
+  outline: 2px solid #7f0f0f;
+  outline-offset: 2px;
+  border-radius: 999px;
+}
+
 .login-input::placeholder {
   color: #a6a6a6;
 }
@@ -163,7 +215,9 @@ a {
 }
 
 .login-btn {
-  width: 100%;
+  width: 50%;
+  margin: 0 auto;
+  display: block;
   border-radius: 999px;
   padding: 12px 16px;
   font-weight: 600;
@@ -194,8 +248,8 @@ a {
 }
 
 .login-btn-outline {
-  background: #ffffff;
-  color: #7f0f0f;
+  background: #7f0f0f;
+  color: #ffffff;
   border-color: #7f0f0f;
 }
 
@@ -230,7 +284,6 @@ a {
 .recovery-icon {
   width: 54px;
   height: 54px;
-  border: 1px solid #333333;
   display: grid;
   place-items: center;
   margin: 0 auto;
@@ -240,6 +293,12 @@ a {
   width: 32px;
   height: 32px;
   fill: #1a1a1a;
+}
+
+.recovery-icon-img {
+  width:60px;
+  height: 60px;
+  object-fit: contain;
 }
 
 .recovery-title {
@@ -270,6 +329,75 @@ a {
   font-weight: 600;
 }
 
+.senha-panel {
+  width: min(560px, 100%);
+  text-align: center;
+  display: grid;
+  gap: 16px;
+}
+
+.senha-icon {
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto;
+}
+
+.senha-icon-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+
+.senha-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f1f1f;
+}
+
+.senha-subtitle {
+  color: #9a9a9a;
+  font-size: 13px;
+}
+
+.senha-form {
+  display: grid;
+  gap: 12px;
+}
+
+.senha-hints {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 10px;
+  color: #7a7a7a;
+}
+
+.senha-hint {
+  padding: 4px 8px;
+  border-radius: 999px;
+  border: 1px solid #e1e1e1;
+  background: #f7f7f7;
+}
+
+.senha-hint.is-valid {
+  border-color: #1f7a3a;
+  color: #1f7a3a;
+  background: #eef8f1;
+}
+
+.senha-error {
+  font-size: 12px;
+  color: #7f0f0f;
+  display: none;
+}
+
+.senha-error.is-visible {
+  display: block;
+}
+
 .code-panel {
   width: min(560px, 100%);
   text-align: center;
@@ -280,7 +408,6 @@ a {
 .code-icon {
   width: 54px;
   height: 54px;
-  border: 1px solid #333333;
   display: grid;
   place-items: center;
   margin: 0 auto;
@@ -290,6 +417,12 @@ a {
   width: 32px;
   height: 32px;
   fill: #1a1a1a;
+}
+
+.code-icon-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
 }
 
 .code-form {
@@ -360,7 +493,6 @@ a {
 .modal-icon {
   width: 46px;
   height: 46px;
-  border: 1px solid #d8d8d8;
   display: grid;
   place-items: center;
   border-radius: 12px;
@@ -371,6 +503,12 @@ a {
   width: 28px;
   height: 28px;
   fill: #6b6b6b;
+}
+
+.modal-icon-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 .modal-icon--error {

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar Senha</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="page-login">
+    <header class="login-topbar">
+      <div class="login-brand">
+        <img class="login-logo" src="images/logomr.png" alt="MR Racoes" />
+      </div>
+      <div class="login-secure">
+        <span class="login-secure-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+            <path
+              d="M17 9h-1V7a4 4 0 0 0-8 0v2H7a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2zm-7-2a2 2 0 0 1 4 0v2h-4V7zm7 12H7v-8h10v8z"
+            />
+          </svg>
+        </span>
+        <span>Acesso Seguro</span>
+      </div>
+    </header>
+
+    <main class="login-main">
+      <section class="senha-panel">
+        <div class="recovery-progress" aria-hidden="true">
+          <span class="recovery-progress-fill recovery-progress-fill--step2"></span>
+        </div>
+
+        <div class="senha-icon" aria-hidden="true">
+          <img src="images/cadeado-preto.png" alt="" class="senha-icon-img" />
+        </div>
+
+        <h1 class="senha-title">Criar uma senha</h1>
+        <p class="senha-subtitle">
+          Digite o codigo que recebeu por email e crie uma nova senha
+        </p>
+
+        <form class="senha-form" action="#" method="post" data-senha-form>
+          <div class="password-field">
+            <input
+              class="login-input"
+              type="password"
+              name="senha"
+              placeholder="Senha"
+              data-senha-input
+              required
+            />
+            <button
+              class="password-toggle"
+              type="button"
+              data-password-toggle
+              data-state="hidden"
+              aria-label="Mostrar senha"
+              aria-pressed="false"
+            >
+              <svg
+                class="password-icon password-icon--open"
+                viewBox="0 0 24 24"
+                role="img"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 5c-5 0-9 4.2-10 7 1 2.8 5 7 10 7s9-4.2 10-7c-1-2.8-5-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2.2a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6z"
+                />
+              </svg>
+              <svg
+                class="password-icon password-icon--closed"
+                viewBox="0 0 24 24"
+                role="img"
+                aria-hidden="true"
+              >
+                <path
+                  d="M3.3 4.7 2 6l3 3C3.2 10.3 2 11.8 1.5 13c1 2.7 5 7 10.5 7 1.8 0 3.4-.4 4.9-1.1l2.3 2.3 1.4-1.4L3.3 4.7zM12 18c-3.8 0-6.7-3-8-5 0-.1.1-.2.2-.3l2.1 2.1a4.9 4.9 0 0 0 6.9 6.9l1.6 1.6c-.9.4-1.8.7-2.8.7zm4.9-3.2-1.6-1.6a4.9 4.9 0 0 0-6.9-6.9L6.8 4.6c1.5-.7 3.1-1.1 5.2-1.1 4.4 0 8.1 3.3 9.5 6.5-.6 1.3-1.8 3-3.6 4.8z"
+                />
+              </svg>
+            </button>
+          </div>
+          <div class="password-field">
+            <input
+              class="login-input"
+              type="password"
+              name="confirmar_senha"
+              placeholder="Confirmar Senha"
+              data-senha-confirm
+              required
+            />
+            <button
+              class="password-toggle"
+              type="button"
+              data-password-toggle
+              data-state="hidden"
+              aria-label="Mostrar senha"
+              aria-pressed="false"
+            >
+              <svg
+                class="password-icon password-icon--open"
+                viewBox="0 0 24 24"
+                role="img"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 5c-5 0-9 4.2-10 7 1 2.8 5 7 10 7s9-4.2 10-7c-1-2.8-5-7-10-7zm0 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm0-2.2a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6z"
+                />
+              </svg>
+              <svg
+                class="password-icon password-icon--closed"
+                viewBox="0 0 24 24"
+                role="img"
+                aria-hidden="true"
+              >
+                <path
+                  d="M3.3 4.7 2 6l3 3C3.2 10.3 2 11.8 1.5 13c1 2.7 5 7 10.5 7 1.8 0 3.4-.4 4.9-1.1l2.3 2.3 1.4-1.4L3.3 4.7zM12 18c-3.8 0-6.7-3-8-5 0-.1.1-.2.2-.3l2.1 2.1a4.9 4.9 0 0 0 6.9 6.9l1.6 1.6c-.9.4-1.8.7-2.8.7zm4.9-3.2-1.6-1.6a4.9 4.9 0 0 0-6.9-6.9L6.8 4.6c1.5-.7 3.1-1.1 5.2-1.1 4.4 0 8.1 3.3 9.5 6.5-.6 1.3-1.8 3-3.6 4.8z"
+                />
+              </svg>
+            </button>
+          </div>
+
+          <div class="senha-hints" aria-hidden="true">
+            <span class="senha-hint" data-hint-upper>Maiuscula</span>
+            <span class="senha-hint" data-hint-lower>Minuscula</span>
+            <span class="senha-hint" data-hint-number>Numero</span>
+            <span class="senha-hint" data-hint-length>8 ou + caracteres</span>
+          </div>
+
+          <p class="senha-error" role="alert" data-senha-error>
+            As senhas nao conferem ou estao incompletas.
+          </p>
+
+          <button class="login-btn login-btn-outline" type="submit" data-senha-submit>
+            Continuar
+          </button>
+        </form>
+
+        <div class="modal" data-senha-success aria-hidden="true">
+          <div class="modal-card" role="dialog" aria-modal="true">
+            <div class="modal-icon" aria-hidden="true">
+              <img src="images/validado.png" alt="" class="modal-icon-img" />
+            </div>
+            <h2 class="modal-title">Senha criada</h2>
+            <p class="modal-text">Sua senha foi criada com sucesso.</p>
+            <a class="modal-btn" href="login.html">Ir para o login</a>
+          </div>
+        </div>
+
+        <div class="modal" data-senha-error-modal aria-hidden="true">
+          <div class="modal-card modal-card--error" role="dialog" aria-modal="true">
+            <div class="modal-icon modal-icon--error" aria-hidden="true">
+              <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                <path
+                  d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm1 14h-2v-2h2zm0-4h-2V6h2z"
+                />
+              </svg>
+            </div>
+            <h2 class="modal-title">Dados invalidos</h2>
+            <p class="modal-text">Verifique a senha e tente novamente.</p>
+            <button class="modal-btn modal-btn--error" type="button" data-senha-error-close>
+              Tentar novamente
+            </button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="js/password-toggle.js"></script>
+    <script src="js/criar-senha.js"></script>
+  </body>
+</html>
