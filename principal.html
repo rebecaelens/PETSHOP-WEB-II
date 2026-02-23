@@ -47,39 +47,6 @@
     <div class="overlay" data-overlay></div>
 
     <div class="layout">
-      <aside class="sidebar" data-sidebar>
-        <div class="sidebar-header">
-          <div class="sidebar-title">Navegação</div>
-          <button class="icon-btn close-sidebar" type="button" aria-label="Fechar" data-sidebar-toggle>✕</button>
-        </div>
-        <nav class="menu" role="navigation">
-          <a class="menu-item" href="principal.html">
-            <span class="menu-icon">🏠</span>
-            <span class="menu-text">Página Inicial</span>
-          </a>
-          <a class="menu-item" href="principal.html?q=" >
-            <span class="menu-icon">🔎</span>
-            <span class="menu-text">Pesquisar</span>
-          </a>
-          <a class="menu-item" href="consultar.html">
-            <span class="menu-icon">📋</span>
-            <span class="menu-text">Consultar</span>
-          </a>
-          <a class="menu-item" href="precos.html">
-            <span class="menu-icon">🏷️</span>
-            <span class="menu-text">Preços</span>
-          </a>
-          <a class="menu-item" href="perfil.html">
-            <span class="menu-icon">👤</span>
-            <span class="menu-text">Perfil</span>
-          </a>
-          <a class="menu-item" href="#" data-logout>
-            <span class="menu-icon">🚪</span>
-            <span class="menu-text">Sair</span>
-          </a>
-        </nav>
-      </aside>
-
       <main class="content">
         <section class="hero">
           <div>
@@ -195,6 +162,59 @@
       </main>
     </div>
 
+    <script>
+      // Carrega o sidebar quando a página termina de carregar
+      document.addEventListener('DOMContentLoaded', async () => {
+        const response = await fetch('sidebar.html');
+        const html = await response.text();
+        
+        // Extrai o HTML do sidebar do arquivo
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const sidebarElement = doc.querySelector('[data-sidebar]');
+        
+        if (sidebarElement) {
+          // Insere o sidebar no início do layout
+          const layout = document.querySelector('.layout');
+          layout.insertAdjacentElement('afterbegin', sidebarElement);
+          
+          // Inicializa controles do sidebar
+          initSidebarControls();
+        }
+      });
+
+      function initSidebarControls() {
+        const sidebar = document.querySelector('[data-sidebar]');
+        const sidebarToggles = Array.from(document.querySelectorAll('[data-sidebar-toggle]'));
+        const overlay = document.querySelector('[data-overlay]');
+
+        if (!sidebar) return;
+
+        function openSidebar() {
+          sidebar.classList.add('open');
+          if (overlay) overlay.classList.add('active');
+        }
+
+        function closeSidebar() {
+          sidebar.classList.remove('open');
+          if (overlay) overlay.classList.remove('active');
+        }
+
+        sidebarToggles.forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (sidebar.classList.contains('open')) {
+              closeSidebar();
+            } else {
+              openSidebar();
+            }
+          });
+        });
+
+        if (overlay) {
+          overlay.addEventListener('click', closeSidebar);
+        }
+      }
+    </script>
     <script src="js/app.js"></script>
   </body>
 </html>
