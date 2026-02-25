@@ -100,11 +100,16 @@ document.addEventListener("click", (event) => {
   const prev = carousel.querySelector('.carousel-prev');
   const next = carousel.querySelector('.carousel-next');
   const dotsWrap = carousel.querySelector('.carousel-dots');
+  
+  const MIN_ITEMS_FOR_CAROUSEL = 6;
+  const shouldCarousel = slides.length >= MIN_ITEMS_FOR_CAROUSEL;
+  
   let index = 0;
   let interval = null;
   const delay = 4000;
 
   function go(i) {
+    if (!shouldCarousel) return;
     index = (i + slides.length) % slides.length;
     track.style.transform = `translateX(${ -index * 100 }%)`;
     updateDots();
@@ -128,11 +133,14 @@ document.addEventListener("click", (event) => {
       });
       dotsWrap.appendChild(btn);
     });
-    updateDots();
+    if (shouldCarousel) {
+      updateDots();
+      dotsWrap.classList.add('show');
+    }
   }
 
   function start() {
-    if (interval) return;
+    if (!shouldCarousel || interval) return;
     interval = setInterval(() => go(index + 1), delay);
   }
 
@@ -142,32 +150,47 @@ document.addEventListener("click", (event) => {
     interval = null;
   }
 
-  function restart() { stop(); start(); }
+  function restart() { 
+    if (!shouldCarousel) return;
+    stop(); 
+    start(); 
+  }
+
+  // Mostrar/esconder botões e dots conforme número de itens
+  if (shouldCarousel) {
+    if (prev) prev.classList.add('show');
+    if (next) next.classList.add('show');
+  }
 
   if (prev) prev.addEventListener('click', () => { go(index - 1); restart(); });
   if (next) next.addEventListener('click', () => { go(index + 1); restart(); });
 
-  let startX = 0;
-  let deltaX = 0;
-  track.addEventListener('pointerdown', (e) => {
-    stop();
-    startX = e.clientX;
-    track.setPointerCapture(e.pointerId);
-  });
-  track.addEventListener('pointermove', (e) => {
-    if (!startX) return;
-    deltaX = e.clientX - startX;
-  });
-  track.addEventListener('pointerup', (e) => {
-    if (Math.abs(deltaX) > 50) {
-      if (deltaX < 0) go(index + 1); else go(index - 1);
-    }
-    startX = 0; deltaX = 0; restart();
-  });
+  if (shouldCarousel) {
+    let startX = 0;
+    let deltaX = 0;
+    track.addEventListener('pointerdown', (e) => {
+      stop();
+      startX = e.clientX;
+      track.setPointerCapture(e.pointerId);
+    });
+    track.addEventListener('pointermove', (e) => {
+      if (!startX) return;
+      deltaX = e.clientX - startX;
+    });
+    track.addEventListener('pointerup', (e) => {
+      if (Math.abs(deltaX) > 50) {
+        if (deltaX < 0) go(index + 1); else go(index - 1);
+      }
+      startX = 0; deltaX = 0; restart();
+    });
+
+    carousel.addEventListener('mouseenter', stop);
+    carousel.addEventListener('mouseleave', start);
+  }
 
   createDots();
-  go(0);
-  start();
-  carousel.addEventListener('mouseenter', stop);
-  carousel.addEventListener('mouseleave', start);
+  if (shouldCarousel) {
+    go(0);
+    start();
+  }
 })();
