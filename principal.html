@@ -11,69 +11,69 @@
     <header class="site-header">
       <div class="header-top container">
         <div class="branding">
-          <img src="image/logomr.png" alt="MR Rações" class="logo-img" onerror="this.style.display='none'" />
+          <img src="images/logomr.png" alt="MR Rações" class="logo-img" onerror="this.style.display='none'" />
           <div class="logo-badge">MR</div>
         </div>
 
         <form class="search" action="principal.html" method="get" role="search">
           <input type="search" name="q" placeholder="Buscar produtos, marcas ou categorias" aria-label="Buscar" />
-          <button type="submit" class="search-btn">🔍</button>
+          <button type="submit" class="search-btn"><img src="images/buscar.png" alt="Buscar"></button>
         </form>
 
         <div class="user-actions">
-          <a class="auth" href="login.html">Entre ou cadastre-se</a>
-          <a class="icon-link" href="favoritos.html" aria-label="Favoritos">♡</a>
-          <a class="icon-link" href="carrinho.html" aria-label="Carrinho">🛒</a>
+          <a class="auth" href="login.html">
+            <img src="images/pfpuser.png" alt="Perfil">
+            <span>Entre ou cadastre-se</span>
+          </a>
+          <a class="icon-link" href="favoritos.html" aria-label="Favoritos"><img src="images/favorite.png" alt="Favoritos"></a>
+          <a class="icon-link" href="carrinho.html" aria-label="Carrinho"><img src="images/carrinho.png" alt="Carrinho"></a>
         </div>
       </div>
 
-      <nav class="category-bar">
-        <div class="container categories">
-          <button class="icon-btn menu-toggle" type="button" data-sidebar-toggle>☰</button>
-          <ul class="category-list">
-            <li><a href="principal.html?cat=all">Todos</a></li>
-            <li><a href="principal.html?cat=cachorros">Cachorros</a></li>
-            <li><a href="principal.html?cat=gatos">Gatos</a></li>
-            <li><a href="principal.html?cat=passaros">Pássaros</a></li>
-            <li><a href="principal.html?cat=peixes">Peixes</a></li>
-            <li><a href="principal.html?cat=outros">Outros Pets</a></li>
-            <li><a href="principal.html?cat=promocoes">Promoções</a></li>
-          </ul>
-        </div>
-      </nav>
     </header>
+
+    <nav class="category-bar">
+      <div class="container categories">
+        <button class="icon-btn menu-toggle" type="button" data-sidebar-toggle><img src="images/menu.png" alt="Menu"></button>
+        <ul class="category-list">
+          <li><a href="principal.html?cat=all">Todos</a></li>
+          <li><a href="principal.html?cat=cachorros">Cachorros</a></li>
+          <li><a href="principal.html?cat=gatos">Gatos</a></li>
+          <li><a href="principal.html?cat=passaros">Pássaros</a></li>
+          <li><a href="principal.html?cat=peixes">Peixes</a></li>
+          <li><a href="principal.html?cat=outros">Outros Pets</a></li>
+          <li><a href="principal.html?cat=promocoes">Promoções</a></li>
+        </ul>
+      </div>
+    </nav>
 
     <div class="overlay" data-overlay></div>
 
     <div class="layout">
       <aside class="sidebar" data-sidebar>
-        <div class="sidebar-header">
-          <div class="sidebar-title">Navegação</div>
-          <button class="icon-btn close-sidebar" type="button" aria-label="Fechar" data-sidebar-toggle>✕</button>
-        </div>
         <nav class="menu" role="navigation">
           <a class="menu-item" href="principal.html">
-            <span class="menu-icon">🏠</span>
+            <span class="menu-icon"><img src="images/home.png" alt="Home"></span>
             <span class="menu-text">Página Inicial</span>
           </a>
           <a class="menu-item" href="principal.html?q=" >
-            <span class="menu-icon">🔎</span>
+            <span class="menu-icon"><img src="images/buscar.png" alt="Pesquisar"></span>
             <span class="menu-text">Pesquisar</span>
           </a>
           <a class="menu-item" href="consultar.html">
-            <span class="menu-icon">📋</span>
+            <span class="menu-icon"><img src="images/chat.png" alt="Consultar"></span>
             <span class="menu-text">Consultar</span>
           </a>
           <a class="menu-item" href="precos.html">
-            <span class="menu-icon">🏷️</span>
+            <span class="menu-icon"><img src="images/preço.png" alt="Preços"></span>
             <span class="menu-text">Preços</span>
           </a>
           <a class="menu-item" href="perfil.html">
-            <span class="menu-icon">👤</span>
+            <span class="menu-icon"><img src="images/user-black.png" alt="Perfil"></span>
             <span class="menu-text">Perfil</span>
           </a>
           <a class="menu-item" href="#" data-logout>
-            <span class="menu-icon">🚪</span>
+            <span class="menu-icon"><img src="images/sair.png" alt="Sair"></span>
             <span class="menu-text">Sair</span>
           </a>
         </nav>
@@ -113,7 +113,7 @@
           <article class="product-card" data-product id="p1">
             <div class="product-media" style="background-image:url('images/cards.jpg')"></div>
             <div class="product-body">
-              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar">♡</button>
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
               <h4 class="product-title">Golden Premiun</h4>
               <p class="product-desc">Uma descricao curta sobre o produto porque o cliente nao vai ficar parado pra ler besteira enquanto escolhe o produto que quer.</p>
               <div class="product-price">VALOR DA SACA: R$ 240,00</div>
@@ -127,7 +127,7 @@
           <article class="product-card" data-product id="p2">
             <div class="product-media" style="background-image:url('images/cards.jpg')"></div>
             <div class="product-body">
-              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar">♡</button>
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
               <h4 class="product-title">Ração SuperMix</h4>
               <p class="product-desc">Uma descricao curta sobre o produto porque o cliente nao vai ficar parado pra ler besteira enquanto escolhe o produto que quer.</p>
               <div class="product-price">VALOR DA SACA: R$ 240,00</div>
@@ -139,9 +139,9 @@
           </article>
 
           <article class="product-card" data-product id="p3">
-            <div class="product-media" style="background-image:url('images/cards.jpg')"></div>
+            <div class="product-media" style="background-image:url('images/.jpg')"></div>
             <div class="product-body">
-              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar">♡</button>
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
               <h4 class="product-title">Snack Crocante</h4>
               <p class="product-desc">Uma descricao curta sobre o produto porque o cliente nao vai ficar parado pra ler besteira enquanto escolhe o produto que quer.</p>
               <div class="product-price">VALOR DA SACA: R$ 240,00</div>
@@ -155,7 +155,7 @@
           <article class="product-card" data-product id="p4">
             <div class="product-media" style="background-image:url('images/cards.jpg')"></div>
             <div class="product-body">
-              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar">♡</button>
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
               <h4 class="product-title">Ração Gatos Select</h4>
               <p class="product-desc">Uma descricao curta sobre o produto porque o cliente nao vai ficar parado pra ler besteira enquanto escolhe o produto que quer.</p>
               <div class="product-price">VALOR DA SACA: R$ 240,00</div>
@@ -169,7 +169,7 @@
           <article class="product-card" data-product id="p5">
             <div class="product-media" style="background-image:url('images/cards.jpg')"></div>
             <div class="product-body">
-              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar">♡</button>
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
               <h4 class="product-title">Coleira Básica</h4>
               <p class="product-desc">Uma descricao curta sobre o produto porque o cliente nao vai ficar parado pra ler besteira enquanto escolhe o produto que quer.</p>
               <div class="product-price">VALOR DA SACA: R$ 240,00</div>

@@ -6,12 +6,14 @@ function openSidebar() {
   if (!sidebar) return;
   sidebar.classList.add('open');
   if (overlay) overlay.classList.add('active');
+  document.body.classList.add('sidebar-open');
 }
 
 function closeSidebar() {
   if (!sidebar) return;
   sidebar.classList.remove('open');
   if (overlay) overlay.classList.remove('active');
+  document.body.classList.remove('sidebar-open');
 }
 
 sidebarToggles.forEach(btn => btn.addEventListener('click', () => {
