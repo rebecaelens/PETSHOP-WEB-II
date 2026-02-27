@@ -6,46 +6,186 @@
     <title>Carrinho</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body class="page-app">
-    <header class="topbar">
-      <a class="link" href="principal.html">Voltar</a>
-      <div class="topbar-title">Carrinho</div>
-      <div class="topbar-actions">
-        <a class="link" href="favoritos.html">Favoritos</a>
-        <a class="link" href="login.html">Sair</a>
+  <body class="page-app cart-page">
+    <header class="site-header">
+      <div class="header-top container">
+        <div class="branding">
+          <img src="images/logomr.png" alt="MR Rações" class="logo-img" onerror="this.style.display='none'" />
+          <div class="logo-badge">MR</div>
+        </div>
+        <div class="cart-header-title">
+          <img src="images/acesssec.png" alt="Acesso Seguro" class="secure-icon" />
+          <span class="secure-text">Acesso Seguro</span>
+        </div>
       </div>
     </header>
 
     <main class="content single">
-      <section class="list">
-        <div class="list-header">
-          <h1>Itens no carrinho</h1>
-          <button class="btn ghost" type="button">Limpar carrinho</button>
-        </div>
-
-        <div class="list-item">
-          <div>
-            <div class="item-title">Produto A</div>
-            <div class="item-sub">Quantidade: 1</div>
+      <section class="cart-container">
+        <div id="cart-products"></div>
+        
+        <div class="cart-bottom">
+          <div class="delivery-section">
+            <h3>Frete e Horário de Entrega</h3>
+            <form id="delivery-form">
+              <div class="form-group">
+                <label>Bairro:</label>
+                <input type="text" id="bairro" placeholder="Digite seu bairro" required />
+              </div>
+              <div class="form-group">
+                <label>Rua:</label>
+                <input type="text" id="rua" placeholder="Digite sua rua" required />
+              </div>
+              <div class="form-group">
+                <label>Número:</label>
+                <input type="text" id="numero" placeholder="Digite o número" required />
+              </div>
+            </form>
+            <div class="delivery-total">
+              <span class="delivery-total-label">
+                <img src="images/totalentr.png" alt="Total" class="delivery-total-icon" />
+                Total
+              </span>
+              <strong id="delivery-total-price">R$ 2,00</strong>
+            </div>
           </div>
-          <button class="btn ghost" type="button">Remover</button>
-        </div>
 
-        <div class="list-item">
-          <div>
-            <div class="item-title">Produto B</div>
-            <div class="item-sub">Quantidade: 2</div>
+          <div class="summary-section">
+            <h3>Resumo do pedido</h3>
+            <div class="summary-item">
+              <span id="products-count">Produtos (0)</span>
+              <span id="products-price">R$ 0,00</span>
+            </div>
+            <div class="summary-item">
+              <span>Frete</span>
+              <span id="delivery-price">R$ 2,00</span>
+            </div>
+            <div class="summary-total">
+              <span class="summary-total-label">
+                <img src="images/totalentr.png" alt="Total com a Entrega" class="summary-total-icon" />
+                Total com a Entrega
+              </span>
+              <strong id="total-price">R$ 2,00</strong>
+            </div>
+            <button class="btn primary checkout-btn" id="checkout-btn">Fazer Pedido</button>
+            <a href="principal.html" class="buy-more-link">Comprar mais produtos</a>
           </div>
-          <button class="btn ghost" type="button">Remover</button>
         </div>
-
-        <div class="list-total">
-          <span>Total</span>
-          <strong>R$ 250,00</strong>
-        </div>
-
-        <button class="btn primary" type="button">Finalizar compra</button>
       </section>
     </main>
+
+    <script>
+      const productDatabase = {
+        p1: { name: 'Golden Premiun', price: 240, image: 'images/item2.png', desc: 'Uma ração seca completa e balanceada, desenvolvida para fornecer nutrição de qualidade para cães e gatos.' },
+        p2: { name: 'Ração SuperMix', price: 100, image: 'images/item3.png', desc: 'Ração seca completa e balanceada, formulada para oferecer nutrição adequada para cães e gatos.' },
+        p3: { name: 'Brinquedos para gatos', price: 240, image: 'images/item4.png', desc: 'Brinquedos desenvolvidos para estimular o instinto natural de caça e manter o pet ativo.' },
+        p4: { name: 'Fucinheira para Cachorros', price: 240, image: 'images/item5.jpg', desc: 'Acessório essencial para manter seu pet seguro e confortável durante a caminhada.' },
+        p5: { name: 'Coleira Básica', price: 240, image: 'images/item1.png', desc: 'Acessório essencial para a identificação e segurança do pet no dia a dia.' }
+      };
+
+      const deliveryFee = 2;
+
+      const renderCart = () => {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const container = document.getElementById('cart-products');
+        
+        if (cartItems.length === 0) {
+          container.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Seu carrinho está vazio</p>';
+          updateSummary(cartItems);
+          document.getElementById('checkout-btn').disabled = true;
+          return;
+        }
+
+        container.innerHTML = cartItems.map((item, index) => {
+          const product = productDatabase[item.id];
+          return `
+            <div class="cart-product">
+              <img src="${product?.image}" alt="${product?.name}" class="cart-product-img" />
+              <div class="cart-product-info">
+                <h3>${product?.name}</h3>
+                <p>${product?.desc}</p>
+                <div class="cart-product-controls">
+                  <button class="qty-btn" onclick="updateQty(${index}, -1)">−</button>
+                  <input type="number" value="${item.quantity}" readonly class="qty-input" />
+                  <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                </div>
+              </div>
+              <div class="cart-product-price">
+                <span>R$ ${((product?.price || 0) * item.quantity).toFixed(2)}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        updateSummary(cartItems);
+        document.getElementById('checkout-btn').disabled = false;
+      };
+
+      const updateQty = (index, delta) => {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        if (cartItems[index]) {
+          cartItems[index].quantity = Math.max(1, cartItems[index].quantity + delta);
+          localStorage.setItem('cartItems', JSON.stringify(cartItems));
+          renderCart();
+        }
+      };
+
+      const removeFromCart = (index) => {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        cartItems.splice(index, 1);
+        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        renderCart();
+        updateCartBadge();
+      };
+
+      const updateSummary = (cartItems) => {
+        let total = 0;
+        let count = 0;
+        
+        cartItems.forEach(item => {
+          const product = productDatabase[item.id];
+          total += (product?.price || 0) * item.quantity;
+          count += item.quantity;
+        });
+
+        document.getElementById('products-count').textContent = `Produtos (${count})`;
+        document.getElementById('products-price').textContent = `R$ ${total.toFixed(2)}`;
+        document.getElementById('total-price').textContent = `R$ ${(total + deliveryFee).toFixed(2)}`;
+        document.getElementById('delivery-total-price').textContent = `R$ ${deliveryFee.toFixed(2)}`;
+      };
+
+      const updateCartBadge = () => {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+        const badges = document.querySelectorAll('[data-cart-badge]');
+        badges.forEach(badge => {
+          if (itemCount > 0) {
+            badge.textContent = itemCount;
+            badge.classList.remove('hidden');
+          } else {
+            badge.classList.add('hidden');
+          }
+        });
+      };
+
+      document.getElementById('checkout-btn').addEventListener('click', () => {
+        const bairro = document.getElementById('bairro').value;
+        const rua = document.getElementById('rua').value;
+        const numero = document.getElementById('numero').value;
+
+        if (!bairro || !rua || !numero) {
+          alert('Por favor, preencha todos os dados de entrega!');
+          return;
+        }
+
+        alert('Pedido finalizado com sucesso!');
+        localStorage.removeItem('cartItems');
+        renderCart();
+        updateCartBadge();
+        document.getElementById('delivery-form').reset();
+      });
+
+      renderCart();
+    </script>
   </body>
 </html>

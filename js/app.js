@@ -191,3 +191,101 @@ document.addEventListener("click", (event) => {
     start();
   }
 })();
+
+(() => {
+  const updateUserArea = () => {
+    const userName = document.querySelector('[data-user-name]');
+    const authLink = document.querySelector('[data-auth-link]');
+    const userAuth = document.querySelector('.user-auth');
+    const currentUser = localStorage.getItem('currentUser');
+    
+    if (currentUser) {
+      userName.textContent = currentUser;
+      authLink.textContent = 'Sair';
+      authLink.href = '#';
+      authLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('currentUser');
+        localStorage.removeItem('cartItems');
+        updateUserArea();
+        updateCartBadge();
+      });
+    } else {
+      userName.textContent = 'Entre ou cadastre-se';
+      authLink.textContent = 'Entrar';
+      authLink.href = 'login.html';
+    }
+  };
+
+  const updateCartBadge = () => {
+    const badge = document.querySelector('[data-cart-badge]');
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const itemCount = cartItems.reduce((total, item) => total + (item.quantity || 1), 0);
+    
+    if (itemCount > 0) {
+      badge.textContent = itemCount;
+      badge.classList.remove('hidden');
+    } else {
+      badge.classList.add('hidden');
+    }
+  };
+
+  const showToast = (message) => {
+    let toast = document.querySelector('.toast');
+    if (toast) toast.remove();
+    
+    toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.classList.add('hide');
+      setTimeout(() => toast.remove(), 400);
+    }, 3000);
+  };
+
+  const addToCart = (productId) => {
+    const card = document.querySelector(`[data-product][id="${productId}"]`);
+    if (!card) return;
+    
+    const titleEl = card.querySelector('.product-title');
+    const priceEl = card.querySelector('.price-value');
+    const productName = titleEl.textContent;
+    const productPrice = parseFloat(priceEl.textContent);
+    
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const existingItem = cartItems.find(item => item.id === productId);
+    
+    if (existingItem) {
+      existingItem.quantity += 1;
+    } else {
+      cartItems.push({ 
+        id: productId, 
+        name: productName,
+        price: productPrice,
+        quantity: 1 
+      });
+    }
+    
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    updateCartBadge();
+  };
+
+  const carrinhoButtons = document.querySelectorAll('[data-carrinho]');
+  carrinhoButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const card = btn.closest('[data-product]');
+      if (card) {
+        const productId = card.id;
+        const productName = card.querySelector('.product-title').textContent;
+        addToCart(productId);
+        showToast(`✓ ${productName} adicionado ao carrinho!`);
+      }
+    });
+  });
+
+  updateUserArea();
+  updateCartBadge();
+})();

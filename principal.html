@@ -21,12 +21,22 @@
         </form>
 
         <div class="user-actions">
-          <a class="auth" href="login.html">
-            <img src="images/pfpuser.png" alt="Perfil">
-            <span>Entre ou cadastre-se</span>
+          <div class="user-auth">
+            <div class="user-avatar">
+              <img src="images/pfpuser.png" alt="Avatar" class="avatar-img" />
+            </div>
+            <div class="user-info">
+              <span class="user-name" data-user-name>Entre ou cadastre-se</span>
+              <a href="login.html" class="auth-link" data-auth-link>Entrar</a>
+            </div>
+          </div>
+          <a class="icon-link favorites-link" href="favoritos.html" aria-label="Favoritos">
+            <img src="images/favorite.png" alt="Favoritos">
           </a>
-          <a class="icon-link" href="favoritos.html" aria-label="Favoritos"><img src="images/favorite.png" alt="Favoritos"></a>
-          <a class="icon-link" href="carrinho.html" aria-label="Carrinho"><img src="images/carrinho.png" alt="Carrinho"></a>
+          <a class="icon-link cart-link" href="carrinho.html" aria-label="Carrinho">
+            <img src="images/carrinho.png" alt="Carrinho">
+            <span class="cart-badge" data-cart-badge>0</span>
+          </a>
         </div>
       </div>
 
