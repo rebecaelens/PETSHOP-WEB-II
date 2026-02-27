@@ -25,7 +25,6 @@ if (overlay) {
   overlay.addEventListener('click', closeSidebar);
 }
 
-// ensure sidebar is closed on page load
 document.addEventListener('DOMContentLoaded', () => {
   closeSidebar();
 });
@@ -55,7 +54,6 @@ menuItems.forEach((item) => {
   }
 });
 
-// if logo image exists hide the text badge fallback
 window.addEventListener('load', () => {
   const logoImg = document.querySelector('.logo-img');
   const badge = document.querySelector('.logo-badge');
@@ -63,7 +61,6 @@ window.addEventListener('load', () => {
     if (logoImg.naturalWidth && logoImg.naturalHeight) {
       badge.style.display = 'none';
     }
-    // if image later loads (cached) ensure badge hidden
     logoImg.addEventListener('load', () => {
       if (logoImg.naturalWidth && logoImg.naturalHeight) badge.style.display = 'none';
     });
@@ -93,7 +90,6 @@ document.addEventListener("click", (event) => {
   }
 });
 
-/* Carousel behavior */
 (() => {
   const carousel = document.querySelector('[data-carousel]');
   if (!carousel) return;
@@ -158,7 +154,6 @@ document.addEventListener("click", (event) => {
     start(); 
   }
 
-  // Mostrar/esconder botões e dots conforme número de itens
   if (shouldCarousel) {
     if (prev) prev.classList.add('show');
     if (next) next.classList.add('show');
