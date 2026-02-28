@@ -1,4 +1,6 @@
 const form = document.querySelector("[data-senha-form]");
+const usernameInput = document.querySelector("[data-username-input]");
+const profileImageInput = document.querySelector("[data-profile-image-input]");
 const passwordInput = document.querySelector("[data-senha-input]");
 const confirmInput = document.querySelector("[data-senha-confirm]");
 const progressFill = document.querySelector("[data-senha-progress]");
@@ -48,6 +50,14 @@ const updateProgress = (validCount, total) => {
   progressFill.style.width = `${percent}%`;
 };
 
+const readFileAsDataURL = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result || ""));
+    reader.onerror = () => reject(new Error("Falha ao ler imagem"));
+    reader.readAsDataURL(file);
+  });
+
 const validatePassword = () => {
   if (!passwordInput) {
     return { isValid: false, match: false };
@@ -76,18 +86,23 @@ const validatePassword = () => {
 
 const updateFormState = () => {
   const { isValid, match } = validatePassword();
-  const shouldShowError = !!confirmInput?.value && (!isValid || !match);
+  const hasUserName = !!usernameInput?.value.trim();
+  const shouldShowError = (!!confirmInput?.value || !!usernameInput?.value) && (!isValid || !match || !hasUserName);
 
   if (errorMessage) {
     errorMessage.classList.toggle("is-visible", shouldShowError);
   }
 
   if (submitButton) {
-    submitButton.disabled = !(isValid && match);
-    submitButton.classList.toggle("login-btn-muted", !(isValid && match));
-    submitButton.classList.toggle("login-btn-outline", isValid && match);
+    submitButton.disabled = !(isValid && match && hasUserName);
+    submitButton.classList.toggle("login-btn-muted", !(isValid && match && hasUserName));
+    submitButton.classList.toggle("login-btn-outline", isValid && match && hasUserName);
   }
 };
+
+if (usernameInput) {
+  usernameInput.addEventListener("input", updateFormState);
+}
 
 if (passwordInput) {
   passwordInput.addEventListener("input", updateFormState);
@@ -98,12 +113,28 @@ if (confirmInput) {
 }
 
 if (form) {
-  form.addEventListener("submit", (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const { isValid, match } = validatePassword();
+    const userName = usernameInput ? usernameInput.value.trim() : "";
+    const hasUserName = !!userName;
 
-    if (isValid && match) {
+    if (isValid && match && hasUserName) {
+      localStorage.setItem("currentUser", userName);
+      localStorage.setItem("profileUserName", userName);
+
+      const selectedFile = profileImageInput?.files?.[0];
+      if (selectedFile) {
+        try {
+          const imageDataUrl = await readFileAsDataURL(selectedFile);
+          localStorage.setItem("userProfileImage", imageDataUrl);
+        } catch (error) {
+          openModal(errorModal);
+          return;
+        }
+      }
+
       openModal(successModal);
       return;
     }

@@ -74,6 +74,20 @@
       </section>
     </main>
 
+    <!-- Modal de confirmação de remoção -->
+    <div class="modal-overlay" id="removeModalOverlay">
+      <div class="modal-confirm">
+        <div class="modal-content">
+          <h3 class="modal-title">Remover item do carrinho?</h3>
+          <p class="modal-message" id="removeModalMessage">Tem certeza que deseja remover este item?</p>
+          <div class="modal-actions">
+            <button class="btn secondary" id="removeModalCancel">Cancelar</button>
+            <button class="btn primary" id="removeModalOk">Remover</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script>
       const productDatabase = {
         p1: { name: 'Golden Premiun', price: 240, image: 'images/item2.png', desc: 'Uma ração seca completa e balanceada, desenvolvida para fornecer nutrição de qualidade para cães e gatos.' },
@@ -98,6 +112,23 @@
 
         container.innerHTML = cartItems.map((item, index) => {
           const product = productDatabase[item.id];
+          let quantityDisplay = '';
+          let totalPrice = 0;
+
+          if (item.isWeightBased) {
+            // Item de peso (ração)
+            if (item.purchaseMode === 'by-weight') {
+              quantityDisplay = `<span>${item.weight.toFixed(2)} kg</span>`;
+            } else {
+              quantityDisplay = `<span>R$ ${item.price.toFixed(2)}</span>`;
+            }
+            totalPrice = item.price;
+          } else {
+            // Item normal
+            quantityDisplay = item.quantity;
+            totalPrice = (product?.price || 0) * item.quantity;
+          }
+
           return `
             <div class="cart-product">
               <img src="${product?.image}" alt="${product?.name}" class="cart-product-img" />
@@ -105,13 +136,18 @@
                 <h3>${product?.name}</h3>
                 <p>${product?.desc}</p>
                 <div class="cart-product-controls">
-                  <button class="qty-btn" onclick="updateQty(${index}, -1)">−</button>
-                  <input type="number" value="${item.quantity}" readonly class="qty-input" />
-                  <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                  ${item.isWeightBased ? 
+                  
+                    `<div></div>
+                     <button class="qty-btn btn-remove" onclick="removeFromCart(${index})" title="Remover do carrinho"><img src="images/lixeira.png" alt="Remover" class="icon-trash"></button>` :
+                    `<button class="qty-btn" onclick="updateQty(${index}, -1)">−</button>
+                     <input type="number" value="${item.quantity}" readonly class="qty-input" />
+                     <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>`
+                  }
                 </div>
               </div>
               <div class="cart-product-price">
-                <span>R$ ${((product?.price || 0) * item.quantity).toFixed(2)}</span>
+                <span>R$ ${totalPrice.toFixed(2)}</span>
               </div>
             </div>
           `;
@@ -130,12 +166,44 @@
         }
       };
 
-      const removeFromCart = (index) => {
+      let removeIndexToConfirm = null;
+
+      function showRemoveModal(index, itemName) {
+        removeIndexToConfirm = index;
+        const overlay = document.getElementById('removeModalOverlay');
+        const msg = document.getElementById('removeModalMessage');
+        msg.textContent = `Remover ${itemName} do carrinho?`;
+        overlay.classList.add('active');
+      }
+
+      function hideRemoveModal() {
+        removeIndexToConfirm = null;
+        document.getElementById('removeModalOverlay').classList.remove('active');
+      }
+
+      const removeModalCancel = document.getElementById('removeModalCancel');
+      const removeModalOk = document.getElementById('removeModalOk');
+
+      removeModalCancel.addEventListener('click', hideRemoveModal);
+      document.getElementById('removeModalOverlay').addEventListener('click', function(e) {
+        if (e.target === this) hideRemoveModal();
+      });
+      removeModalOk.addEventListener('click', function() {
+        if (removeIndexToConfirm !== null) {
+          const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+          cartItems.splice(removeIndexToConfirm, 1);
+          localStorage.setItem('cartItems', JSON.stringify(cartItems));
+          renderCart();
+          updateCartBadge && updateCartBadge();
+          hideRemoveModal();
+        }
+      });
+
+      // Substitui chamada de removeFromCart por showRemoveModal
+      function removeFromCart(index) {
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        cartItems.splice(index, 1);
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
-        renderCart();
-        updateCartBadge();
+        const itemName = cartItems[index].name;
+        showRemoveModal(index, itemName);
       };
 
       const updateSummary = (cartItems) => {
@@ -143,9 +211,16 @@
         let count = 0;
         
         cartItems.forEach(item => {
-          const product = productDatabase[item.id];
-          total += (product?.price || 0) * item.quantity;
-          count += item.quantity;
+          if (item.isWeightBased) {
+            // Item de peso - o preço já está calculado
+            total += item.price;
+            count += 1; // Conta como 1 item
+          } else {
+            // Item normal
+            const product = productDatabase[item.id];
+            total += (product?.price || 0) * item.quantity;
+            count += item.quantity;
+          }
         });
 
         document.getElementById('products-count').textContent = `Produtos (${count})`;
@@ -156,7 +231,9 @@
 
       const updateCartBadge = () => {
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+        const itemCount = cartItems.reduce((total, item) => {
+          return total + (item.isWeightBased ? 1 : item.quantity);
+        }, 0);
         const badges = document.querySelectorAll('[data-cart-badge]');
         badges.forEach(badge => {
           if (itemCount > 0) {
