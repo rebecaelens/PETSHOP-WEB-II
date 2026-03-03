@@ -27,6 +27,11 @@
         <div class="cart-bottom">
           <div class="delivery-section">
             <h3>Frete e Horário de Entrega</h3>
+            <div class="free-shipping-banner">
+              <span class="banner-icon">🎉</span>
+              <strong>Frete Grátis para o Nordeste!</strong>
+              <p>Aproveite o frete grátis em toda a região Nordeste</p>
+            </div>
             <form id="delivery-form">
               <div class="form-group">
                 <label>Como deseja informar a localidade?</label>
@@ -217,14 +222,16 @@
         if (!region) {
           currentDeliveryFee = 0;
           locationInfo.textContent = 'Localidade não definida';
+          document.getElementById('delivery-price').textContent = 'R$ 0,00';
+          document.getElementById('delivery-total-price').textContent = 'R$ 0,00';
         } else {
           currentDeliveryFee = SHIPPING_BY_REGION[region];
           locationInfo.textContent = `Região: ${region} • Frete ${currentDeliveryFee === 0 ? 'Grátis' : formatCurrency(currentDeliveryFee)}`;
+          const deliveryText = currentDeliveryFee === 0 ? 'Grátis' : formatCurrency(currentDeliveryFee);
+          document.getElementById('delivery-price').textContent = deliveryText;
+          document.getElementById('delivery-total-price').textContent = deliveryText;
         }
 
-        const deliveryText = currentDeliveryFee === 0 ? 'Grátis' : formatCurrency(currentDeliveryFee);
-        document.getElementById('delivery-price').textContent = deliveryText;
-        document.getElementById('delivery-total-price').textContent = deliveryText;
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         updateSummary(cartItems);
       };
@@ -380,7 +387,13 @@
 
         document.getElementById('products-count').textContent = `Produtos (${count})`;
         document.getElementById('products-price').textContent = `R$ ${total.toFixed(2)}`;
-        document.getElementById('total-price').textContent = formatCurrency(total + currentDeliveryFee);
+        
+        const region = resolveRegion();
+        if (!region) {
+          document.getElementById('total-price').textContent = formatCurrency(total);
+        } else {
+          document.getElementById('total-price').textContent = formatCurrency(total + currentDeliveryFee);
+        }
       };
 
       const updateCartBadge = () => {
