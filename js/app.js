@@ -73,29 +73,6 @@ document.addEventListener("click", (event) => {
   if (!(target instanceof HTMLElement)) {
     return;
   }
-
-  if (target.matches("[data-favorito]")) {
-    if (target.classList.contains('fav-btn')) {
-      target.classList.toggle('is-favorito');
-    } else {
-      target.classList.toggle("is-favorito");
-      target.textContent = target.classList.contains("is-favorito") ? "Favoritado" : "Favoritar";
-    }
-  }
-
-  if (target.matches("[data-carrinho]")) {
-    target.classList.toggle('in-cart');
-    target.textContent = target.classList.contains('in-cart') ? 'ADICIONADO' : 'COMPRAR';
-  }
-
-  if (target.matches("[data-pesar]")) {
-    const card = target.closest('[data-product]');
-    if (card) {
-      const productId = card.id;
-      const productName = card.querySelector('.product-title').textContent;
-      showToast(`⚖️ ${productName} - Abra a página de pesagem (a implementar)`);
-    }
-  }
 });
 
 (() => {
@@ -290,6 +267,7 @@ document.addEventListener("click", (event) => {
 
   const updateCartBadge = () => {
     const badge = document.querySelector('[data-cart-badge]');
+    if (!badge) return;
     const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
     const itemCount = cartItems.reduce((total, item) => {
       return total + (item.isWeightBased ? 1 : (item.quantity || 1));
@@ -318,14 +296,115 @@ document.addEventListener("click", (event) => {
     }, 3000);
   };
 
-  const addToCart = (productId) => {
+  const FAVORITES_STORAGE_KEY = 'favoriteItems';
+
+  const getFavorites = () => JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY)) || [];
+
+  const saveFavorites = (favorites) => {
+    localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
+  };
+
+  const parsePriceText = (priceText) => {
+    const normalized = String(priceText || '')
+      .replace(/\s/g, '')
+      .replace(/\./g, '')
+      .replace(',', '.')
+      .replace(/[^\d.-]/g, '');
+    const parsed = parseFloat(normalized);
+    return Number.isFinite(parsed) ? parsed : 0;
+  };
+
+  const extractBackgroundImageUrl = (element) => {
+    const bgValue = element?.style?.backgroundImage || '';
+    const matched = bgValue.match(/url\(["']?(.*?)["']?\)/i);
+    return matched ? matched[1] : '';
+  };
+
+  const getProductDataFromCard = (card) => {
+    if (!card) return null;
+
+    const productId = card.id || card.dataset.productId;
+    const title = card.querySelector('.product-title, .card-title')?.textContent?.trim() || '';
+    const description = card.querySelector('.product-desc, .card-text')?.textContent?.trim() || '';
+    const priceValue = card.querySelector('.price-value')?.textContent || card.dataset.price || '';
+    const image = extractBackgroundImageUrl(card.querySelector('.product-media'));
+
+    if (!productId || !title) {
+      return null;
+    }
+
+    return {
+      id: productId,
+      name: title,
+      desc: description,
+      price: parsePriceText(priceValue),
+      image
+    };
+  };
+
+  const renderFavoritesPage = () => {
+    const listContainer = document.querySelector('[data-favorites-list]');
+    if (!listContainer) return;
+
+    const favorites = getFavorites();
+
+    if (!favorites.length) {
+      listContainer.innerHTML = `
+        <article class="product-card" style="width: 100%; max-width: 100%; grid-column: 1 / -1;">
+          <div class="product-body" style="padding: 40px 20px; text-align: center;">
+            <h4 class="product-title">Nenhum item favoritado</h4>
+            <p class="product-desc">Clique no coração dos produtos para salvá-los aqui.</p>
+          </div>
+        </article>
+      `;
+      return;
+    }
+
+    listContainer.innerHTML = favorites.map((product) => `
+      <article class="product-card" data-product data-product-id="${product.id}" data-price="${product.price}" id="${product.id}">
+        <div class="product-media" style="background-image:url('${product.image}')"></div>
+        <div class="product-body">
+          <button class="fav-btn is-favorito" type="button" data-favorito aria-label="Remover de favoritos"><img src="images/favorite.png" alt="Favoritar"></button>
+          <h4 class="product-title">${product.name}</h4>
+          <p class="product-desc">${product.desc || 'Item salvo para compra futura.'}</p>
+          <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">${product.price.toFixed(2).replace('.', ',')}</span></div>
+          <div class="product-actions">
+            <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+          </div>
+        </div>
+      </article>
+    `).join('');
+  };
+
+  const syncFavoriteButtons = () => {
+    const favoriteIds = new Set(getFavorites().map((item) => item.id));
+    document.querySelectorAll('.fav-btn[data-favorito]').forEach((button) => {
+      const card = button.closest('[data-product]');
+      const productId = card?.id;
+      button.classList.toggle('is-favorito', Boolean(productId && favoriteIds.has(productId)));
+    });
+  };
+
+  const toggleFavorite = (product) => {
+    const favorites = getFavorites();
+    const existingIndex = favorites.findIndex((item) => item.id === product.id);
+
+    if (existingIndex >= 0) {
+      favorites.splice(existingIndex, 1);
+      saveFavorites(favorites);
+      return false;
+    }
+
+    favorites.push(product);
+    saveFavorites(favorites);
+    return true;
+  };
+
+  const addToCart = (productId, fallbackProduct = null) => {
     const card = document.querySelector(`[data-product][id="${productId}"]`);
-    if (!card) return;
-    
-    const titleEl = card.querySelector('.product-title');
-    const priceEl = card.querySelector('.price-value');
-    const productName = titleEl.textContent;
-    const productPrice = parseFloat(priceEl.textContent);
+    const cardProduct = getProductDataFromCard(card);
+    const productData = cardProduct || fallbackProduct;
+    if (!productData) return;
     
     const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
     const existingItem = cartItems.find(item => item.id === productId);
@@ -335,8 +414,8 @@ document.addEventListener("click", (event) => {
     } else {
       cartItems.push({ 
         id: productId, 
-        name: productName,
-        price: productPrice,
+        name: productData.name,
+        price: productData.price,
         quantity: 1 
       });
     }
@@ -344,20 +423,6 @@ document.addEventListener("click", (event) => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
     updateCartBadge();
   };
-
-  const carrinhoButtons = document.querySelectorAll('[data-carrinho]');
-  carrinhoButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const card = btn.closest('[data-product]');
-      if (card) {
-        const productId = card.id;
-        const productName = card.querySelector('.product-title').textContent;
-        addToCart(productId);
-        showToast(`✓ ${productName} adicionado ao carrinho!`);
-      }
-    });
-  });
 
   // ========== WEIGHT MODAL LOGIC ==========
   const weightModal = document.getElementById('weightModalOverlay');
@@ -406,7 +471,7 @@ document.addEventListener("click", (event) => {
   });
 
   const calculateFromWeight = () => {
-    if (!currentWeightProduct || !weightInputKg.value) return;
+    if (!currentWeightProduct || !weightInputKg || !weightTotalPrice || !weightInputKg.value) return;
     
     const weight = parseFloat(weightInputKg.value) || 0;
     const pricePerKg = parseFloat(currentWeightProduct.dataset.pricePerKg) || 0;
@@ -416,7 +481,7 @@ document.addEventListener("click", (event) => {
   };
 
   const calculateFromPrice = () => {
-    if (!currentWeightProduct || !weightInputPrice.value) return;
+    if (!currentWeightProduct || !weightInputPrice || !weightTotalWeight || !weightInputPrice.value) return;
     
     const price = parseFloat(weightInputPrice.value) || 0;
     const pricePerKg = parseFloat(currentWeightProduct.dataset.pricePerKg) || 0;
@@ -426,6 +491,10 @@ document.addEventListener("click", (event) => {
   };
 
   const openWeightModal = (productCard) => {
+    if (!weightModal || !weightProductName || !pricePerKgDisplay || !weightInputKg || !weightInputPrice || !weightTabBtns.length || !weightTabContents.length) {
+      return;
+    }
+
     currentWeightProduct = productCard;
     currentTab = 'by-weight';
     
@@ -452,23 +521,26 @@ document.addEventListener("click", (event) => {
   };
 
   const closeWeightModal = () => {
+    if (!weightModal) return;
     weightModal.classList.remove('active');
     currentWeightProduct = null;
   };
 
-  weightInputKg.addEventListener('input', calculateFromWeight);
-  weightInputPrice.addEventListener('input', calculateFromPrice);
+  if (weightInputKg) weightInputKg.addEventListener('input', calculateFromWeight);
+  if (weightInputPrice) weightInputPrice.addEventListener('input', calculateFromPrice);
 
-  weightModalClose.addEventListener('click', closeWeightModal);
-  weightModalCancel.addEventListener('click', closeWeightModal);
+  if (weightModalClose) weightModalClose.addEventListener('click', closeWeightModal);
+  if (weightModalCancel) weightModalCancel.addEventListener('click', closeWeightModal);
 
-  weightModal.addEventListener('click', (e) => {
-    if (e.target === weightModal) {
-      closeWeightModal();
-    }
-  });
+  if (weightModal) {
+    weightModal.addEventListener('click', (e) => {
+      if (e.target === weightModal) {
+        closeWeightModal();
+      }
+    });
+  }
 
-  weightModalAddCart.addEventListener('click', () => {
+  if (weightModalAddCart) weightModalAddCart.addEventListener('click', () => {
     if (!currentWeightProduct) return;
 
     const pricePerKg = parseFloat(currentWeightProduct.dataset.pricePerKg) || 0;
@@ -519,17 +591,59 @@ document.addEventListener("click", (event) => {
     closeWeightModal();
   });
 
-  // Pesar buttons handlers
-  const pesarButtons = document.querySelectorAll('[data-pesar]');
-  pesarButtons.forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      const card = btn.closest('[data-product]');
+  document.addEventListener('click', (event) => {
+    const target = event.target;
+    if (!(target instanceof HTMLElement)) return;
+
+    const favoriteButton = target.closest('[data-favorito]');
+    if (favoriteButton instanceof HTMLElement) {
+      event.preventDefault();
+      const card = favoriteButton.closest('[data-product]');
+      const product = getProductDataFromCard(card);
+      if (!product) return;
+
+      const wasAdded = toggleFavorite(product);
+
+      if (favoriteButton.classList.contains('fav-btn')) {
+        favoriteButton.classList.toggle('is-favorito', wasAdded);
+        // Se está removendo, animar saída do card
+        if (!wasAdded && card) {
+          card.classList.add('removing');
+          setTimeout(() => {
+            renderFavoritesPage();
+          }, 350);
+        }
+      }
+
+      syncFavoriteButtons();
+      showToast(wasAdded ? `❤ ${product.name} adicionado aos favoritos!` : `✕ ${product.name} removido dos favoritos.`);
+      return;
+    }
+
+    const cartButton = target.closest('[data-carrinho]');
+    if (cartButton instanceof HTMLElement) {
+      event.preventDefault();
+      const card = cartButton.closest('[data-product]');
+      const product = getProductDataFromCard(card);
+      if (!product) return;
+
+      addToCart(product.id, product);
+      showToast(`✓ ${product.name} adicionado ao carrinho!`);
+      return;
+    }
+
+    const weighButton = target.closest('[data-pesar]');
+    if (weighButton instanceof HTMLElement) {
+      event.preventDefault();
+      const card = weighButton.closest('[data-product]');
       if (card) {
         openWeightModal(card);
       }
-    });
+    }
   });
+
+  renderFavoritesPage();
+  syncFavoriteButtons();
 
   updateUserArea();
   updateCartBadge();

@@ -9,10 +9,10 @@
   <body class="page-app cart-page">
     <header class="site-header">
       <div class="header-top container">
-        <div class="branding">
+        <a href="principal.html" class="branding" aria-label="Voltar para o menu principal">
           <img src="images/logomr.png" alt="MR Rações" class="logo-img" onerror="this.style.display='none'" />
           <div class="logo-badge">MR</div>
-        </div>
+        </a>
         <div class="cart-header-title">
           <img src="images/acesssec.png" alt="Acesso Seguro" class="secure-icon" />
           <span class="secure-text">Acesso Seguro</span>
@@ -28,6 +28,36 @@
           <div class="delivery-section">
             <h3>Frete e Horário de Entrega</h3>
             <form id="delivery-form">
+              <div class="form-group">
+                <label>Como deseja informar a localidade?</label>
+                <div class="shipping-mode-options">
+                  <label class="shipping-mode-option">
+                    <input type="radio" name="shippingMode" value="estado" checked />
+                    <span>Por estado (UF)</span>
+                  </label>
+                  <label class="shipping-mode-option">
+                    <input type="radio" name="shippingMode" value="cep" />
+                    <span>Por CEP</span>
+                  </label>
+                </div>
+              </div>
+              <div class="form-group" id="state-field">
+                <label for="estado">Estado (UF):</label>
+                <select id="estado" required>
+                  <option value="">Selecione o estado</option>
+                  <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option>
+                  <option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option>
+                  <option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+                  <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option>
+                  <option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option>
+                  <option value="SE">SE</option><option value="TO">TO</option>
+                </select>
+              </div>
+              <div class="form-group hidden" id="cep-field">
+                <label for="cep">CEP:</label>
+                <input type="text" id="cep" placeholder="00000-000" maxlength="9" />
+              </div>
+              <p class="shipping-location" id="shipping-location">Localidade não definida</p>
               <div class="form-group">
                 <label>Bairro:</label>
                 <input type="text" id="bairro" placeholder="Digite seu bairro" required />
@@ -97,7 +127,131 @@
         p5: { name: 'Coleira Básica', price: 240, image: 'images/item1.png', desc: 'Acessório essencial para a identificação e segurança do pet no dia a dia.' }
       };
 
-      const deliveryFee = 2;
+      const SHIPPING_BY_REGION = {
+        Norte: 5,
+        Nordeste: 0,
+        'Centro-Oeste': 6,
+        Sudeste: 8,
+        Sul: 7
+      };
+
+      const REGION_BY_STATE = {
+        AC: 'Norte', AL: 'Nordeste', AP: 'Norte', AM: 'Norte', BA: 'Nordeste', CE: 'Nordeste',
+        DF: 'Centro-Oeste', ES: 'Sudeste', GO: 'Centro-Oeste', MA: 'Nordeste', MT: 'Centro-Oeste',
+        MS: 'Centro-Oeste', MG: 'Sudeste', PA: 'Norte', PB: 'Nordeste', PR: 'Sul', PE: 'Nordeste',
+        PI: 'Nordeste', RJ: 'Sudeste', RN: 'Nordeste', RS: 'Sul', RO: 'Norte', RR: 'Norte',
+        SC: 'Sul', SP: 'Sudeste', SE: 'Nordeste', TO: 'Norte'
+      };
+
+      const CEP_RANGES_BY_STATE = [
+        { uf: 'SP', start: 1000, end: 19999 },
+        { uf: 'RJ', start: 20000, end: 28999 },
+        { uf: 'ES', start: 29000, end: 29999 },
+        { uf: 'MG', start: 30000, end: 39999 },
+        { uf: 'BA', start: 40000, end: 48999 },
+        { uf: 'SE', start: 49000, end: 49999 },
+        { uf: 'PE', start: 50000, end: 56999 },
+        { uf: 'AL', start: 57000, end: 57999 },
+        { uf: 'PB', start: 58000, end: 58999 },
+        { uf: 'RN', start: 59000, end: 59999 },
+        { uf: 'CE', start: 60000, end: 63999 },
+        { uf: 'PI', start: 64000, end: 64999 },
+        { uf: 'MA', start: 65000, end: 65999 },
+        { uf: 'PA', start: 66000, end: 68899 },
+        { uf: 'AP', start: 68900, end: 68999 },
+        { uf: 'AM', start: 69000, end: 69299 },
+        { uf: 'RR', start: 69300, end: 69399 },
+        { uf: 'AM', start: 69400, end: 69899 },
+        { uf: 'AC', start: 69900, end: 69999 },
+        { uf: 'DF', start: 70000, end: 72799 },
+        { uf: 'GO', start: 72800, end: 72999 },
+        { uf: 'DF', start: 73000, end: 73699 },
+        { uf: 'GO', start: 73700, end: 76799 },
+        { uf: 'RO', start: 76800, end: 76999 },
+        { uf: 'TO', start: 77000, end: 77999 },
+        { uf: 'MT', start: 78000, end: 78899 },
+        { uf: 'MS', start: 79000, end: 79999 },
+        { uf: 'PR', start: 80000, end: 87999 },
+        { uf: 'SC', start: 88000, end: 89999 },
+        { uf: 'RS', start: 90000, end: 99999 }
+      ];
+
+      let currentDeliveryFee = 0;
+
+      const formatCurrency = (value) => `R$ ${value.toFixed(2)}`;
+
+      const sanitizeCep = (value) => value.replace(/\D/g, '');
+
+      const getShippingMode = () => {
+        const selectedMode = document.querySelector('input[name="shippingMode"]:checked');
+        return selectedMode ? selectedMode.value : 'estado';
+      };
+
+      const getStateFromCep = (cep) => {
+        const cepPrefix = Number(cep.slice(0, 5));
+        const matchedRange = CEP_RANGES_BY_STATE.find(({ start, end }) => cepPrefix >= start && cepPrefix <= end);
+        return matchedRange ? matchedRange.uf : null;
+      };
+
+      const resolveRegion = () => {
+        const mode = getShippingMode();
+
+        if (mode === 'estado') {
+          const state = document.getElementById('estado').value;
+          return REGION_BY_STATE[state] || null;
+        }
+
+        const cep = sanitizeCep(document.getElementById('cep').value);
+        if (cep.length !== 8) {
+          return null;
+        }
+
+        const stateFromCep = getStateFromCep(cep);
+        return stateFromCep ? REGION_BY_STATE[stateFromCep] : null;
+      };
+
+      const updateShippingUI = () => {
+        const region = resolveRegion();
+        const locationInfo = document.getElementById('shipping-location');
+
+        if (!region) {
+          currentDeliveryFee = 0;
+          locationInfo.textContent = 'Localidade não definida';
+        } else {
+          currentDeliveryFee = SHIPPING_BY_REGION[region];
+          locationInfo.textContent = `Região: ${region} • Frete ${currentDeliveryFee === 0 ? 'Grátis' : formatCurrency(currentDeliveryFee)}`;
+        }
+
+        const deliveryText = currentDeliveryFee === 0 ? 'Grátis' : formatCurrency(currentDeliveryFee);
+        document.getElementById('delivery-price').textContent = deliveryText;
+        document.getElementById('delivery-total-price').textContent = deliveryText;
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        updateSummary(cartItems);
+      };
+
+      const toggleShippingInputs = () => {
+        const mode = getShippingMode();
+        const stateField = document.getElementById('state-field');
+        const cepField = document.getElementById('cep-field');
+        const stateSelect = document.getElementById('estado');
+        const cepInput = document.getElementById('cep');
+
+        if (mode === 'estado') {
+          stateField.classList.remove('hidden');
+          cepField.classList.add('hidden');
+          stateSelect.required = true;
+          cepInput.required = false;
+          cepInput.value = '';
+        } else {
+          stateField.classList.add('hidden');
+          cepField.classList.remove('hidden');
+          stateSelect.required = false;
+          cepInput.required = true;
+          stateSelect.value = '';
+        }
+
+        updateShippingUI();
+      };
 
       const renderCart = () => {
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -137,12 +291,13 @@
                 <p>${product?.desc}</p>
                 <div class="cart-product-controls">
                   ${item.isWeightBased ? 
-                  
-                    `<div></div>
-                     <button class="qty-btn btn-remove" onclick="removeFromCart(${index})" title="Remover do carrinho"><img src="images/lixeira.png" alt="Remover" class="icon-trash"></button>` :
-                    `<button class="qty-btn" onclick="updateQty(${index}, -1)">−</button>
-                     <input type="number" value="${item.quantity}" readonly class="qty-input" />
-                     <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>`
+                    `<button class="qty-btn btn-remove" onclick="removeFromCart(${index})" title="Remover do carrinho"><img src="images/lixeira.png" alt="Remover" class="icon-trash"></button>` :
+                    `<div class="qty-controller">
+                       <button class="qty-btn qty-minus" onclick="updateQty(${index}, -1)" title="Diminuir quantidade">−</button>
+                       <input type="number" value="${item.quantity}" readonly class="qty-input" />
+                       <button class="qty-btn qty-plus" onclick="updateQty(${index}, 1)" title="Aumentar quantidade">+</button>
+                     </div>
+                     <button class="btn-remove-qty" onclick="removeFromCart(${index})" title="Remover produto"><img src="images/lixeira.png" alt="Remover" class="icon-trash"></button>`
                   }
                 </div>
               </div>
@@ -225,8 +380,7 @@
 
         document.getElementById('products-count').textContent = `Produtos (${count})`;
         document.getElementById('products-price').textContent = `R$ ${total.toFixed(2)}`;
-        document.getElementById('total-price').textContent = `R$ ${(total + deliveryFee).toFixed(2)}`;
-        document.getElementById('delivery-total-price').textContent = `R$ ${deliveryFee.toFixed(2)}`;
+        document.getElementById('total-price').textContent = formatCurrency(total + currentDeliveryFee);
       };
 
       const updateCartBadge = () => {
@@ -246,9 +400,15 @@
       };
 
       document.getElementById('checkout-btn').addEventListener('click', () => {
+        const region = resolveRegion();
         const bairro = document.getElementById('bairro').value;
         const rua = document.getElementById('rua').value;
         const numero = document.getElementById('numero').value;
+
+        if (!region) {
+          alert('Escolha a localidade por estado ou informe um CEP válido para calcular o frete.');
+          return;
+        }
 
         if (!bairro || !rua || !numero) {
           alert('Por favor, preencha todos os dados de entrega!');
@@ -260,8 +420,23 @@
         renderCart();
         updateCartBadge();
         document.getElementById('delivery-form').reset();
+        toggleShippingInputs();
       });
 
+      document.querySelectorAll('input[name="shippingMode"]').forEach((input) => {
+        input.addEventListener('change', toggleShippingInputs);
+      });
+
+      document.getElementById('estado').addEventListener('change', updateShippingUI);
+      document.getElementById('cep').addEventListener('input', (event) => {
+        const numericCep = sanitizeCep(event.target.value);
+        event.target.value = numericCep.length > 5
+          ? `${numericCep.slice(0, 5)}-${numericCep.slice(5, 8)}`
+          : numericCep;
+        updateShippingUI();
+      });
+
+      toggleShippingInputs();
       renderCart();
     </script>
   </body>
