@@ -606,8 +606,9 @@ document.addEventListener("click", (event) => {
 
       if (favoriteButton.classList.contains('fav-btn')) {
         favoriteButton.classList.toggle('is-favorito', wasAdded);
-        // Se está removendo, animar saída do card
-        if (!wasAdded && card) {
+        // Se está removendo na página de favoritos, animar saída do card
+        const favoritesListContainer = document.querySelector('[data-favorites-list]');
+        if (!wasAdded && card && favoritesListContainer) {
           card.classList.add('removing');
           setTimeout(() => {
             renderFavoritesPage();
