@@ -22,50 +22,82 @@
 
     <main class="content single">
       <section class="cart-container">
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="principal.html">Início</a>
+          <span class="separator">/</span>
+          <span class="current">Carrinho</span>
+        </nav>
+
+        <!-- Checkout Timeline -->
+        <div class="checkout-timeline">
+          <div class="timeline-step completed">
+            <div class="timeline-circle">✓</div>
+            <div class="timeline-label">Produtos</div>
+          </div>
+          <div class="timeline-step active">
+            <div class="timeline-circle">2</div>
+            <div class="timeline-label">Entrega</div>
+          </div>
+          <div class="timeline-step">
+            <div class="timeline-circle">3</div>
+            <div class="timeline-label">Pagamento</div>
+          </div>
+          <div class="timeline-step">
+            <div class="timeline-circle">4</div>
+            <div class="timeline-label">Confirmação</div>
+          </div>
+        </div>
+
         <div id="cart-products"></div>
         
         <div class="cart-bottom">
           <div class="delivery-section">
             <h3>Frete e Horário de Entrega</h3>
-            <div class="free-shipping-banner">
-              <span class="banner-icon">🎉</span>
-              <strong>Frete Grátis para o Nordeste!</strong>
-              <p>Aproveite o frete grátis em toda a região Nordeste</p>
-            </div>
             <form id="delivery-form">
               <div class="form-group">
-                <label>Como deseja informar a localidade?</label>
-                <div class="shipping-mode-options">
-                  <label class="shipping-mode-option">
-                    <input type="radio" name="shippingMode" value="estado" checked />
-                    <span>Por estado (UF)</span>
-                  </label>
-                  <label class="shipping-mode-option">
-                    <input type="radio" name="shippingMode" value="cep" />
-                    <span>Por CEP</span>
-                  </label>
-                </div>
-              </div>
-              <div class="form-group" id="state-field">
-                <label for="estado">Estado (UF):</label>
-                <select id="estado" required>
-                  <option value="">Selecione o estado</option>
-                  <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option><option value="AM">AM</option><option value="BA">BA</option>
-                  <option value="CE">CE</option><option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option><option value="MA">MA</option>
-                  <option value="MT">MT</option><option value="MS">MS</option><option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
-                  <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option><option value="RJ">RJ</option><option value="RN">RN</option>
-                  <option value="RS">RS</option><option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option><option value="SP">SP</option>
-                  <option value="SE">SE</option><option value="TO">TO</option>
-                </select>
-              </div>
-              <div class="form-group hidden" id="cep-field">
-                <label for="cep">CEP:</label>
-                <input type="text" id="cep" placeholder="00000-000" maxlength="9" />
-              </div>
-              <p class="shipping-location" id="shipping-location">Localidade não definida</p>
-              <div class="form-group">
                 <label>Bairro:</label>
-                <input type="text" id="bairro" placeholder="Digite seu bairro" required />
+                <select id="bairro" required>
+                  <option value="">Selecione seu bairro</option>
+                  <option value="Acaracuzinho">Acaracuzinho</option>
+                  <option value="Alto Alegre">Alto Alegre</option>
+                  <option value="Alto da Mangueira">Alto da Mangueira</option>
+                  <option value="Antônio Justa">Antônio Justa</option>
+                  <option value="Boa Esperança">Boa Esperança</option>
+                  <option value="Boa Vista">Boa Vista</option>
+                  <option value="Cágado">Cágado</option>
+                  <option value="Coqueiral">Coqueiral</option>
+                  <option value="Centro">Centro</option>
+                  <option value="Cidade Nova">Cidade Nova</option>
+                  <option value="Distrito Industrial I">Distrito Industrial I</option>
+                  <option value="Furna da Onça">Furna da Onça</option>
+                  <option value="Horto">Horto</option>
+                  <option value="Industrial">Industrial</option>
+                  <option value="Jaçanaú">Jaçanaú</option>
+                  <option value="Jardim Bandeirantes">Jardim Bandeirantes</option>
+                  <option value="Jari">Jari</option>
+                  <option value="Jenipapeiro">Jenipapeiro</option>
+                  <option value="Jereissati">Jereissati</option>
+                  <option value="Luzardo Viana">Luzardo Viana</option>
+                  <option value="Menino Jesus de Praga">Menino Jesus de Praga</option>
+                  <option value="Mucunã">Mucunã</option>
+                  <option value="Novo Jenipapeiro">Novo Jenipapeiro</option>
+                  <option value="Novo Maracanaú">Novo Maracanaú</option>
+                  <option value="Novo Oriente">Novo Oriente</option>
+                  <option value="Olho D'Água">Olho D'Água</option>
+                  <option value="Pajuçara">Pajuçara</option>
+                  <option value="Pajuçara Park">Pajuçara Park</option>
+                  <option value="Pau-Serrado">Pau-Serrado</option>
+                  <option value="Parque Tijuca">Parque Tijuca</option>
+                  <option value="Parque Tropical">Parque Tropical</option>
+                  <option value="Parque Santa Maria">Parque Santa Maria</option>
+                  <option value="Piratininga">Piratininga</option>
+                  <option value="Santo Antônio">Santo Antônio</option>
+                  <option value="Santo Sátiro">Santo Sátiro</option>
+                  <option value="Senador José Afonso Sancho">Senador José Afonso Sancho</option>
+                  <option value="Siqueira">Siqueira</option>
+                  <option value="Timbó">Timbó</option>
+                </select>
               </div>
               <div class="form-group">
                 <label>Rua:</label>
@@ -83,6 +115,10 @@
               </span>
               <strong id="delivery-total-price">R$ 2,00</strong>
             </div>
+            <div class="delivery-time" id="delivery-time" style="display: none;">
+              <span class="delivery-time-icon">📦</span>
+              <span>Tempo estimado: <strong id="estimated-delivery"></strong></span>
+            </div>
           </div>
 
           <div class="summary-section">
@@ -93,14 +129,14 @@
             </div>
             <div class="summary-item">
               <span>Frete</span>
-              <span id="delivery-price">R$ 2,00</span>
+              <span id="delivery-price">R$ 0,00</span>
             </div>
             <div class="summary-total">
               <span class="summary-total-label">
                 <img src="images/totalentr.png" alt="Total com a Entrega" class="summary-total-icon" />
                 Total com a Entrega
               </span>
-              <strong id="total-price">R$ 2,00</strong>
+              <strong id="total-price">R$ 0,00</strong>
             </div>
             <button class="btn primary checkout-btn" id="checkout-btn">Fazer Pedido</button>
             <a href="principal.html" class="buy-more-link">Comprar mais produtos</a>
@@ -132,144 +168,135 @@
         p5: { name: 'Coleira Básica', price: 240, image: 'images/item1.png', desc: 'Acessório essencial para a identificação e segurança do pet no dia a dia.' }
       };
 
-      const SHIPPING_BY_REGION = {
-        Norte: 5,
-        Nordeste: 0,
-        'Centro-Oeste': 6,
-        Sudeste: 8,
-        Sul: 7
-      };
+      const BASE_DELIVERY_FEE = 2;
 
-      const REGION_BY_STATE = {
-        AC: 'Norte', AL: 'Nordeste', AP: 'Norte', AM: 'Norte', BA: 'Nordeste', CE: 'Nordeste',
-        DF: 'Centro-Oeste', ES: 'Sudeste', GO: 'Centro-Oeste', MA: 'Nordeste', MT: 'Centro-Oeste',
-        MS: 'Centro-Oeste', MG: 'Sudeste', PA: 'Norte', PB: 'Nordeste', PR: 'Sul', PE: 'Nordeste',
-        PI: 'Nordeste', RJ: 'Sudeste', RN: 'Nordeste', RS: 'Sul', RO: 'Norte', RR: 'Norte',
-        SC: 'Sul', SP: 'Sudeste', SE: 'Nordeste', TO: 'Norte'
-      };
+      const neighborhoodFees = Object.fromEntries(
+        Array.from(document.querySelectorAll('#bairro option')).map((option, index) => {
+          if (!option.value) return [option.value, 0];
+          return [option.value, Number((BASE_DELIVERY_FEE + index * 0.2).toFixed(2))];
+        })
+      );
 
-      const CEP_RANGES_BY_STATE = [
-        { uf: 'SP', start: 1000, end: 19999 },
-        { uf: 'RJ', start: 20000, end: 28999 },
-        { uf: 'ES', start: 29000, end: 29999 },
-        { uf: 'MG', start: 30000, end: 39999 },
-        { uf: 'BA', start: 40000, end: 48999 },
-        { uf: 'SE', start: 49000, end: 49999 },
-        { uf: 'PE', start: 50000, end: 56999 },
-        { uf: 'AL', start: 57000, end: 57999 },
-        { uf: 'PB', start: 58000, end: 58999 },
-        { uf: 'RN', start: 59000, end: 59999 },
-        { uf: 'CE', start: 60000, end: 63999 },
-        { uf: 'PI', start: 64000, end: 64999 },
-        { uf: 'MA', start: 65000, end: 65999 },
-        { uf: 'PA', start: 66000, end: 68899 },
-        { uf: 'AP', start: 68900, end: 68999 },
-        { uf: 'AM', start: 69000, end: 69299 },
-        { uf: 'RR', start: 69300, end: 69399 },
-        { uf: 'AM', start: 69400, end: 69899 },
-        { uf: 'AC', start: 69900, end: 69999 },
-        { uf: 'DF', start: 70000, end: 72799 },
-        { uf: 'GO', start: 72800, end: 72999 },
-        { uf: 'DF', start: 73000, end: 73699 },
-        { uf: 'GO', start: 73700, end: 76799 },
-        { uf: 'RO', start: 76800, end: 76999 },
-        { uf: 'TO', start: 77000, end: 77999 },
-        { uf: 'MT', start: 78000, end: 78899 },
-        { uf: 'MS', start: 79000, end: 79999 },
-        { uf: 'PR', start: 80000, end: 87999 },
-        { uf: 'SC', start: 88000, end: 89999 },
-        { uf: 'RS', start: 90000, end: 99999 }
-      ];
+      const getCurrentDeliveryFee = () => {
+        const bairro = document.getElementById('bairro')?.value.trim();
+        const rua = document.getElementById('rua')?.value.trim();
+        const numero = document.getElementById('numero')?.value.trim();
 
-      let currentDeliveryFee = 0;
-
-      const formatCurrency = (value) => `R$ ${value.toFixed(2)}`;
-
-      const sanitizeCep = (value) => value.replace(/\D/g, '');
-
-      const getShippingMode = () => {
-        const selectedMode = document.querySelector('input[name="shippingMode"]:checked');
-        return selectedMode ? selectedMode.value : 'estado';
-      };
-
-      const getStateFromCep = (cep) => {
-        const cepPrefix = Number(cep.slice(0, 5));
-        const matchedRange = CEP_RANGES_BY_STATE.find(({ start, end }) => cepPrefix >= start && cepPrefix <= end);
-        return matchedRange ? matchedRange.uf : null;
-      };
-
-      const resolveRegion = () => {
-        const mode = getShippingMode();
-
-        if (mode === 'estado') {
-          const state = document.getElementById('estado').value;
-          return REGION_BY_STATE[state] || null;
+        if (!bairro || !rua || !numero) {
+          return 0;
         }
 
-        const cep = sanitizeCep(document.getElementById('cep').value);
-        if (cep.length !== 8) {
-          return null;
-        }
-
-        const stateFromCep = getStateFromCep(cep);
-        return stateFromCep ? REGION_BY_STATE[stateFromCep] : null;
+        return neighborhoodFees[bairro] || 0;
       };
 
-      const updateShippingUI = () => {
-        const region = resolveRegion();
-        const locationInfo = document.getElementById('shipping-location');
+      const calculateDeliveryTime = () => {
+        const bairro = document.getElementById('bairro')?.value.trim();
+        const barrioIndex = Array.from(document.querySelectorAll('#bairro option')).findIndex(opt => opt.value === bairro);
+        
+        // Base: 2-3 dias úteis
+        let businessDays = 2;
+        
+        // Adiciona 1 dia a cada 10 bairros (bairros mais longes)
+        if (barrioIndex > 10) businessDays = 3;
+        if (barrioIndex > 20) businessDays = 4;
+        if (barrioIndex > 30) businessDays = 5;
+        
+        // Calcula data de entrega (próximo dia útil)
+        let deliveryDate = new Date();
+        let daysAdded = 0;
+        
+        while (daysAdded < businessDays) {
+          deliveryDate.setDate(deliveryDate.getDate() + 1);
+          // Pula fins de semana
+          if (deliveryDate.getDay() !== 0 && deliveryDate.getDay() !== 6) {
+            daysAdded++;
+          }
+        }
+        
+        return deliveryDate;
+      };
 
-        if (!region) {
-          currentDeliveryFee = 0;
-          locationInfo.textContent = 'Localidade não definida';
-          document.getElementById('delivery-price').textContent = 'R$ 0,00';
-          document.getElementById('delivery-total-price').textContent = 'R$ 0,00';
+      const updateDeliveryTime = () => {
+        const bairro = document.getElementById('bairro')?.value.trim();
+        const rua = document.getElementById('rua')?.value.trim();
+        const numero = document.getElementById('numero')?.value.trim();
+        const timeElement = document.getElementById('delivery-time');
+        const estimatedElement = document.getElementById('estimated-delivery');
+        
+        if (bairro && rua && numero) {
+          const deliveryDate = calculateDeliveryTime();
+          const dateString = deliveryDate.toLocaleDateString('pt-BR', { weekday: 'long', month: 'long', day: 'numeric' });
+          estimatedElement.textContent = dateString;
+          timeElement.style.display = 'flex';
         } else {
-          currentDeliveryFee = SHIPPING_BY_REGION[region];
-          locationInfo.textContent = `Região: ${region} • Frete ${currentDeliveryFee === 0 ? 'Grátis' : formatCurrency(currentDeliveryFee)}`;
-          const deliveryText = currentDeliveryFee === 0 ? 'Grátis' : formatCurrency(currentDeliveryFee);
-          document.getElementById('delivery-price').textContent = deliveryText;
-          document.getElementById('delivery-total-price').textContent = deliveryText;
+          timeElement.style.display = 'none';
         }
+      };
 
+      const updateTimeline = () => {
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        updateSummary(cartItems);
-      };
-
-      const toggleShippingInputs = () => {
-        const mode = getShippingMode();
-        const stateField = document.getElementById('state-field');
-        const cepField = document.getElementById('cep-field');
-        const stateSelect = document.getElementById('estado');
-        const cepInput = document.getElementById('cep');
-
-        if (mode === 'estado') {
-          stateField.classList.remove('hidden');
-          cepField.classList.add('hidden');
-          stateSelect.required = true;
-          cepInput.required = false;
-          cepInput.value = '';
+        const timelineSteps = document.querySelectorAll('.checkout-timeline .timeline-step');
+        
+        // Step 1: Produtos - completo se houver itens
+        const hasProducts = cartItems.length > 0;
+        const productsStep = timelineSteps[0];
+        if (hasProducts) {
+          productsStep.classList.add('completed');
+          productsStep.classList.remove('active');
+          productsStep.querySelector('.timeline-circle').textContent = '✓';
         } else {
-          stateField.classList.add('hidden');
-          cepField.classList.remove('hidden');
-          stateSelect.required = false;
-          cepInput.required = true;
-          stateSelect.value = '';
+          productsStep.classList.remove('completed');
+          productsStep.classList.add('active');
+          productsStep.querySelector('.timeline-circle').textContent = '1';
         }
 
-        updateShippingUI();
+        // Step 2: Entrega - completo se todos os campos estão preenchidos
+        const bairro = document.getElementById('bairro')?.value.trim();
+        const rua = document.getElementById('rua')?.value.trim();
+        const numero = document.getElementById('numero')?.value.trim();
+        const allFieldsFilled = bairro && rua && numero;
+
+        const deliveryStep = timelineSteps[1];
+        if (allFieldsFilled) {
+          deliveryStep.classList.add('completed');
+          deliveryStep.classList.remove('active');
+          deliveryStep.querySelector('.timeline-circle').textContent = '✓';
+        } else {
+          deliveryStep.classList.remove('completed');
+          deliveryStep.classList.add('active');
+          deliveryStep.querySelector('.timeline-circle').textContent = '2';
+        }
+
+        // Step 3 e 4: Sempre inativo (por enquanto)
+        for (let i = 2; i < timelineSteps.length; i++) {
+          timelineSteps[i].classList.remove('completed', 'active');
+          timelineSteps[i].querySelector('.timeline-circle').textContent = (i + 1);
+        }
       };
+
 
       const renderCart = () => {
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
         const container = document.getElementById('cart-products');
+        const cartContainer = document.querySelector('.cart-container');
         
         if (cartItems.length === 0) {
-          container.innerHTML = '<p style="text-align: center; color: #999; padding: 20px;">Seu carrinho está vazio</p>';
+          cartContainer.classList.add('is-empty');
+          container.innerHTML = `
+            <section class="cart-empty-state" aria-label="Carrinho vazio">
+              <img src="images/carrinho.png" alt="Carrinho vazio" class="cart-empty-icon" />
+              <h2 class="cart-empty-title">Adicione produtos ao seu carrinho</h2>
+              <p class="cart-empty-description">Que tal explorar nossas categorias ou buscar os produtos que estão na sua lista de desejos?</p>
+              <a href="principal.html" class="btn primary cart-empty-action">Buscar</a>
+            </section>
+          `;
           updateSummary(cartItems);
           document.getElementById('checkout-btn').disabled = true;
+          updateTimeline();
           return;
         }
+
+        cartContainer.classList.remove('is-empty');
 
         container.innerHTML = cartItems.map((item, index) => {
           const product = productDatabase[item.id];
@@ -317,6 +344,7 @@
 
         updateSummary(cartItems);
         document.getElementById('checkout-btn').disabled = false;
+        updateTimeline();
       };
 
       const updateQty = (index, delta) => {
@@ -353,10 +381,28 @@
       removeModalOk.addEventListener('click', function() {
         if (removeIndexToConfirm !== null) {
           const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+          const itemName = cartItems[removeIndexToConfirm].name;
           cartItems.splice(removeIndexToConfirm, 1);
           localStorage.setItem('cartItems', JSON.stringify(cartItems));
-          renderCart();
-          updateCartBadge && updateCartBadge();
+          
+          // Animar remoção e mostrar toast
+          const removeBtn = document.querySelector(`[data-remove-index="${removeIndexToConfirm}"]`);
+          if (removeBtn && removeBtn.closest('.cart-product')) {
+            const productCard = removeBtn.closest('.cart-product');
+            productCard.classList.add('removing');
+            setTimeout(() => {
+              renderCart();
+              updateCartBadge && updateCartBadge();
+              // Chamar showToast se existir (do app.js)
+              if (typeof showToast === 'function') {
+                showToast(`✕ ${itemName} removido do carrinho`);
+              }
+            }, 350);
+          } else {
+            renderCart();
+            updateCartBadge && updateCartBadge();
+          }
+          
           hideRemoveModal();
         }
       });
@@ -387,13 +433,11 @@
 
         document.getElementById('products-count').textContent = `Produtos (${count})`;
         document.getElementById('products-price').textContent = `R$ ${total.toFixed(2)}`;
-        
-        const region = resolveRegion();
-        if (!region) {
-          document.getElementById('total-price').textContent = formatCurrency(total);
-        } else {
-          document.getElementById('total-price').textContent = formatCurrency(total + currentDeliveryFee);
-        }
+
+        const currentDeliveryFee = getCurrentDeliveryFee();
+        document.getElementById('delivery-price').textContent = `R$ ${currentDeliveryFee.toFixed(2)}`;
+        document.getElementById('delivery-total-price').textContent = `R$ ${currentDeliveryFee.toFixed(2)}`;
+        document.getElementById('total-price').textContent = `R$ ${(total + currentDeliveryFee).toFixed(2)}`;
       };
 
       const updateCartBadge = () => {
@@ -413,43 +457,63 @@
       };
 
       document.getElementById('checkout-btn').addEventListener('click', () => {
-        const region = resolveRegion();
         const bairro = document.getElementById('bairro').value;
         const rua = document.getElementById('rua').value;
         const numero = document.getElementById('numero').value;
 
-        if (!region) {
-          alert('Escolha a localidade por estado ou informe um CEP válido para calcular o frete.');
-          return;
-        }
-
         if (!bairro || !rua || !numero) {
-          alert('Por favor, preencha todos os dados de entrega!');
+          // Validação com feedback visual melhorado
+          if (!bairro) document.getElementById('bairro').style.borderColor = '#ff6b6b';
+          if (!rua) document.getElementById('rua').style.borderColor = '#ff6b6b';
+          if (!numero) document.getElementById('numero').style.borderColor = '#ff6b6b';
+          
+          if (typeof showToast === 'function') {
+            showToast('⚠ Por favor, preencha todos os dados de entrega!');
+          }
+          setTimeout(() => {
+            document.getElementById('bairro').style.borderColor = '';
+            document.getElementById('rua').style.borderColor = '';
+            document.getElementById('numero').style.borderColor = '';
+          }, 3000);
           return;
         }
 
-        alert('Pedido finalizado com sucesso!');
-        localStorage.removeItem('cartItems');
-        renderCart();
-        updateCartBadge();
-        document.getElementById('delivery-form').reset();
-        toggleShippingInputs();
+        // Animação de sucesso
+        const btn = document.getElementById('checkout-btn');
+        const originalText = btn.textContent;
+        btn.textContent = '✓ Pedido Confirmado!';
+        btn.disabled = true;
+        
+        if (typeof showToast === 'function') {
+          showToast('✓ Pedido finalizado com sucesso!');
+        }
+        
+        setTimeout(() => {
+          alert('Seu pedido foi realizado com sucesso! Acompanhe o status na sua conta.');
+          localStorage.removeItem('cartItems');
+          document.getElementById('delivery-form').reset();
+          renderCart();
+          updateCartBadge();
+          btn.textContent = originalText;
+          btn.disabled = false;
+        }, 1500);
       });
 
-      document.querySelectorAll('input[name="shippingMode"]').forEach((input) => {
-        input.addEventListener('change', toggleShippingInputs);
-      });
+      const recalculateSummary = () => {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        updateSummary(cartItems);
+        updateDeliveryTime();
+        updateTimeline();
+      };
 
-      document.getElementById('estado').addEventListener('change', updateShippingUI);
-      document.getElementById('cep').addEventListener('input', (event) => {
-        const numericCep = sanitizeCep(event.target.value);
-        event.target.value = numericCep.length > 5
-          ? `${numericCep.slice(0, 5)}-${numericCep.slice(5, 8)}`
-          : numericCep;
-        updateShippingUI();
-      });
+      const bairroField = document.getElementById('bairro');
+      const ruaField = document.getElementById('rua');
+      const numeroField = document.getElementById('numero');
 
-      toggleShippingInputs();
+      if (bairroField) bairroField.addEventListener('change', recalculateSummary);
+      if (ruaField) ruaField.addEventListener('input', recalculateSummary);
+      if (numeroField) numeroField.addEventListener('input', recalculateSummary);
+
       renderCart();
     </script>
   </body>

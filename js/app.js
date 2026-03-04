@@ -304,6 +304,21 @@ document.addEventListener("click", (event) => {
     localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
   };
 
+  const updateFavoriteBadge = () => {
+    const badges = document.querySelectorAll('[data-favorite-badge]');
+    if (!badges.length) return;
+
+    const favoritesCount = getFavorites().length;
+    badges.forEach((badge) => {
+      if (favoritesCount > 0) {
+        badge.textContent = favoritesCount;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    });
+  };
+
   const parsePriceText = (priceText) => {
     const normalized = String(priceText || '')
       .replace(/\s/g, '')
@@ -617,6 +632,7 @@ document.addEventListener("click", (event) => {
       }
 
       syncFavoriteButtons();
+      updateFavoriteBadge();
       showToast(wasAdded ? `❤ ${product.name} adicionado aos favoritos!` : `✕ ${product.name} removido dos favoritos.`);
       return;
     }
@@ -628,8 +644,21 @@ document.addEventListener("click", (event) => {
       const product = getProductDataFromCard(card);
       if (!product) return;
 
+      // Feedback visual: animar botão
+      const originalText = cartButton.textContent;
+      cartButton.style.opacity = '0.6';
+      cartButton.disabled = true;
+      cartButton.textContent = '✓ Adicionado';
+      
       addToCart(product.id, product);
       showToast(`✓ ${product.name} adicionado ao carrinho!`);
+      
+      // Restaurar botão após 2s
+      setTimeout(() => {
+        cartButton.textContent = originalText;
+        cartButton.style.opacity = '1';
+        cartButton.disabled = false;
+      }, 2000);
       return;
     }
 
@@ -645,6 +674,7 @@ document.addEventListener("click", (event) => {
 
   renderFavoritesPage();
   syncFavoriteButtons();
+  updateFavoriteBadge();
 
   updateUserArea();
   updateCartBadge();
