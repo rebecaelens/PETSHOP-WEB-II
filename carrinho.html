@@ -274,6 +274,16 @@
         }
       };
 
+      const getCartItemViewData = (item) => {
+        const product = productDatabase[item.id] || {};
+        const name = item.name || item.title || product.name || 'Produto';
+        const desc = item.desc || product.desc || 'Produto adicionado ao carrinho.';
+        const image = item.image || product.image || 'images/cards.jpg';
+        const unitPrice = Number.isFinite(Number(item.price)) ? Number(item.price) : Number(product.price) || 0;
+
+        return { name, desc, image, unitPrice };
+      };
+
 
       const renderCart = () => {
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
@@ -299,7 +309,7 @@
         cartContainer.classList.remove('is-empty');
 
         container.innerHTML = cartItems.map((item, index) => {
-          const product = productDatabase[item.id];
+          const view = getCartItemViewData(item);
           let quantityDisplay = '';
           let totalPrice = 0;
 
@@ -314,15 +324,15 @@
           } else {
             // Item normal
             quantityDisplay = item.quantity;
-            totalPrice = (product?.price || 0) * item.quantity;
+            totalPrice = view.unitPrice * item.quantity;
           }
 
           return `
             <div class="cart-product">
-              <img src="${product?.image}" alt="${product?.name}" class="cart-product-img" />
+              <img src="${view.image}" alt="${view.name}" class="cart-product-img" />
               <div class="cart-product-info">
-                <h3>${product?.name}</h3>
-                <p>${product?.desc}</p>
+                <h3>${view.name}</h3>
+                <p>${view.desc}</p>
                 <div class="cart-product-controls">
                   ${item.isWeightBased ? 
                     `<button class="qty-btn btn-remove" onclick="removeFromCart(${index})" title="Remover do carrinho"><img src="images/lixeira.png" alt="Remover" class="icon-trash"></button>` :
@@ -381,7 +391,8 @@
       removeModalOk.addEventListener('click', function() {
         if (removeIndexToConfirm !== null) {
           const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-          const itemName = cartItems[removeIndexToConfirm].name;
+          const removedItem = cartItems[removeIndexToConfirm] || {};
+          const itemName = removedItem.name || removedItem.title || 'item';
           cartItems.splice(removeIndexToConfirm, 1);
           localStorage.setItem('cartItems', JSON.stringify(cartItems));
           
@@ -410,7 +421,8 @@
       // Substitui chamada de removeFromCart por showRemoveModal
       function removeFromCart(index) {
         const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
-        const itemName = cartItems[index].name;
+        const current = cartItems[index] || {};
+        const itemName = current.name || current.title || 'item';
         showRemoveModal(index, itemName);
       };
 
@@ -419,14 +431,14 @@
         let count = 0;
         
         cartItems.forEach(item => {
+          const view = getCartItemViewData(item);
           if (item.isWeightBased) {
             // Item de peso - o preço já está calculado
             total += item.price;
             count += 1; // Conta como 1 item
           } else {
             // Item normal
-            const product = productDatabase[item.id];
-            total += (product?.price || 0) * item.quantity;
+            total += view.unitPrice * item.quantity;
             count += item.quantity;
           }
         });
