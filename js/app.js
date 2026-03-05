@@ -217,6 +217,10 @@ document.addEventListener("click", (event) => {
 (() => {
   const carousel = document.querySelector('[data-carousel]');
   if (!carousel) return;
+
+  const query = new URLSearchParams(window.location.search);
+  const selectedCategory = (query.get('cat') || 'all').toLowerCase();
+
   const track = carousel.querySelector('.carousel-track');
   const slides = Array.from(carousel.querySelectorAll('.slide'));
   const prev = carousel.querySelector('.carousel-prev');
@@ -227,13 +231,43 @@ document.addEventListener("click", (event) => {
   const shouldCarousel = slides.length >= MIN_ITEMS_FOR_CAROUSEL;
   
   let index = 0;
-  let interval = null;
-  const delay = 4000;
 
-  function go(i) {
+  // Linka categorias da navbar com o carrossel (dot é index + 1).
+  const categoryToSlideIndex = {
+    all: 0,
+    cachorros: 1,
+    gatos: 2,
+    passaros: 3,
+    outros: 4,
+    promocoes: 5,
+    peixes: 7
+  };
+
+  const getInitialIndex = () => {
+    const mapped = categoryToSlideIndex[selectedCategory];
+    if (!Number.isInteger(mapped)) return 0;
+    if (mapped < 0) return 0;
+    if (mapped >= slides.length) return slides.length - 1;
+    return mapped;
+  };
+
+  const getSlideWidth = () => {
+    const firstSlide = slides[0];
+    return firstSlide ? Math.round(firstSlide.getBoundingClientRect().width) : 0;
+  };
+
+  const clampIndex = (value) => Math.min(slides.length - 1, Math.max(0, value));
+
+  function go(i, smooth = true) {
     if (!shouldCarousel) return;
-    index = (i + slides.length) % slides.length;
-    track.style.transform = `translateX(${ -index * 100 }%)`;
+    const slideWidth = getSlideWidth();
+    if (!slideWidth) return;
+
+    index = clampIndex(i);
+    track.scrollTo({
+      left: index * slideWidth,
+      behavior: smooth ? 'smooth' : 'auto'
+    });
     updateDots();
   }
 
@@ -249,10 +283,7 @@ document.addEventListener("click", (event) => {
     slides.forEach((_, i) => {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.addEventListener('click', () => {
-        go(i);
-        restart();
-      });
+      btn.setAttribute('aria-label', `Slide ${i + 1}`);
       dotsWrap.appendChild(btn);
     });
     if (shouldCarousel) {
@@ -261,36 +292,13 @@ document.addEventListener("click", (event) => {
     }
   }
 
-  function start() {
-    if (!shouldCarousel || interval) return;
-    interval = setInterval(() => go(index + 1), delay);
-  }
-
-  function stop() {
-    if (!interval) return;
-    clearInterval(interval);
-    interval = null;
-  }
-
-  function restart() { 
-    if (!shouldCarousel) return;
-    stop(); 
-    start(); 
-  }
-
-  if (shouldCarousel) {
-    if (prev) prev.classList.add('show');
-    if (next) next.classList.add('show');
-  }
-
-  if (prev) prev.addEventListener('click', () => { go(index - 1); restart(); });
-  if (next) next.addEventListener('click', () => { go(index + 1); restart(); });
+  if (prev) prev.classList.remove('show');
+  if (next) next.classList.remove('show');
 
   if (shouldCarousel) {
     let startX = 0;
     let deltaX = 0;
     track.addEventListener('pointerdown', (e) => {
-      stop();
       startX = e.clientX;
       track.setPointerCapture(e.pointerId);
     });
@@ -301,18 +309,32 @@ document.addEventListener("click", (event) => {
     track.addEventListener('pointerup', (e) => {
       if (Math.abs(deltaX) > 50) {
         if (deltaX < 0) go(index + 1); else go(index - 1);
+      } else {
+        go(index);
       }
-      startX = 0; deltaX = 0; restart();
+      startX = 0;
+      deltaX = 0;
     });
 
-    carousel.addEventListener('mouseenter', stop);
-    carousel.addEventListener('mouseleave', start);
+    track.addEventListener('scroll', () => {
+      const slideWidth = getSlideWidth();
+      if (!slideWidth) return;
+      const nextIndex = clampIndex(Math.round(track.scrollLeft / slideWidth));
+      if (nextIndex !== index) {
+        index = nextIndex;
+        updateDots();
+      }
+    }, { passive: true });
+
+    window.addEventListener('resize', () => {
+      go(index, false);
+    });
   }
 
   createDots();
   if (shouldCarousel) {
-    go(0);
-    start();
+    track.style.transform = 'none';
+    go(getInitialIndex(), false);
   }
 })();
 
