@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfil</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="page-app">
+    <header class="site-header">
+      <div class="header-top container">
+        <a href="principal.html" class="branding" aria-label="Voltar para a página inicial">
+          <img src="images/logomr.png" alt="MR Rações" class="logo-img" onerror="this.style.display='none'" />
+          <div class="logo-badge">MR</div>
+        </a>
+
+        <div class="user-actions">
+          <div class="user-auth">
+            <div class="user-avatar">
+              <img src="images/pfpuser.png" alt="Avatar" class="avatar-img" />
+            </div>
+            <div class="user-info">
+              <span class="user-name" data-user-name>Entre ou cadastre-se</span>
+              <a href="login.html" class="auth-link" data-auth-link>Entrar</a>
+            </div>
+          </div>
+          <a class="icon-link favorites-link" href="favoritos.html" aria-label="Favoritos">
+            <img src="images/favorite.png" alt="Favoritos" />
+            <span class="cart-badge" data-favorite-badge>0</span>
+          </a>
+          <a class="icon-link cart-link" href="carrinho.html" aria-label="Carrinho">
+            <img src="images/carrinho.png" alt="Carrinho" />
+            <span class="cart-badge" data-cart-badge>0</span>
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <nav class="category-bar">
+      <div class="container categories">
+        <button class="icon-btn menu-toggle" type="button" data-sidebar-toggle>
+          <img src="images/menu.png" alt="Menu" />
+        </button>
+        <ul class="category-list">
+          <li><a href="principal.html">Início</a></li>
+          <li><a href="favoritos.html">Favoritos</a></li>
+          <li><a href="carrinho.html">Carrinho</a></li>
+          <li><a href="perfil.html" class="is-active">Perfil</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="overlay" data-overlay></div>
+
+    <div class="layout">
+      <aside class="sidebar" data-sidebar>
+        <nav class="menu" role="navigation">
+          <a class="menu-item" href="principal.html">
+            <span class="menu-icon"><img src="images/home.png" alt="Home" /></span>
+            <span class="menu-text">Página Inicial</span>
+          </a>
+          <a class="menu-item" href="principal.html?q=">
+            <span class="menu-icon"><img src="images/buscar.png" alt="Pesquisar" /></span>
+            <span class="menu-text">Pesquisar</span>
+          </a>
+          <a class="menu-item" href="consultar.html">
+            <span class="menu-icon"><img src="images/chat.png" alt="Consultar" /></span>
+            <span class="menu-text">Consultar</span>
+          </a>
+          <a class="menu-item" href="precos.html">
+            <span class="menu-icon"><img src="images/preço.png" alt="Preços" /></span>
+            <span class="menu-text">Preços</span>
+          </a>
+          <a class="menu-item active" href="perfil.html">
+            <span class="menu-icon"><img src="images/user-black.png" alt="Perfil" /></span>
+            <span class="menu-text">Perfil</span>
+          </a>
+          <a class="menu-item" href="#" data-logout>
+            <span class="menu-icon"><img src="images/sair.png" alt="Sair" /></span>
+            <span class="menu-text">Sair</span>
+          </a>
+        </nav>
+      </aside>
+
+      <main class="content single profile-page">
+        <section class="profile-card">
+          <h1 class="profile-title">Foto de Perfil</h1>
+          <p class="profile-subtitle">Ajuste sua imagem no círculo e salve para atualizar seu avatar.</p>
+
+          <div class="profile-cropper-wrap" data-crop-area>
+            <img src="images/pfpuser.png" alt="Pré-visualização da foto" class="profile-crop-image" data-crop-image />
+          </div>
+
+          <div class="profile-preview-wrap">
+            <span class="profile-preview-label">Prévia do recorte</span>
+            <canvas class="profile-preview-canvas" data-crop-preview width="160" height="160" aria-label="Prévia da foto recortada"></canvas>
+          </div>
+
+          <div class="profile-actions">
+            <input type="file" accept="image/*" data-crop-input class="profile-file-input" id="profile-file-input" />
+            <label for="profile-file-input" class="btn secondary profile-btn">Selecionar foto</label>
+          </div>
+
+          <div class="profile-zoom-row">
+            <span>Zoom</span>
+            <input type="range" min="1" max="3" step="0.01" value="1" data-crop-zoom class="profile-zoom" />
+          </div>
+
+          <div class="profile-save-row">
+            <button class="btn primary" type="button" data-crop-save>Salvar foto</button>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/perfil.js"></script>
+  </body>
+</html>

@@ -71,14 +71,34 @@
             <span class="menu-icon"><img src="images/buscar.png" alt="Pesquisar"></span>
             <span class="menu-text">Pesquisar</span>
           </a>
-          <a class="menu-item" href="consultar.html">
+          <a class="menu-item" href="#" id="consultarBtn">
             <span class="menu-icon"><img src="images/chat.png" alt="Consultar"></span>
             <span class="menu-text">Consultar</span>
           </a>
-          <a class="menu-item" href="precos.html">
+          <a class="menu-item" href="#" data-price-filters-toggle aria-expanded="false" aria-controls="price-filters-panel">
             <span class="menu-icon"><img src="images/preço.png" alt="Preços"></span>
             <span class="menu-text">Preços</span>
           </a>
+          <div class="price-filters-panel" id="price-filters-panel" data-price-filters-panel hidden>
+            <div class="price-filter-group">
+              <p class="price-filter-title">Faixa de preço</p>
+              <div class="price-filter-row">
+                <input type="number" min="0" step="0.01" placeholder="Mín" data-filter-price-min />
+                <input type="number" min="0" step="0.01" placeholder="Máx" data-filter-price-max />
+              </div>
+            </div>
+
+            <div class="price-filter-group">
+              <p class="price-filter-title">Tipo de pet</p>
+              <label class="price-filter-check"><input type="checkbox" value="cachorros" data-filter-pet-type /> Cachorro</label>
+              <label class="price-filter-check"><input type="checkbox" value="gatos" data-filter-pet-type /> Gato</label>
+              <label class="price-filter-check"><input type="checkbox" value="peixes" data-filter-pet-type /> Peixe</label>
+              <label class="price-filter-check"><input type="checkbox" value="passaros" data-filter-pet-type /> Pássaro</label>
+              <label class="price-filter-check"><input type="checkbox" value="outros" data-filter-pet-type /> Outros</label>
+            </div>
+
+            <button class="price-filter-clear" type="button" data-filter-clear>Limpar filtros</button>
+          </div>
           <a class="menu-item" href="perfil.html">
             <span class="menu-icon"><img src="images/user-black.png" alt="Perfil"></span>
             <span class="menu-text">Perfil</span>
@@ -144,12 +164,20 @@
             <div class="product-media" style="background-image:url('images/item2.png')"></div>
             <div class="product-body">
               <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <img src="images/venda.png" alt="Promoção" class="sale-badge">
               <h4 class="product-title">Golden Premiun</h4>
               <p class="product-desc">Uma ração seca completa e balanceada, desenvolvida para fornecer nutrição de qualidade para cães e gatos. Sua fórmula contém proteínas, vitaminas e minerais essenciais que auxiliam na saúde.</p>
+<<<<<<< Updated upstream
               <div class="product-price">
                 <span class="price-original">R$ 319,90</span>
                 <div class="price-promo"><span class="price-currency">R$</span> <span class="price-value">245,90</span></div>
               </div>
+=======
+              <div class="product-price-original">
+                <span class="price-currency">R$</span> <span class="price-value">239,90</span>
+              </div>
+              <div class="product-price product-price-promo"><span class="price-currency">R$</span> <span class="price-value">189,90</span></div>
+>>>>>>> Stashed changes
               <div class="product-actions">
                 <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
               </div>
@@ -175,12 +203,20 @@
             <div class="product-media" style="background-image:url('images/item4.png')"></div>
             <div class="product-body">
               <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <img src="images/venda.png" alt="Promoção" class="sale-badge">
               <h4 class="product-title">Brinquedos para gatos</h4>
               <p class="product-desc">Brinquedos para gatos são itens desenvolvidos para estimular o instinto natural de caça e manter o pet ativo e entretido. Eles ajudam a reduzir o estresse e incentivam o gato.</p>
+<<<<<<< Updated upstream
               <div class="product-price">
                 <span class="price-original">R$ 64,90</span>
                 <div class="price-promo"><span class="price-currency">R$</span> <span class="price-value">45,90</span></div>
               </div>
+=======
+              <div class="product-price-original">
+                <span class="price-currency">R$</span> <span class="price-value">99,90</span>
+              </div>
+              <div class="product-price product-price-promo"><span class="price-currency">R$</span> <span class="price-value">79,90</span></div>
+>>>>>>> Stashed changes
               <div class="product-actions">
                 <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
               </div>
@@ -232,12 +268,20 @@
             <div class="product-media" style="background-image:url('images/Guia e Coleira Confort.jpg')"></div>
             <div class="product-body">
               <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <img src="images/venda.png" alt="Promoção" class="sale-badge">
               <h4 class="product-title">Guia e Coleira Confort</h4>
               <p class="product-desc">Conjunto de guia e coleira com ajuste prático para passeios seguros e confortáveis em cães de pequeno e médio porte.</p>
+<<<<<<< Updated upstream
               <div class="product-price">
                 <span class="price-original">R$ 109,90</span>
                 <div class="price-promo"><span class="price-currency">R$</span> <span class="price-value">79,90</span></div>
               </div>
+=======
+              <div class="product-price-original">
+                <span class="price-currency">R$</span> <span class="price-value">89,90</span>
+              </div>
+              <div class="product-price product-price-promo"><span class="price-currency">R$</span> <span class="price-value">69,90</span></div>
+>>>>>>> Stashed changes
               <div class="product-actions">
                 <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
               </div>
@@ -275,12 +319,20 @@
             <div class="product-media" style="background-image:url('images/Mix de Sementes Premium.png')"></div>
             <div class="product-body">
               <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <img src="images/venda.png" alt="Promoção" class="sale-badge">
               <h4 class="product-title">Mix de Sementes Premium</h4>
               <p class="product-desc">Seleção nutritiva de sementes para pássaros ornamentais, com vitaminas e minerais para plumagem e vitalidade.</p>
+<<<<<<< Updated upstream
               <div class="product-price">
                 <span class="price-original">R$ 39,90</span>
                 <div class="price-promo"><span class="price-currency">R$</span> <span class="price-value">28,90</span></div>
               </div>
+=======
+              <div class="product-price-original">
+                <span class="price-currency">R$</span> <span class="price-value">44,90</span>
+              </div>
+              <div class="product-price product-price-promo"><span class="price-currency">R$</span> <span class="price-value">34,90</span></div>
+>>>>>>> Stashed changes
               <div class="product-actions">
                 <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
               </div>
@@ -558,6 +610,24 @@
       </div>
     </div>
 
+    <!-- Chat Widget -->
+    <button class="chat-widget-button" id="chatWidgetBtn">
+        <img src="images/bot.png" alt="Chat" class="chat-widget-icon">
+    </button>
+    
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header">
+            <h1>Pet Advisor</h1>
+            <button class="chat-close-btn" id="chatCloseBtn">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Sua mensagem...">
+            <button class="chat-send-btn" id="chatSendBtn">→</button>
+        </div>
+    </div>
+
     <script src="js/app.js"></script>
+    <script src="js/consultarBot.js"></script>
   </body>
 </html>

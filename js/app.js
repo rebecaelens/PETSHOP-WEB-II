@@ -27,11 +27,39 @@ if (overlay) {
 
 document.addEventListener('DOMContentLoaded', () => {
   closeSidebar();
+  
+  // Adicionar listener para o toggle de filtros de preço
+  const priceToggleBtn = document.querySelector('[data-price-filters-toggle]');
+  if (priceToggleBtn) {
+    priceToggleBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const panel = document.querySelector('[data-price-filters-panel]');
+      if (panel instanceof HTMLElement) {
+        const isHidden = panel.hasAttribute('hidden');
+        if (isHidden) {
+          panel.removeAttribute('hidden');
+          priceToggleBtn.setAttribute('aria-expanded', 'true');
+        } else {
+          panel.setAttribute('hidden', '');
+          priceToggleBtn.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+  }
 });
 
 document.addEventListener('click', (e) => {
   const target = e.target;
   if (!(target instanceof HTMLElement)) return;
+
+  const priceToggle = target.closest('[data-price-filters-toggle]');
+  if (priceToggle instanceof HTMLElement) {
+    e.preventDefault();
+    e.stopPropagation();
+    return;
+  }
+
   if (target.matches('.menu-item') || target.closest('.menu-item')) {
     const item = target.matches('.menu-item') ? target : target.closest('.menu-item');
     document.querySelectorAll('.menu-item').forEach((m) => m.classList.remove('active'));
@@ -82,12 +110,24 @@ document.addEventListener("click", (event) => {
 
   const productCards = Array.from(document.querySelectorAll('[data-product]'));
   const categoryLinks = Array.from(document.querySelectorAll('.category-list a'));
+  const minPriceInput = document.querySelector('[data-filter-price-min]');
+  const maxPriceInput = document.querySelector('[data-filter-price-max]');
+  const petTypeChecks = Array.from(document.querySelectorAll('[data-filter-pet-type]'));
+  const clearFiltersButton = document.querySelector('[data-filter-clear]');
 
   const parseCategories = (value) =>
     String(value || '')
       .split(',')
       .map((item) => item.trim().toLowerCase())
       .filter(Boolean);
+
+  const getCardPrice = (card) => {
+    // Pega o preço promocional se existir, senão pega o preço normal
+    const priceContainer = card.querySelector('.product-price-promo') || card.querySelector('.product-price');
+    const priceText = priceContainer?.querySelector('.price-value')?.textContent || '0';
+    const normalized = priceText.replace(/\./g, '').replace(',', '.').replace(/[^0-9.]/g, '');
+    return Number(normalized) || 0;
+  };
 
   const matchesCategory = (card) => {
     if (selectedCategory === 'all') {
@@ -113,10 +153,59 @@ document.addEventListener("click", (event) => {
     return `${title} ${desc}`.includes(searchTerm);
   };
 
-  productCards.forEach((card) => {
-    const visible = matchesCategory(card) && matchesSearch(card);
-    card.style.display = visible ? '' : 'none';
-  });
+  const matchesSidebarFilters = (card) => {
+    const minPrice = Number(minPriceInput?.value || 0);
+    const maxPrice = Number(maxPriceInput?.value || 0);
+    const cardPrice = getCardPrice(card);
+    const categories = parseCategories(card.dataset.category);
+    const selectedPetTypes = petTypeChecks
+      .filter((check) => check instanceof HTMLInputElement && check.checked)
+      .map((check) => check.value.toLowerCase());
+
+    if (minPrice > 0 && cardPrice < minPrice) {
+      return false;
+    }
+
+    if (maxPrice > 0 && cardPrice > maxPrice) {
+      return false;
+    }
+
+    if (selectedPetTypes.length > 0) {
+      return categories.some((category) => selectedPetTypes.includes(category));
+    }
+
+    return true;
+  };
+
+  const applyFilters = () => {
+    productCards.forEach((card) => {
+      const visible = matchesCategory(card) && matchesSearch(card) && matchesSidebarFilters(card);
+      card.style.display = visible ? '' : 'none';
+    });
+  };
+
+  applyFilters();
+
+  const onSidebarFilterChange = () => {
+    applyFilters();
+  };
+
+  if (minPriceInput) minPriceInput.addEventListener('input', onSidebarFilterChange);
+  if (maxPriceInput) maxPriceInput.addEventListener('input', onSidebarFilterChange);
+  petTypeChecks.forEach((check) => check.addEventListener('change', onSidebarFilterChange));
+
+  if (clearFiltersButton) {
+    clearFiltersButton.addEventListener('click', () => {
+      if (minPriceInput) minPriceInput.value = '';
+      if (maxPriceInput) maxPriceInput.value = '';
+      petTypeChecks.forEach((check) => {
+        if (check instanceof HTMLInputElement) {
+          check.checked = false;
+        }
+      });
+      applyFilters();
+    });
+  }
 
   categoryLinks.forEach((link) => {
     const href = link.getAttribute('href') || '';
@@ -341,7 +430,11 @@ document.addEventListener("click", (event) => {
     const productId = card.id || card.dataset.productId;
     const title = card.querySelector('.product-title, .card-title')?.textContent?.trim() || '';
     const description = card.querySelector('.product-desc, .card-text')?.textContent?.trim() || '';
-    const priceValue = card.querySelector('.price-value')?.textContent || card.dataset.price || '';
+    
+    // Pega o preço promocional se existir, senão pega o preço normal
+    const priceContainer = card.querySelector('.product-price-promo') || card.querySelector('.product-price');
+    const priceValue = priceContainer?.querySelector('.price-value')?.textContent || card.dataset.price || '';
+    
     const image = extractBackgroundImageUrl(card.querySelector('.product-media'));
 
     if (!productId || !title) {
