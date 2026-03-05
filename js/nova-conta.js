@@ -12,12 +12,17 @@ const resendTimer = document.querySelector("[data-nova-conta-resend-timer]");
 const successModal = document.querySelector("[data-nova-conta-success]");
 const errorModal = document.querySelector("[data-nova-conta-error]");
 const errorModalClose = document.querySelector("[data-nova-conta-error-close]");
+const errorText = document.querySelector('[data-nova-conta-error-text]');
 
 const EXPECTED_CODE = "12345";
 const RESEND_SECONDS = 30;
+const SIGNUP_EMAIL_KEY = 'signupEmail';
+const SIGNUP_CODE_KEY = 'signupCode';
+const api = window.PetshopApi || null;
 
 let lastFocusedElement = null;
 let resendInterval = null;
+let lastErrorMessage = 'Verifique o codigo e tente novamente.';
 
 const getFocusableElements = (modal) => {
   if (!modal) return [];
@@ -131,7 +136,7 @@ const startResendCountdown = () => {
 };
 
 if (novaContaForm) {
-  novaContaForm.addEventListener("submit", (event) => {
+  novaContaForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     if (!novaContaEmailInput || !novaContaEmailInput.checkValidity()) {
@@ -146,12 +151,26 @@ if (novaContaForm) {
 
     setSubmitLoading(true);
 
-    setTimeout(() => {
+    try {
+      if (!api) throw new Error('API indisponivel');
+      const sendResponse = await fetch('http://localhost:3333/api/auth/request-signup-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const sendData = await sendResponse.json().catch(() => ({}));
+      if (!sendResponse.ok) throw new Error(sendData?.message || 'Falha ao enviar codigo');
+
+      sessionStorage.setItem(SIGNUP_EMAIL_KEY, email);
+
       setSubmitLoading(false);
       openModal(codeModal);
       resetCodeInputs();
       startResendCountdown();
-    }, 500);
+    } catch (err) {
+      setSubmitLoading(false);
+      alert(err?.message || 'Nao foi possivel enviar o codigo.');
+    }
   });
 }
 
@@ -193,24 +212,52 @@ codeInputs.forEach((input, index) => {
 });
 
 if (codeForm) {
-  codeForm.addEventListener("submit", (event) => {
+  codeForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
     const code = codeInputs.map((input) => input.value).join("");
+    const email = (sessionStorage.getItem(SIGNUP_EMAIL_KEY) || novaContaEmailInput?.value || '').trim().toLowerCase();
 
-    if (code.length !== EXPECTED_CODE.length || code !== EXPECTED_CODE) {
+    if (code.length !== EXPECTED_CODE.length) {
+      lastErrorMessage = 'Codigo incompleto. Digite os 5 numeros.';
+      if (errorText) errorText.textContent = lastErrorMessage;
       closeModal(codeModal);
       openModal(errorModal);
       return;
     }
 
-    closeModal(codeModal);
-    openModal(successModal);
+    try {
+      const response = await fetch('http://localhost:3333/api/auth/verify-signup-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(data?.message || 'Codigo invalido');
+      }
+
+      sessionStorage.setItem(SIGNUP_EMAIL_KEY, email);
+      sessionStorage.setItem(SIGNUP_CODE_KEY, code);
+
+      closeModal(codeModal);
+      openModal(successModal);
+      return;
+    } catch (_) {
+      lastErrorMessage = _.message || 'Codigo invalido';
+      if (errorText) errorText.textContent = lastErrorMessage;
+      closeModal(codeModal);
+      openModal(errorModal);
+      return;
+    }
   });
 }
 
 if (errorModalClose) {
   errorModalClose.addEventListener("click", () => {
+    if (errorText) {
+      errorText.textContent = lastErrorMessage;
+    }
     closeModal(errorModal);
     openModal(codeModal);
     resetCodeInputs();
@@ -218,11 +265,26 @@ if (errorModalClose) {
 }
 
 if (resendButton) {
-  resendButton.addEventListener("click", () => {
+  resendButton.addEventListener("click", async () => {
     resetCodeInputs();
-    startResendCountdown();
-    if (resendTimer) {
-      resendTimer.textContent = "Código reenviado. Reenviar em 30s";
+    const email = (sessionStorage.getItem(SIGNUP_EMAIL_KEY) || novaContaEmailInput?.value || '').trim().toLowerCase();
+    if (!email) return;
+
+    try {
+      const response = await fetch('http://localhost:3333/api/auth/request-signup-code', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data?.message || 'Falha ao reenviar codigo');
+
+      startResendCountdown();
+      if (resendTimer) {
+        resendTimer.textContent = "Codigo reenviado. Reenviar em 30s";
+      }
+    } catch (err) {
+      alert(err?.message || 'Nao foi possivel reenviar o codigo.');
     }
   });
 }

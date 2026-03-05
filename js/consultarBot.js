@@ -10,6 +10,36 @@ const BOT_NAME = 'BOLT';
 const BOT_AVATAR = 'images/bolt.jpg';
 const DEFAULT_USER_AVATAR = 'images/pfpuser.png';
 const STORE_WHATSAPP_NUMBER = '5585998279694';
+const api = window.PetshopApi || null;
+
+const isAuthenticated = () => Boolean(api?.getAccessToken && api.getAccessToken());
+
+const syncLocalCartFromApi = async () => {
+  if (!isAuthenticated()) return;
+  try {
+    const data = await api.getCart();
+    const mapped = (data.items || []).map((item) => {
+      const isWeightBased = Number(item.product?.pricePerKg || 0) > 0;
+      const weight = Number(item.grams || 0) / 1000;
+      return {
+        id: item.productId,
+        name: item.product?.name || 'Produto',
+        title: item.product?.name || 'Produto',
+        desc: item.product?.description || '',
+        image: item.product?.imageUrl || '',
+        price: Number(item.totalPrice || 0),
+        quantity: isWeightBased ? 1 : Number(item.quantity || 1),
+        weight,
+        pricePerKg: Number(item.product?.pricePerKg || 0),
+        isWeightBased,
+        purchaseMode: isWeightBased ? 'by-weight' : 'unit'
+      };
+    });
+    localStorage.setItem('cartItems', JSON.stringify(mapped));
+  } catch (_) {
+    // Mantem fallback local.
+  }
+};
 
 let conversationState = 'greeting';
 let userPreferences = {
@@ -296,6 +326,13 @@ function addWeightBasedItemToCart(product, totalPrice, purchaseMode = 'by-price'
     purchaseMode
   });
   localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+  if (isAuthenticated()) {
+    api.addCartItem({
+      productId: product.id,
+      grams: Math.round(weight * 1000)
+    }).then(syncLocalCartFromApi).catch(() => {});
+  }
 }
 
 function tryHandleRationByBudget(intent) {
@@ -602,7 +639,7 @@ function showRecommendations(products) {
   sendBtn.style.border = 'none';
   sendBtn.textContent = 'Enviar para carrinho';
   
-  sendBtn.addEventListener('click', () => {
+  sendBtn.addEventListener('click', async () => {
     if (Object.keys(selectedProducts).length === 0) {
       addMessage('Selecione pelo menos um produto!', true);
       return;
@@ -622,9 +659,23 @@ function showRecommendations(products) {
         price: product.price,
         quantity: product.quantity || 1
       });
+
+      if (isAuthenticated()) {
+        try {
+          const productPricePerKg = products.find((p) => p.id === productId)?.pricePerKg;
+          if (Number(productPricePerKg) > 0) {
+            await api.addCartItem({ productId, grams: Math.round((product.quantity || 1) * 1000) });
+          } else {
+            await api.addCartItem({ productId, quantity: Math.max(1, Math.round(product.quantity || 1)) });
+          }
+        } catch (_) {}
+      }
     }
     
     localStorage.setItem('cartItems', JSON.stringify(cart));
+    if (isAuthenticated()) {
+      await syncLocalCartFromApi();
+    }
     
     addMessage('Produtos adicionados ao carrinho com sucesso!', true, [
       { text: 'Ir para o carrinho', value: 'goCart' },

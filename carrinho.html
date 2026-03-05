@@ -159,6 +159,7 @@
       </div>
     </div>
 
+    <script src="js/api.js"></script>
     <script>
       const productDatabase = {
         p1: { name: 'Golden Premiun', price: 240, image: 'images/item2.png', desc: 'Uma ração seca completa e balanceada, desenvolvida para fornecer nutrição de qualidade para cães e gatos.' },
@@ -169,6 +170,38 @@
       };
 
       const BASE_DELIVERY_FEE = 2;
+      const api = window.PetshopApi || null;
+
+      const isAuthenticated = () => Boolean(api?.getAccessToken && api.getAccessToken());
+      const getLocalCartItems = () => JSON.parse(localStorage.getItem('cartItems')) || [];
+
+      const syncLocalCartFromApi = async () => {
+        if (!isAuthenticated()) return;
+        try {
+          const data = await api.getCart();
+          const mapped = (data.items || []).map((item) => {
+            const isWeightBased = Number(item.product?.pricePerKg || 0) > 0;
+            const weight = Number(item.grams || 0) / 1000;
+            return {
+              apiItemId: item.id,
+              id: item.productId,
+              name: item.product?.name || 'Produto',
+              title: item.product?.name || 'Produto',
+              desc: item.product?.description || '',
+              image: item.product?.imageUrl || '',
+              price: Number(item.totalPrice || 0),
+              quantity: isWeightBased ? 1 : Number(item.quantity || 1),
+              weight,
+              pricePerKg: Number(item.product?.pricePerKg || 0),
+              isWeightBased,
+              purchaseMode: isWeightBased ? 'by-weight' : 'unit'
+            };
+          });
+          localStorage.setItem('cartItems', JSON.stringify(mapped));
+        } catch (_) {
+          // Mantem fallback local.
+        }
+      };
 
       const neighborhoodFees = Object.fromEntries(
         Array.from(document.querySelectorAll('#bairro option')).map((option, index) => {
@@ -234,7 +267,7 @@
       };
 
       const updateTimeline = () => {
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const cartItems = getLocalCartItems();
         const timelineSteps = document.querySelectorAll('.checkout-timeline .timeline-step');
         
         // Step 1: Produtos - completo se houver itens
@@ -286,7 +319,7 @@
 
 
       const renderCart = () => {
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const cartItems = getLocalCartItems();
         const container = document.getElementById('cart-products');
         const cartContainer = document.querySelector('.cart-container');
         
@@ -357,11 +390,19 @@
         updateTimeline();
       };
 
-      const updateQty = (index, delta) => {
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+      const updateQty = async (index, delta) => {
+        const cartItems = getLocalCartItems();
         if (cartItems[index]) {
           cartItems[index].quantity = Math.max(1, cartItems[index].quantity + delta);
           localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+          const item = cartItems[index];
+          if (isAuthenticated() && item?.apiItemId) {
+            try {
+              await api.updateCartItem(item.apiItemId, { quantity: item.quantity });
+              await syncLocalCartFromApi();
+            } catch (_) {}
+          }
           renderCart();
         }
       };
@@ -388,13 +429,20 @@
       document.getElementById('removeModalOverlay').addEventListener('click', function(e) {
         if (e.target === this) hideRemoveModal();
       });
-      removeModalOk.addEventListener('click', function() {
+      removeModalOk.addEventListener('click', async function() {
         if (removeIndexToConfirm !== null) {
-          const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+          const cartItems = getLocalCartItems();
           const removedItem = cartItems[removeIndexToConfirm] || {};
           const itemName = removedItem.name || removedItem.title || 'item';
           cartItems.splice(removeIndexToConfirm, 1);
           localStorage.setItem('cartItems', JSON.stringify(cartItems));
+
+          if (isAuthenticated() && removedItem?.apiItemId) {
+            try {
+              await api.removeCartItem(removedItem.apiItemId);
+              await syncLocalCartFromApi();
+            } catch (_) {}
+          }
           
           // Animar remoção e mostrar toast
           const removeBtn = document.querySelector(`[data-remove-index="${removeIndexToConfirm}"]`);
@@ -420,7 +468,7 @@
 
       // Substitui chamada de removeFromCart por showRemoveModal
       function removeFromCart(index) {
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const cartItems = getLocalCartItems();
         const current = cartItems[index] || {};
         const itemName = current.name || current.title || 'item';
         showRemoveModal(index, itemName);
@@ -453,7 +501,7 @@
       };
 
       const updateCartBadge = () => {
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const cartItems = getLocalCartItems();
         const itemCount = cartItems.reduce((total, item) => {
           return total + (item.isWeightBased ? 1 : item.quantity);
         }, 0);
@@ -468,7 +516,7 @@
         });
       };
 
-      document.getElementById('checkout-btn').addEventListener('click', () => {
+      document.getElementById('checkout-btn').addEventListener('click', async () => {
         const bairro = document.getElementById('bairro').value;
         const rua = document.getElementById('rua').value;
         const numero = document.getElementById('numero').value;
@@ -500,9 +548,25 @@
           showToast('✓ Pedido finalizado com sucesso!');
         }
         
-        setTimeout(() => {
+        setTimeout(async () => {
+          try {
+            if (isAuthenticated()) {
+              await api.createOrder({ status: 'pending' });
+              await syncLocalCartFromApi();
+            } else {
+              localStorage.removeItem('cartItems');
+            }
+          } catch (err) {
+            alert(err?.message || 'Nao foi possivel finalizar seu pedido.');
+            btn.textContent = originalText;
+            btn.disabled = false;
+            return;
+          }
+
           alert('Seu pedido foi realizado com sucesso! Acompanhe o status na sua conta.');
-          localStorage.removeItem('cartItems');
+          if (!isAuthenticated()) {
+            localStorage.removeItem('cartItems');
+          }
           document.getElementById('delivery-form').reset();
           renderCart();
           updateCartBadge();
@@ -512,7 +576,7 @@
       });
 
       const recalculateSummary = () => {
-        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const cartItems = getLocalCartItems();
         updateSummary(cartItems);
         updateDeliveryTime();
         updateTimeline();
@@ -526,7 +590,10 @@
       if (ruaField) ruaField.addEventListener('input', recalculateSummary);
       if (numeroField) numeroField.addEventListener('input', recalculateSummary);
 
-      renderCart();
+      (async () => {
+        await syncLocalCartFromApi();
+        renderCart();
+      })();
     </script>
   </body>
 </html>

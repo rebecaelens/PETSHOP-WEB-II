@@ -68,7 +68,11 @@ document.addEventListener('click', (e) => {
   }
   if (target.matches('[data-logout]') || target.closest('[data-logout]')) {
     e.preventDefault();
-    localStorage.removeItem('auth');
+    if (window.PetshopApi?.logout) {
+      window.PetshopApi.logout();
+    } else {
+      localStorage.removeItem('auth');
+    }
     window.location.href = 'login.html';
   }
 });
@@ -339,13 +343,18 @@ document.addEventListener("click", (event) => {
 })();
 
 (() => {
+  const api = window.PetshopApi || null;
   const DEFAULT_AVATAR = 'images/pfpuser.png';
+  const FAVORITES_STORAGE_KEY = 'favoriteItems';
+
+  const isAuthenticated = () => Boolean(api?.getAccessToken && api.getAccessToken());
 
   const updateUserArea = () => {
     const userName = document.querySelector('[data-user-name]');
     const authLink = document.querySelector('[data-auth-link]');
     const avatarImage = document.querySelector('.avatar-img');
-    const currentUser = localStorage.getItem('currentUser');
+    const authUser = api?.getCurrentUser ? api.getCurrentUser() : null;
+    const currentUser = authUser?.name || localStorage.getItem('currentUser');
     const savedProfileImage = localStorage.getItem('userProfileImage');
 
     if (!userName || !authLink) {
@@ -361,10 +370,13 @@ document.addEventListener("click", (event) => {
       authLink.href = '#';
       authLink.addEventListener('click', (e) => {
         e.preventDefault();
+        api?.logout?.();
         localStorage.removeItem('currentUser');
         localStorage.removeItem('cartItems');
+        localStorage.removeItem(FAVORITES_STORAGE_KEY);
         updateUserArea();
         updateCartBadge();
+        updateFavoriteBadge();
       });
     } else {
       userName.textContent = 'Entre ou cadastre-se';
@@ -407,12 +419,55 @@ document.addEventListener("click", (event) => {
     }, 3000);
   };
 
-  const FAVORITES_STORAGE_KEY = 'favoriteItems';
-
   const getFavorites = () => JSON.parse(localStorage.getItem(FAVORITES_STORAGE_KEY)) || [];
 
   const saveFavorites = (favorites) => {
     localStorage.setItem(FAVORITES_STORAGE_KEY, JSON.stringify(favorites));
+  };
+
+  const syncFavoritesFromApi = async () => {
+    if (!isAuthenticated()) return;
+    try {
+      const rows = await api.listFavorites();
+      const favorites = rows.map((item) => ({
+        id: item.product?.id || item.productId,
+        name: item.product?.name || 'Produto',
+        desc: item.product?.description || '',
+        price: Number(item.product?.promoPrice ?? item.product?.price ?? 0),
+        image: item.product?.imageUrl || ''
+      }));
+      saveFavorites(favorites.filter((item) => item.id));
+    } catch (_) {
+      // Fallback local se API estiver indisponivel.
+    }
+  };
+
+  const syncCartFromApi = async () => {
+    if (!isAuthenticated()) return;
+    try {
+      const data = await api.getCart();
+      const localItems = (data.items || []).map((item) => {
+        const isWeightBased = Number(item.product?.pricePerKg || 0) > 0;
+        const grams = Number(item.grams || 0);
+        const weight = grams > 0 ? grams / 1000 : 0;
+        return {
+          id: item.productId,
+          name: item.product?.name || 'Produto',
+          title: item.product?.name || 'Produto',
+          desc: item.product?.description || '',
+          image: item.product?.imageUrl || '',
+          price: Number(item.totalPrice || 0),
+          quantity: isWeightBased ? 1 : Number(item.quantity || 1),
+          weight,
+          pricePerKg: Number(item.product?.pricePerKg || 0),
+          isWeightBased,
+          purchaseMode: isWeightBased ? 'by-weight' : 'unit'
+        };
+      });
+      localStorage.setItem('cartItems', JSON.stringify(localItems));
+    } catch (_) {
+      // Mantem cache local.
+    }
   };
 
   const updateFavoriteBadge = () => {
@@ -515,22 +570,32 @@ document.addEventListener("click", (event) => {
     });
   };
 
-  const toggleFavorite = (product) => {
+  const toggleFavorite = async (product) => {
     const favorites = getFavorites();
     const existingIndex = favorites.findIndex((item) => item.id === product.id);
 
     if (existingIndex >= 0) {
       favorites.splice(existingIndex, 1);
       saveFavorites(favorites);
+      if (isAuthenticated()) {
+        try {
+          await api.removeFavorite(product.id);
+        } catch (_) {}
+      }
       return false;
     }
 
     favorites.push(product);
     saveFavorites(favorites);
+    if (isAuthenticated()) {
+      try {
+        await api.addFavorite(product.id);
+      } catch (_) {}
+    }
     return true;
   };
 
-  const addToCart = (productId, fallbackProduct = null) => {
+  const addToCart = async (productId, fallbackProduct = null) => {
     const card = document.querySelector(`[data-product][id="${productId}"]`);
     const cardProduct = getProductDataFromCard(card);
     const productData = cardProduct || fallbackProduct;
@@ -551,6 +616,12 @@ document.addEventListener("click", (event) => {
     }
     
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    if (isAuthenticated()) {
+      try {
+        await api.addCartItem({ productId, quantity: 1 });
+      } catch (_) {}
+      await syncCartFromApi();
+    }
     updateCartBadge();
   };
 
@@ -670,7 +741,7 @@ document.addEventListener("click", (event) => {
     });
   }
 
-  if (weightModalAddCart) weightModalAddCart.addEventListener('click', () => {
+  if (weightModalAddCart) weightModalAddCart.addEventListener('click', async () => {
     if (!currentWeightProduct) return;
 
     const pricePerKg = parseFloat(currentWeightProduct.dataset.pricePerKg) || 0;
@@ -715,13 +786,19 @@ document.addEventListener("click", (event) => {
 
     cartItems.push(cartItem);
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    if (isAuthenticated()) {
+      try {
+        await api.addCartItem({ productId, grams: Math.round(weight * 1000) });
+      } catch (_) {}
+      await syncCartFromApi();
+    }
     updateCartBadge();
 
     showToast(`✓ ${formatWeight(weight)}kg de ${productName} (${formatPrice(totalPrice)}) adicionado ao carrinho!`);
     closeWeightModal();
   });
 
-  document.addEventListener('click', (event) => {
+  document.addEventListener('click', async (event) => {
     const target = event.target;
     if (!(target instanceof HTMLElement)) return;
 
@@ -732,7 +809,7 @@ document.addEventListener("click", (event) => {
       const product = getProductDataFromCard(card);
       if (!product) return;
 
-      const wasAdded = toggleFavorite(product);
+      const wasAdded = await toggleFavorite(product);
 
       if (favoriteButton.classList.contains('fav-btn')) {
         favoriteButton.classList.toggle('is-favorito', wasAdded);
@@ -765,7 +842,7 @@ document.addEventListener("click", (event) => {
       cartButton.disabled = true;
       cartButton.textContent = '✓ Adicionado';
       
-      addToCart(product.id, product);
+      await addToCart(product.id, product);
       showToast(`✓ ${product.name} adicionado ao carrinho!`);
       
       // Restaurar botão após 2s
@@ -787,10 +864,15 @@ document.addEventListener("click", (event) => {
     }
   });
 
-  renderFavoritesPage();
-  syncFavoriteButtons();
-  updateFavoriteBadge();
+  const initialize = async () => {
+    await syncFavoritesFromApi();
+    await syncCartFromApi();
+    renderFavoritesPage();
+    syncFavoriteButtons();
+    updateFavoriteBadge();
+    updateUserArea();
+    updateCartBadge();
+  };
 
-  updateUserArea();
-  updateCartBadge();
+  initialize();
 })();

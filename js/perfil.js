@@ -1,4 +1,5 @@
 (() => {
+  const api = window.PetshopApi || null;
   const DEFAULT_AVATAR = 'images/pfpuser.png';
   const STORAGE_KEY = 'userProfileImage';
 
@@ -200,13 +201,20 @@
     return renderedCanvas.toDataURL('image/png');
   };
 
-  saveButton.addEventListener('click', () => {
+  saveButton.addEventListener('click', async () => {
     if (!imageElement.naturalWidth) return;
 
     const cropped = generateCroppedImage();
     if (!cropped) return;
 
     localStorage.setItem(STORAGE_KEY, cropped);
+    if (api?.getAccessToken()) {
+      try {
+        await api.updateAvatar(cropped);
+      } catch (_) {
+        // Mantem fluxo local mesmo se a API estiver indisponivel.
+      }
+    }
     loadImage(cropped, true);
 
     const toast = document.createElement('div');

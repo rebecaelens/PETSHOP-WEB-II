@@ -9,6 +9,9 @@ const submitButton = document.querySelector("[data-senha-submit]");
 const successModal = document.querySelector("[data-senha-success]");
 const errorModal = document.querySelector("[data-senha-error-modal]");
 const errorModalClose = document.querySelector("[data-senha-error-close]");
+const SIGNUP_EMAIL_KEY = 'signupEmail';
+const SIGNUP_CODE_KEY = 'signupCode';
+const api = window.PetshopApi || null;
 
 const hintUpper = document.querySelector("[data-hint-upper]");
 const hintLower = document.querySelector("[data-hint-lower]");
@@ -121,18 +124,68 @@ if (form) {
     const hasUserName = !!userName;
 
     if (isValid && match && hasUserName) {
-      localStorage.setItem("currentUser", userName);
-      localStorage.setItem("profileUserName", userName);
+      const signupEmail = sessionStorage.getItem(SIGNUP_EMAIL_KEY);
+      const signupCode = sessionStorage.getItem(SIGNUP_CODE_KEY);
+
+      if (!signupEmail || !signupCode) {
+        if (errorMessage) {
+          errorMessage.textContent = 'Sessao de validacao expirada. Volte e valide o e-mail novamente.';
+          errorMessage.classList.add('is-visible');
+        }
+        openModal(errorModal);
+        return;
+      }
+
+      let avatarUrl = null;
 
       const selectedFile = profileImageInput?.files?.[0];
       if (selectedFile) {
         try {
-          const imageDataUrl = await readFileAsDataURL(selectedFile);
-          localStorage.setItem("userProfileImage", imageDataUrl);
+          avatarUrl = await readFileAsDataURL(selectedFile);
+          localStorage.setItem("userProfileImage", avatarUrl);
         } catch (error) {
           openModal(errorModal);
           return;
         }
+      }
+
+      try {
+        const response = await fetch('http://localhost:3333/api/auth/register-with-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: userName,
+            email: signupEmail,
+            password: passwordInput.value,
+            code: signupCode,
+            avatarUrl
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok) {
+          throw new Error(data?.message || 'Nao foi possivel concluir o cadastro');
+        }
+
+        if (api?.setAuth) {
+          api.setAuth({
+            user: data.user,
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken
+          });
+        }
+
+        localStorage.setItem("currentUser", userName);
+        localStorage.setItem("profileUserName", userName);
+        sessionStorage.removeItem(SIGNUP_EMAIL_KEY);
+        sessionStorage.removeItem(SIGNUP_CODE_KEY);
+      } catch (err) {
+        if (errorMessage) {
+          errorMessage.textContent = err?.message || 'Nao foi possivel concluir o cadastro.';
+          errorMessage.classList.add('is-visible');
+        }
+        openModal(errorModal);
+        return;
       }
 
       openModal(successModal);

@@ -101,13 +101,41 @@
       </section>
     </main>
     <script src="js/password-toggle.js"></script>
+    <script src="js/api.js"></script>
     <script>
-      document.querySelector('.login-form').addEventListener('submit', (e) => {
-        const email = document.querySelector('input[name="email"]').value;
-        const profileUserName = localStorage.getItem('profileUserName');
-        const userName = profileUserName || email.split('@')[0];
-        localStorage.setItem('currentUser', userName);
-      });
+      const loginForm = document.querySelector('.login-form');
+      const emailInput = document.querySelector('input[name="email"]');
+      const passwordInput = document.querySelector('input[name="senha"]');
+      const submitButton = loginForm?.querySelector('button[type="submit"]');
+
+      if (loginForm && emailInput && passwordInput) {
+        loginForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+
+          const email = emailInput.value.trim();
+          const password = passwordInput.value;
+          if (!email || !password) return;
+
+          const originalLabel = submitButton?.textContent || 'Entrar';
+          if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = 'Entrando...';
+          }
+
+          try {
+            const user = await window.PetshopApi.login(email, password);
+            localStorage.setItem('currentUser', user?.name || email.split('@')[0]);
+            window.location.href = 'principal.html';
+          } catch (err) {
+            alert(err?.message || 'Nao foi possivel fazer login.');
+          } finally {
+            if (submitButton) {
+              submitButton.disabled = false;
+              submitButton.textContent = originalLabel;
+            }
+          }
+        });
+      }
     </script>
   </body>
 </html>
