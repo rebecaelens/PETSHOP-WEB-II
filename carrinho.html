@@ -6,46 +6,527 @@
     <title>Carrinho</title>
     <link rel="stylesheet" href="css/style.css" />
   </head>
-  <body class="page-app">
-    <header class="topbar">
-      <a class="link" href="principal.html">Voltar</a>
-      <div class="topbar-title">Carrinho</div>
-      <div class="topbar-actions">
-        <a class="link" href="favoritos.html">Favoritos</a>
-        <a class="link" href="login.html">Sair</a>
+  <body class="page-app cart-page">
+    <header class="site-header">
+      <div class="header-top container">
+        <a href="principal.html" class="branding" aria-label="Voltar para o menu principal">
+          <img src="images/logomr.png" alt="MR Rações" class="logo-img" onerror="this.style.display='none'" />
+          <div class="logo-badge">MR</div>
+        </a>
+        <div class="cart-header-title">
+          <img src="images/acesssec.png" alt="Acesso Seguro" class="secure-icon" />
+          <span class="secure-text">Acesso Seguro</span>
+        </div>
       </div>
     </header>
 
     <main class="content single">
-      <section class="list">
-        <div class="list-header">
-          <h1>Itens no carrinho</h1>
-          <button class="btn ghost" type="button">Limpar carrinho</button>
-        </div>
+      <section class="cart-container">
+        <!-- Breadcrumb Navigation -->
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="principal.html">Início</a>
+          <span class="separator">/</span>
+          <span class="current">Carrinho</span>
+        </nav>
 
-        <div class="list-item">
-          <div>
-            <div class="item-title">Produto A</div>
-            <div class="item-sub">Quantidade: 1</div>
+        <!-- Checkout Timeline -->
+        <div class="checkout-timeline">
+          <div class="timeline-step completed">
+            <div class="timeline-circle">✓</div>
+            <div class="timeline-label">Produtos</div>
           </div>
-          <button class="btn ghost" type="button">Remover</button>
-        </div>
-
-        <div class="list-item">
-          <div>
-            <div class="item-title">Produto B</div>
-            <div class="item-sub">Quantidade: 2</div>
+          <div class="timeline-step active">
+            <div class="timeline-circle">2</div>
+            <div class="timeline-label">Entrega</div>
           </div>
-          <button class="btn ghost" type="button">Remover</button>
+          <div class="timeline-step">
+            <div class="timeline-circle">3</div>
+            <div class="timeline-label">Pagamento</div>
+          </div>
+          <div class="timeline-step">
+            <div class="timeline-circle">4</div>
+            <div class="timeline-label">Confirmação</div>
+          </div>
         </div>
 
-        <div class="list-total">
-          <span>Total</span>
-          <strong>R$ 250,00</strong>
-        </div>
+        <div id="cart-products"></div>
+        
+        <div class="cart-bottom">
+          <div class="delivery-section">
+            <h3>Frete e Horário de Entrega</h3>
+            <form id="delivery-form">
+              <div class="form-group">
+                <label>Bairro:</label>
+                <select id="bairro" required>
+                  <option value="">Selecione seu bairro</option>
+                  <option value="Acaracuzinho">Acaracuzinho</option>
+                  <option value="Alto Alegre">Alto Alegre</option>
+                  <option value="Alto da Mangueira">Alto da Mangueira</option>
+                  <option value="Antônio Justa">Antônio Justa</option>
+                  <option value="Boa Esperança">Boa Esperança</option>
+                  <option value="Boa Vista">Boa Vista</option>
+                  <option value="Cágado">Cágado</option>
+                  <option value="Coqueiral">Coqueiral</option>
+                  <option value="Centro">Centro</option>
+                  <option value="Cidade Nova">Cidade Nova</option>
+                  <option value="Distrito Industrial I">Distrito Industrial I</option>
+                  <option value="Furna da Onça">Furna da Onça</option>
+                  <option value="Horto">Horto</option>
+                  <option value="Industrial">Industrial</option>
+                  <option value="Jaçanaú">Jaçanaú</option>
+                  <option value="Jardim Bandeirantes">Jardim Bandeirantes</option>
+                  <option value="Jari">Jari</option>
+                  <option value="Jenipapeiro">Jenipapeiro</option>
+                  <option value="Jereissati">Jereissati</option>
+                  <option value="Luzardo Viana">Luzardo Viana</option>
+                  <option value="Menino Jesus de Praga">Menino Jesus de Praga</option>
+                  <option value="Mucunã">Mucunã</option>
+                  <option value="Novo Jenipapeiro">Novo Jenipapeiro</option>
+                  <option value="Novo Maracanaú">Novo Maracanaú</option>
+                  <option value="Novo Oriente">Novo Oriente</option>
+                  <option value="Olho D'Água">Olho D'Água</option>
+                  <option value="Pajuçara">Pajuçara</option>
+                  <option value="Pajuçara Park">Pajuçara Park</option>
+                  <option value="Pau-Serrado">Pau-Serrado</option>
+                  <option value="Parque Tijuca">Parque Tijuca</option>
+                  <option value="Parque Tropical">Parque Tropical</option>
+                  <option value="Parque Santa Maria">Parque Santa Maria</option>
+                  <option value="Piratininga">Piratininga</option>
+                  <option value="Santo Antônio">Santo Antônio</option>
+                  <option value="Santo Sátiro">Santo Sátiro</option>
+                  <option value="Senador José Afonso Sancho">Senador José Afonso Sancho</option>
+                  <option value="Siqueira">Siqueira</option>
+                  <option value="Timbó">Timbó</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Rua:</label>
+                <input type="text" id="rua" placeholder="Digite sua rua" required />
+              </div>
+              <div class="form-group">
+                <label>Número:</label>
+                <input type="text" id="numero" placeholder="Digite o número" required />
+              </div>
+            </form>
+            <div class="delivery-total">
+              <span class="delivery-total-label">
+                <img src="images/totalentr.png" alt="Total" class="delivery-total-icon" />
+                Total
+              </span>
+              <strong id="delivery-total-price">R$ 2,00</strong>
+            </div>
+            <div class="delivery-time" id="delivery-time" style="display: none;">
+              <span class="delivery-time-icon">📦</span>
+              <span>Tempo estimado: <strong id="estimated-delivery"></strong></span>
+            </div>
+          </div>
 
-        <button class="btn primary" type="button">Finalizar compra</button>
+          <div class="summary-section">
+            <h3>Resumo do pedido</h3>
+            <div class="summary-item">
+              <span id="products-count">Produtos (0)</span>
+              <span id="products-price">R$ 0,00</span>
+            </div>
+            <div class="summary-item">
+              <span>Frete</span>
+              <span id="delivery-price">R$ 0,00</span>
+            </div>
+            <div class="summary-total">
+              <span class="summary-total-label">
+                <img src="images/totalentr.png" alt="Total com a Entrega" class="summary-total-icon" />
+                Total com a Entrega
+              </span>
+              <strong id="total-price">R$ 0,00</strong>
+            </div>
+            <button class="btn primary checkout-btn" id="checkout-btn">Fazer Pedido</button>
+            <a href="principal.html" class="buy-more-link">Comprar mais produtos</a>
+          </div>
+        </div>
       </section>
     </main>
+
+    <!-- Modal de confirmação de remoção -->
+    <div class="modal-overlay" id="removeModalOverlay">
+      <div class="modal-confirm">
+        <div class="modal-content">
+          <h3 class="modal-title">Remover item do carrinho?</h3>
+          <p class="modal-message" id="removeModalMessage">Tem certeza que deseja remover este item?</p>
+          <div class="modal-actions">
+            <button class="btn secondary" id="removeModalCancel">Cancelar</button>
+            <button class="btn primary" id="removeModalOk">Remover</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const productDatabase = {
+        p1: { name: 'Golden Premiun', price: 240, image: 'images/item2.png', desc: 'Uma ração seca completa e balanceada, desenvolvida para fornecer nutrição de qualidade para cães e gatos.' },
+        p2: { name: 'Ração SuperMix', price: 100, image: 'images/item3.png', desc: 'Ração seca completa e balanceada, formulada para oferecer nutrição adequada para cães e gatos.' },
+        p3: { name: 'Brinquedos para gatos', price: 240, image: 'images/item4.png', desc: 'Brinquedos desenvolvidos para estimular o instinto natural de caça e manter o pet ativo.' },
+        p4: { name: 'Fucinheira para Cachorros', price: 240, image: 'images/item5.jpg', desc: 'Acessório essencial para manter seu pet seguro e confortável durante a caminhada.' },
+        p5: { name: 'Coleira Básica', price: 240, image: 'images/item1.png', desc: 'Acessório essencial para a identificação e segurança do pet no dia a dia.' }
+      };
+
+      const BASE_DELIVERY_FEE = 2;
+
+      const neighborhoodFees = Object.fromEntries(
+        Array.from(document.querySelectorAll('#bairro option')).map((option, index) => {
+          if (!option.value) return [option.value, 0];
+          return [option.value, Number((BASE_DELIVERY_FEE + index * 0.2).toFixed(2))];
+        })
+      );
+
+      const getCurrentDeliveryFee = () => {
+        const bairro = document.getElementById('bairro')?.value.trim();
+        const rua = document.getElementById('rua')?.value.trim();
+        const numero = document.getElementById('numero')?.value.trim();
+
+        if (!bairro || !rua || !numero) {
+          return 0;
+        }
+
+        return neighborhoodFees[bairro] || 0;
+      };
+
+      const calculateDeliveryTime = () => {
+        const bairro = document.getElementById('bairro')?.value.trim();
+        const barrioIndex = Array.from(document.querySelectorAll('#bairro option')).findIndex(opt => opt.value === bairro);
+        
+        // Base: 2-3 dias úteis
+        let businessDays = 2;
+        
+        // Adiciona 1 dia a cada 10 bairros (bairros mais longes)
+        if (barrioIndex > 10) businessDays = 3;
+        if (barrioIndex > 20) businessDays = 4;
+        if (barrioIndex > 30) businessDays = 5;
+        
+        // Calcula data de entrega (próximo dia útil)
+        let deliveryDate = new Date();
+        let daysAdded = 0;
+        
+        while (daysAdded < businessDays) {
+          deliveryDate.setDate(deliveryDate.getDate() + 1);
+          // Pula fins de semana
+          if (deliveryDate.getDay() !== 0 && deliveryDate.getDay() !== 6) {
+            daysAdded++;
+          }
+        }
+        
+        return deliveryDate;
+      };
+
+      const updateDeliveryTime = () => {
+        const bairro = document.getElementById('bairro')?.value.trim();
+        const rua = document.getElementById('rua')?.value.trim();
+        const numero = document.getElementById('numero')?.value.trim();
+        const timeElement = document.getElementById('delivery-time');
+        const estimatedElement = document.getElementById('estimated-delivery');
+        
+        if (bairro && rua && numero) {
+          const deliveryDate = calculateDeliveryTime();
+          const dateString = deliveryDate.toLocaleDateString('pt-BR', { weekday: 'long', month: 'long', day: 'numeric' });
+          estimatedElement.textContent = dateString;
+          timeElement.style.display = 'flex';
+        } else {
+          timeElement.style.display = 'none';
+        }
+      };
+
+      const updateTimeline = () => {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const timelineSteps = document.querySelectorAll('.checkout-timeline .timeline-step');
+        
+        // Step 1: Produtos - completo se houver itens
+        const hasProducts = cartItems.length > 0;
+        const productsStep = timelineSteps[0];
+        if (hasProducts) {
+          productsStep.classList.add('completed');
+          productsStep.classList.remove('active');
+          productsStep.querySelector('.timeline-circle').textContent = '✓';
+        } else {
+          productsStep.classList.remove('completed');
+          productsStep.classList.add('active');
+          productsStep.querySelector('.timeline-circle').textContent = '1';
+        }
+
+        // Step 2: Entrega - completo se todos os campos estão preenchidos
+        const bairro = document.getElementById('bairro')?.value.trim();
+        const rua = document.getElementById('rua')?.value.trim();
+        const numero = document.getElementById('numero')?.value.trim();
+        const allFieldsFilled = bairro && rua && numero;
+
+        const deliveryStep = timelineSteps[1];
+        if (allFieldsFilled) {
+          deliveryStep.classList.add('completed');
+          deliveryStep.classList.remove('active');
+          deliveryStep.querySelector('.timeline-circle').textContent = '✓';
+        } else {
+          deliveryStep.classList.remove('completed');
+          deliveryStep.classList.add('active');
+          deliveryStep.querySelector('.timeline-circle').textContent = '2';
+        }
+
+        // Step 3 e 4: Sempre inativo (por enquanto)
+        for (let i = 2; i < timelineSteps.length; i++) {
+          timelineSteps[i].classList.remove('completed', 'active');
+          timelineSteps[i].querySelector('.timeline-circle').textContent = (i + 1);
+        }
+      };
+
+      const getCartItemViewData = (item) => {
+        const product = productDatabase[item.id] || {};
+        const name = item.name || item.title || product.name || 'Produto';
+        const desc = item.desc || product.desc || 'Produto adicionado ao carrinho.';
+        const image = item.image || product.image || 'images/cards.jpg';
+        const unitPrice = Number.isFinite(Number(item.price)) ? Number(item.price) : Number(product.price) || 0;
+
+        return { name, desc, image, unitPrice };
+      };
+
+
+      const renderCart = () => {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const container = document.getElementById('cart-products');
+        const cartContainer = document.querySelector('.cart-container');
+        
+        if (cartItems.length === 0) {
+          cartContainer.classList.add('is-empty');
+          container.innerHTML = `
+            <section class="cart-empty-state" aria-label="Carrinho vazio">
+              <img src="images/carrinho.png" alt="Carrinho vazio" class="cart-empty-icon" />
+              <h2 class="cart-empty-title">Adicione produtos ao seu carrinho</h2>
+              <p class="cart-empty-description">Que tal explorar nossas categorias ou buscar os produtos que estão na sua lista de desejos?</p>
+              <a href="principal.html" class="btn primary cart-empty-action">Buscar</a>
+            </section>
+          `;
+          updateSummary(cartItems);
+          document.getElementById('checkout-btn').disabled = true;
+          updateTimeline();
+          return;
+        }
+
+        cartContainer.classList.remove('is-empty');
+
+        container.innerHTML = cartItems.map((item, index) => {
+          const view = getCartItemViewData(item);
+          let quantityDisplay = '';
+          let totalPrice = 0;
+
+          if (item.isWeightBased) {
+            // Item de peso (ração)
+            if (item.purchaseMode === 'by-weight') {
+              quantityDisplay = `<span>${item.weight.toFixed(2)} kg</span>`;
+            } else {
+              quantityDisplay = `<span>R$ ${item.price.toFixed(2)}</span>`;
+            }
+            totalPrice = item.price;
+          } else {
+            // Item normal
+            quantityDisplay = item.quantity;
+            totalPrice = view.unitPrice * item.quantity;
+          }
+
+          return `
+            <div class="cart-product">
+              <img src="${view.image}" alt="${view.name}" class="cart-product-img" />
+              <div class="cart-product-info">
+                <h3>${view.name}</h3>
+                <p>${view.desc}</p>
+                <div class="cart-product-controls">
+                  ${item.isWeightBased ? 
+                    `<button class="qty-btn btn-remove" onclick="removeFromCart(${index})" title="Remover do carrinho"><img src="images/lixeira.png" alt="Remover" class="icon-trash"></button>` :
+                    `<div class="qty-controller">
+                       <button class="qty-btn qty-minus" onclick="updateQty(${index}, -1)" title="Diminuir quantidade">−</button>
+                       <input type="number" value="${item.quantity}" readonly class="qty-input" />
+                       <button class="qty-btn qty-plus" onclick="updateQty(${index}, 1)" title="Aumentar quantidade">+</button>
+                     </div>
+                     <button class="btn-remove-qty" onclick="removeFromCart(${index})" title="Remover produto"><img src="images/lixeira.png" alt="Remover" class="icon-trash"></button>`
+                  }
+                </div>
+              </div>
+              <div class="cart-product-price">
+                <span>R$ ${totalPrice.toFixed(2)}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        updateSummary(cartItems);
+        document.getElementById('checkout-btn').disabled = false;
+        updateTimeline();
+      };
+
+      const updateQty = (index, delta) => {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        if (cartItems[index]) {
+          cartItems[index].quantity = Math.max(1, cartItems[index].quantity + delta);
+          localStorage.setItem('cartItems', JSON.stringify(cartItems));
+          renderCart();
+        }
+      };
+
+      let removeIndexToConfirm = null;
+
+      function showRemoveModal(index, itemName) {
+        removeIndexToConfirm = index;
+        const overlay = document.getElementById('removeModalOverlay');
+        const msg = document.getElementById('removeModalMessage');
+        msg.textContent = `Remover ${itemName} do carrinho?`;
+        overlay.classList.add('active');
+      }
+
+      function hideRemoveModal() {
+        removeIndexToConfirm = null;
+        document.getElementById('removeModalOverlay').classList.remove('active');
+      }
+
+      const removeModalCancel = document.getElementById('removeModalCancel');
+      const removeModalOk = document.getElementById('removeModalOk');
+
+      removeModalCancel.addEventListener('click', hideRemoveModal);
+      document.getElementById('removeModalOverlay').addEventListener('click', function(e) {
+        if (e.target === this) hideRemoveModal();
+      });
+      removeModalOk.addEventListener('click', function() {
+        if (removeIndexToConfirm !== null) {
+          const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+          const removedItem = cartItems[removeIndexToConfirm] || {};
+          const itemName = removedItem.name || removedItem.title || 'item';
+          cartItems.splice(removeIndexToConfirm, 1);
+          localStorage.setItem('cartItems', JSON.stringify(cartItems));
+          
+          // Animar remoção e mostrar toast
+          const removeBtn = document.querySelector(`[data-remove-index="${removeIndexToConfirm}"]`);
+          if (removeBtn && removeBtn.closest('.cart-product')) {
+            const productCard = removeBtn.closest('.cart-product');
+            productCard.classList.add('removing');
+            setTimeout(() => {
+              renderCart();
+              updateCartBadge && updateCartBadge();
+              // Chamar showToast se existir (do app.js)
+              if (typeof showToast === 'function') {
+                showToast(`✕ ${itemName} removido do carrinho`);
+              }
+            }, 350);
+          } else {
+            renderCart();
+            updateCartBadge && updateCartBadge();
+          }
+          
+          hideRemoveModal();
+        }
+      });
+
+      // Substitui chamada de removeFromCart por showRemoveModal
+      function removeFromCart(index) {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const current = cartItems[index] || {};
+        const itemName = current.name || current.title || 'item';
+        showRemoveModal(index, itemName);
+      };
+
+      const updateSummary = (cartItems) => {
+        let total = 0;
+        let count = 0;
+        
+        cartItems.forEach(item => {
+          const view = getCartItemViewData(item);
+          if (item.isWeightBased) {
+            // Item de peso - o preço já está calculado
+            total += item.price;
+            count += 1; // Conta como 1 item
+          } else {
+            // Item normal
+            total += view.unitPrice * item.quantity;
+            count += item.quantity;
+          }
+        });
+
+        document.getElementById('products-count').textContent = `Produtos (${count})`;
+        document.getElementById('products-price').textContent = `R$ ${total.toFixed(2)}`;
+
+        const currentDeliveryFee = getCurrentDeliveryFee();
+        document.getElementById('delivery-price').textContent = `R$ ${currentDeliveryFee.toFixed(2)}`;
+        document.getElementById('delivery-total-price').textContent = `R$ ${currentDeliveryFee.toFixed(2)}`;
+        document.getElementById('total-price').textContent = `R$ ${(total + currentDeliveryFee).toFixed(2)}`;
+      };
+
+      const updateCartBadge = () => {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        const itemCount = cartItems.reduce((total, item) => {
+          return total + (item.isWeightBased ? 1 : item.quantity);
+        }, 0);
+        const badges = document.querySelectorAll('[data-cart-badge]');
+        badges.forEach(badge => {
+          if (itemCount > 0) {
+            badge.textContent = itemCount;
+            badge.classList.remove('hidden');
+          } else {
+            badge.classList.add('hidden');
+          }
+        });
+      };
+
+      document.getElementById('checkout-btn').addEventListener('click', () => {
+        const bairro = document.getElementById('bairro').value;
+        const rua = document.getElementById('rua').value;
+        const numero = document.getElementById('numero').value;
+
+        if (!bairro || !rua || !numero) {
+          // Validação com feedback visual melhorado
+          if (!bairro) document.getElementById('bairro').style.borderColor = '#ff6b6b';
+          if (!rua) document.getElementById('rua').style.borderColor = '#ff6b6b';
+          if (!numero) document.getElementById('numero').style.borderColor = '#ff6b6b';
+          
+          if (typeof showToast === 'function') {
+            showToast('⚠ Por favor, preencha todos os dados de entrega!');
+          }
+          setTimeout(() => {
+            document.getElementById('bairro').style.borderColor = '';
+            document.getElementById('rua').style.borderColor = '';
+            document.getElementById('numero').style.borderColor = '';
+          }, 3000);
+          return;
+        }
+
+        // Animação de sucesso
+        const btn = document.getElementById('checkout-btn');
+        const originalText = btn.textContent;
+        btn.textContent = '✓ Pedido Confirmado!';
+        btn.disabled = true;
+        
+        if (typeof showToast === 'function') {
+          showToast('✓ Pedido finalizado com sucesso!');
+        }
+        
+        setTimeout(() => {
+          alert('Seu pedido foi realizado com sucesso! Acompanhe o status na sua conta.');
+          localStorage.removeItem('cartItems');
+          document.getElementById('delivery-form').reset();
+          renderCart();
+          updateCartBadge();
+          btn.textContent = originalText;
+          btn.disabled = false;
+        }, 1500);
+      });
+
+      const recalculateSummary = () => {
+        const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+        updateSummary(cartItems);
+        updateDeliveryTime();
+        updateTimeline();
+      };
+
+      const bairroField = document.getElementById('bairro');
+      const ruaField = document.getElementById('rua');
+      const numeroField = document.getElementById('numero');
+
+      if (bairroField) bairroField.addEventListener('change', recalculateSummary);
+      if (ruaField) ruaField.addEventListener('input', recalculateSummary);
+      if (numeroField) numeroField.addEventListener('input', recalculateSummary);
+
+      renderCart();
+    </script>
   </body>
 </html>

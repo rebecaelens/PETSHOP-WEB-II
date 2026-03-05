@@ -39,6 +39,21 @@
         </p>
 
         <form class="senha-form" action="#" method="post" data-senha-form>
+          <input
+            class="login-input"
+            type="text"
+            name="nome_usuario"
+            placeholder="Nome de usuário"
+            data-username-input
+            required
+          />
+          <input
+            class="login-input"
+            type="file"
+            name="foto_perfil"
+            accept="image/*"
+            data-profile-image-input
+          />
           <div class="password-field">
             <input
               class="login-input"
@@ -126,7 +141,7 @@
           </div>
 
           <p class="senha-error" role="alert" data-senha-error>
-            As senhas nao conferem ou estao incompletas.
+            Informe um nome de usuário e verifique se as senhas conferem.
           </p>
 
           <button class="login-btn login-btn-outline" type="submit" data-senha-submit>

@@ -101,5 +101,13 @@
       </section>
     </main>
     <script src="js/password-toggle.js"></script>
+    <script>
+      document.querySelector('.login-form').addEventListener('submit', (e) => {
+        const email = document.querySelector('input[name="email"]').value;
+        const profileUserName = localStorage.getItem('profileUserName');
+        const userName = profileUserName || email.split('@')[0];
+        localStorage.setItem('currentUser', userName);
+      });
+    </script>
   </body>
 </html>

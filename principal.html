@@ -7,70 +7,592 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body class="page-app">
-    <header class="topbar">
-      <button class="icon-btn" type="button" data-sidebar-toggle>
-        <span class="icon">&#9776;</span>
-      </button>
-      <div class="topbar-title">Painel Principal</div>
-      <div class="topbar-actions">
-        <a class="link" href="favoritos.html">Favoritos</a>
-        <a class="link" href="carrinho.html">Carrinho</a>
-        <a class="link" href="login.html">Sair</a>
+    
+    <header class="site-header">
+      <div class="header-top container">
+        <div class="branding">
+          <img src="images/logomr.png" alt="MR Rações" class="logo-img" onerror="this.style.display='none'" />
+          <div class="logo-badge">MR</div>
+        </div>
+
+        <form class="search" action="principal.html" method="get" role="search">
+          <input type="search" name="q" placeholder="Buscar produtos, marcas ou categorias" aria-label="Buscar" />
+          <button type="submit" class="search-btn"><img src="images/buscar.png" alt="Buscar"></button>
+        </form>
+
+        <div class="user-actions">
+          <div class="user-auth">
+            <div class="user-avatar">
+              <img src="images/pfpuser.png" alt="Avatar" class="avatar-img" />
+            </div>
+            <div class="user-info">
+              <span class="user-name" data-user-name>Entre ou cadastre-se</span>
+              <a href="login.html" class="auth-link" data-auth-link>Entrar</a>
+            </div>
+          </div>
+          <a class="icon-link favorites-link" href="favoritos.html" aria-label="Favoritos">
+            <img src="images/favorite.png" alt="Favoritos">
+            <span class="cart-badge" data-favorite-badge>0</span>
+          </a>
+          <a class="icon-link cart-link" href="carrinho.html" aria-label="Carrinho">
+            <img src="images/carrinho.png" alt="Carrinho">
+            <span class="cart-badge" data-cart-badge>0</span>
+          </a>
+        </div>
       </div>
+
     </header>
+
+    <nav class="category-bar">
+      <div class="container categories">
+        <button class="icon-btn menu-toggle" type="button" data-sidebar-toggle><img src="images/menu.png" alt="Menu"></button>
+        <ul class="category-list">
+          <li><a href="principal.html?cat=all">Todos</a></li>
+          <li><a href="principal.html?cat=cachorros">Cachorros</a></li>
+          <li><a href="principal.html?cat=gatos">Gatos</a></li>
+          <li><a href="principal.html?cat=passaros">Pássaros</a></li>
+          <li><a href="principal.html?cat=peixes">Peixes</a></li>
+          <li><a href="principal.html?cat=outros">Outros Pets</a></li>
+          <li><a href="principal.html?cat=promocoes">Promoções</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="overlay" data-overlay></div>
 
     <div class="layout">
       <aside class="sidebar" data-sidebar>
-        <div class="sidebar-header">Menu</div>
-        <nav class="menu">
-          <a class="menu-item" href="principal.html">Inicio</a>
-          <a class="menu-item" href="favoritos.html">Produtos favoritados</a>
-          <a class="menu-item" href="carrinho.html">Carrinho</a>
-          <a class="menu-item" href="#">Historico</a>
-          <a class="menu-item" href="#">Configuracoes</a>
+        <nav class="menu" role="navigation">
+          <a class="menu-item" href="principal.html">
+            <span class="menu-icon"><img src="images/home.png" alt="Home"></span>
+            <span class="menu-text">Página Inicial</span>
+          </a>
+          <a class="menu-item" href="principal.html?q=" >
+            <span class="menu-icon"><img src="images/buscar.png" alt="Pesquisar"></span>
+            <span class="menu-text">Pesquisar</span>
+          </a>
+          <a class="menu-item" href="#" id="consultarBtn">
+            <span class="menu-icon"><img src="images/chat.png" alt="Consultar"></span>
+            <span class="menu-text">Consultar</span>
+          </a>
+          <a class="menu-item" href="#" data-price-filters-toggle aria-expanded="false" aria-controls="price-filters-panel">
+            <span class="menu-icon"><img src="images/preço.png" alt="Preços"></span>
+            <span class="menu-text">Preços</span>
+          </a>
+          <div class="price-filters-panel" id="price-filters-panel" data-price-filters-panel hidden>
+            <div class="price-filter-group">
+              <p class="price-filter-title">Faixa de preço</p>
+              <div class="price-filter-row">
+                <input type="number" min="0" step="0.01" placeholder="Mín" data-filter-price-min />
+                <input type="number" min="0" step="0.01" placeholder="Máx" data-filter-price-max />
+              </div>
+            </div>
+
+            <div class="price-filter-group">
+              <p class="price-filter-title">Tipo de pet</p>
+              <label class="price-filter-check"><input type="checkbox" value="cachorros" data-filter-pet-type /> Cachorro</label>
+              <label class="price-filter-check"><input type="checkbox" value="gatos" data-filter-pet-type /> Gato</label>
+              <label class="price-filter-check"><input type="checkbox" value="peixes" data-filter-pet-type /> Peixe</label>
+              <label class="price-filter-check"><input type="checkbox" value="passaros" data-filter-pet-type /> Pássaro</label>
+              <label class="price-filter-check"><input type="checkbox" value="outros" data-filter-pet-type /> Outros</label>
+            </div>
+
+            <button class="price-filter-clear" type="button" data-filter-clear>Limpar filtros</button>
+          </div>
+          <a class="menu-item" href="perfil.html">
+            <span class="menu-icon"><img src="images/user-black.png" alt="Perfil"></span>
+            <span class="menu-text">Perfil</span>
+          </a>
+          <a class="menu-item" href="#" data-logout>
+            <span class="menu-icon"><img src="images/sair.png" alt="Sair"></span>
+            <span class="menu-text">Sair</span>
+          </a>
         </nav>
       </aside>
 
       <main class="content">
-        <section class="hero">
-          <div>
-            <h1>Bem-vindo ao painel</h1>
-            <p>Gerencie seus produtos, carrinho e favoritos em um so lugar.</p>
+        
+        <section class="carousel" data-carousel>
+          <div class="carousel-track">
+            <article class="slide" data-src="images/carrossel1.png">
+              <div class="slide-media" style="background-image: url('images/carrossel1.png')"></div>
+            </article>
+
+            <article class="slide" data-src="images/carrossel2.png">
+              <div class="slide-media" style="background-image: url('images/carrossel2.png')"></div>
+            </article>
+
+            <article class="slide" data-src="images/carrossel3.png">
+              <div class="slide-media" style="background-image: url('images/carrossel3.png')"></div>
+            </article>
+
+            <article class="slide" data-src="images/carrossel4.png">
+              <div class="slide-media" style="background-image: url('images/carrossel4.png')"></div>
+            </article>
+
+            <article class="slide" data-src="images/carrossel5.png">
+              <div class="slide-media" style="background-image: url('images/carrossel5.png')"></div>
+            </article>
+
+            <article class="slide" data-src="images/carrossel6.jpg">
+              <div class="slide-media" style="background-image: url('images/carrossel6.jpg')"></div>
+            </article>
+
+            <article class="slide" data-src="images/carrossel7.jpg">
+              <div class="slide-media" style="background-image: url('images/carrossel7.jpg')"></div>
+            </article>
+
+            <article class="slide" data-src="images/carrossel8.jpg">
+              <div class="slide-media" style="background-image: url('images/carrossel8.jpg')"></div>
+            </article>
+
+            <article class="slide" data-src="images/carrossel9.jpg">
+              <div class="slide-media" style="background-image: url('images/carrossel9.jpg')"></div>
+            </article>
+
+            <article class="slide" data-src="images/carrossel10.jpg">
+              <div class="slide-media" style="background-image: url('images/carrossel10.jpg')"></div>
+            </article>
           </div>
-          <button class="btn primary" type="button">Novo produto</button>
+
+          <div class="carousel-dots" aria-hidden="false"></div>
         </section>
 
-        <section class="grid">
-          <article class="card" data-product>
-            <div class="card-title">Produto A</div>
-            <p class="card-text">Descricao rapida do item com pontos principais.</p>
-            <div class="card-actions">
-              <button class="btn ghost" type="button" data-favorito>Favoritar</button>
-              <button class="btn primary" type="button" data-carrinho>Adicionar</button>
+        <section class="grid products">
+          <article class="product-card" data-product data-category="cachorros" data-promocao="true" id="p1">
+            <div class="product-media" style="background-image:url('images/item2.png')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <img src="images/venda.png" alt="Promoção" class="sale-badge">
+              <h4 class="product-title">Golden Premiun</h4>
+              <p class="product-desc">Uma ração seca completa e balanceada, desenvolvida para fornecer nutrição de qualidade para cães e gatos. Sua fórmula contém proteínas, vitaminas e minerais essenciais que auxiliam na saúde.</p>
+              <div class="product-price-original">
+                <span class="price-currency">R$</span> <span class="price-value">239,90</span>
+              </div>
+              <div class="product-price product-price-promo"><span class="price-currency">R$</span> <span class="price-value">189,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
             </div>
           </article>
 
-          <article class="card" data-product>
-            <div class="card-title">Produto B</div>
-            <p class="card-text">Descricao rapida do item com pontos principais.</p>
-            <div class="card-actions">
-              <button class="btn ghost" type="button" data-favorito>Favoritar</button>
-              <button class="btn primary" type="button" data-carrinho>Adicionar</button>
+          <article class="product-card" data-product data-category="gatos" data-price-per-kg="75" id="p2">
+            <div class="product-media" style="background-image:url('images/item3.png')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Ração SuperMix</h4>
+              <p class="product-desc">É uma ração seca completa e balanceada, formulada para oferecer nutrição adequada para cães e gatos. Sua composição reúne proteínas, vitaminas e minerais para o pet.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">89,90</span></div>
+              <div class="product-actions">
+                <button class="btn secondary" type="button" data-pesar>PESAR</button>
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
             </div>
           </article>
 
-          <article class="card" data-product>
-            <div class="card-title">Produto C</div>
-            <p class="card-text">Descricao rapida do item com pontos principais.</p>
-            <div class="card-actions">
-              <button class="btn ghost" type="button" data-favorito>Favoritar</button>
-              <button class="btn primary" type="button" data-carrinho>Adicionar</button>
+          <article class="product-card" data-product data-category="gatos" data-promocao="true" id="p3">
+            <div class="product-media" style="background-image:url('images/item4.png')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <img src="images/venda.png" alt="Promoção" class="sale-badge">
+              <h4 class="product-title">Brinquedos para gatos</h4>
+              <p class="product-desc">Brinquedos para gatos são itens desenvolvidos para estimular o instinto natural de caça e manter o pet ativo e entretido. Eles ajudam a reduzir o estresse e incentivam o gato.</p>
+              <div class="product-price-original">
+                <span class="price-currency">R$</span> <span class="price-value">99,90</span>
+              </div>
+              <div class="product-price product-price-promo"><span class="price-currency">R$</span> <span class="price-value">79,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="cachorros" id="p4">
+            <div class="product-media" style="background-image:url('images/item5.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Focinheira para Cachorros</h4>
+              <p class="product-desc">Fucinheira para cachorros é um acessório essencial para manter seu pet seguro e confortável durante a caminhada. Ela oferece proteção e controle durante o passeio.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">89,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="outros" id="p5">
+            <div class="product-media" style="background-image:url('images/item1.png')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Coleira Básica</h4>
+              <p class="product-desc">Coleira é um acessório essencial para a identificação e segurança do pet no dia a dia. Confortável e resistente, ela facilita o controle durante passeios e ajuda a manter o animal protegido.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">35,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="cachorros" data-price-per-kg="60" id="p6">
+            <div class="product-media" style="background-image:url('images/Ração Filhotes.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Ração Filhotes</h4>
+              <p class="product-desc">Ração premium para filhotes com nutrientes essenciais para crescimento saudável, energia e fortalecimento das defesas naturais.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">169,90</span></div>
+              <div class="product-actions">
+                <button class="btn secondary" type="button" data-pesar>PESAR</button>
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="cachorros" data-promocao="true" id="p7">
+            <div class="product-media" style="background-image:url('images/Guia e Coleira Confort.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <img src="images/venda.png" alt="Promoção" class="sale-badge">
+              <h4 class="product-title">Guia e Coleira Confort</h4>
+              <p class="product-desc">Conjunto de guia e coleira com ajuste prático para passeios seguros e confortáveis em cães de pequeno e médio porte.</p>
+              <div class="product-price-original">
+                <span class="price-currency">R$</span> <span class="price-value">89,90</span>
+              </div>
+              <div class="product-price product-price-promo"><span class="price-currency">R$</span> <span class="price-value">69,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="gatos" id="p8">
+            <div class="product-media" style="background-image:url('images/Areia Higiênica Premium.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Areia Higiênica Premium</h4>
+              <p class="product-desc">Areia de alta absorção e controle de odor, ideal para manter a caixa limpa por mais tempo e o ambiente mais agradável.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">42,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="gatos" id="p9">
+            <div class="product-media" style="background-image:url('images/Arranhador Compacto.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Arranhador Compacto</h4>
+              <p class="product-desc">Arranhador compacto para estimular o comportamento natural dos gatos e ajudar na proteção dos móveis da casa.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">119,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="passaros" data-promocao="true" id="p10">
+            <div class="product-media" style="background-image:url('images/Mix de Sementes Premium.png')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <img src="images/venda.png" alt="Promoção" class="sale-badge">
+              <h4 class="product-title">Mix de Sementes Premium</h4>
+              <p class="product-desc">Seleção nutritiva de sementes para pássaros ornamentais, com vitaminas e minerais para plumagem e vitalidade.</p>
+              <div class="product-price-original">
+                <span class="price-currency">R$</span> <span class="price-value">44,90</span>
+              </div>
+              <div class="product-price product-price-promo"><span class="price-currency">R$</span> <span class="price-value">34,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="peixes" data-price-per-kg="140" id="p11">
+            <div class="product-media" style="background-image:url('images/flakes.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Ração Flakes Tropical</h4>
+              <p class="product-desc">Alimento em flocos para peixes tropicais, fácil digestão e alta palatabilidade para rotina diária do aquário.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">24,90</span></div>
+              <div class="product-actions">
+                <button class="btn secondary" type="button" data-pesar>PESAR</button>
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="peixes" id="p12">
+            <div class="product-media" style="background-image:url('images/kit-inicial.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Kit Aquário Inicial</h4>
+              <p class="product-desc">Kit essencial para começar seu aquário com segurança, incluindo acessórios básicos para manutenção e cuidado diário.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">349,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="gatos" data-promocao="true" id="p13">
+            <div class="product-media" style="background-image:url('images/areiasilica.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Areia Sílica</h4>
+              <p class="product-desc">Areia higiênica de sílica com alta absorção e ótimo controle de odores para manter o ambiente do gato sempre mais seco.</p>
+              <div class="product-price">
+                <span class="price-original">R$ 79,90</span>
+                <div class="price-promo"><span class="price-currency">R$</span> <span class="price-value">58,90</span></div>
+              </div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="gatos" id="p14">
+            <div class="product-media" style="background-image:url('images/gatosfilhotes.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Ração Gatos Filhotes</h4>
+              <p class="product-desc">Fórmula desenvolvida para filhotes com nutrientes essenciais para crescimento saudável, energia e desenvolvimento equilibrado.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">129,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="cachorros" id="p15">
+            <div class="product-media" style="background-image:url('images/petiscodental.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Petisco Dental</h4>
+              <p class="product-desc">Snack funcional que auxilia na higiene bucal, ajudando a reduzir acúmulo de placa e tártaro no dia a dia.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">32,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="gatos" id="p16">
+            <div class="product-media" style="background-image:url('images/petiscosdeatum.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Petisco de Atum</h4>
+              <p class="product-desc">Petisco cremoso com sabor de atum para agradar gatos exigentes, ideal como recompensa ou reforço positivo.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">16,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="cachorros" data-promocao="true" id="p17">
+            <div class="product-media" style="background-image:url('images/petiscotreino.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Petisco para Treino</h4>
+              <p class="product-desc">Petisco prático em pequenos pedaços para treinos e comandos, com ótima aceitação e fácil porcionamento.</p>
+              <div class="product-price">
+                <span class="price-original">R$ 34,90</span>
+                <div class="price-promo"><span class="price-currency">R$</span> <span class="price-value">24,90</span></div>
+              </div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="passaros" id="p18">
+            <div class="product-media" style="background-image:url('images/psita.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Mix para Calopsita</h4>
+              <p class="product-desc">Composição balanceada de sementes selecionadas para calopsitas, contribuindo para vitalidade e bem-estar diário.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">27,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="cachorros" id="p19">
+            <div class="product-media" style="background-image:url('images/racaofilhote.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Ração Filhote Cães</h4>
+              <p class="product-desc">Alimento completo para fase de crescimento com proteínas de qualidade, vitaminas e minerais essenciais.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">94,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="gatos" data-promocao="true" id="p20">
+            <div class="product-media" style="background-image:url('images/raçãogatoscastrados.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Ração Gatos Castrados</h4>
+              <p class="product-desc">Fórmula específica para gatos castrados, com controle de peso e suporte ao equilíbrio do trato urinário.</p>
+              <div class="product-price">
+                <span class="price-original">R$ 249,90</span>
+                <div class="price-promo"><span class="price-currency">R$</span> <span class="price-value">189,90</span></div>
+              </div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="peixes" id="p21">
+            <div class="product-media" style="background-image:url('images/raçãokinguios.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Ração para Kinguios</h4>
+              <p class="product-desc">Alimento granulado para kinguios com nutrientes que ajudam na coloração, digestão e manutenção da saúde.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">29,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="cachorros" id="p22">
+            <div class="product-media" style="background-image:url('images/raçãosenior.png')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Ração Cães Sênior</h4>
+              <p class="product-desc">Nutrição para cães idosos com suporte para articulações, digestão leve e manutenção da massa corporal.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">219,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="passaros" id="p23">
+            <div class="product-media" style="background-image:url('images/sementescanarios.png')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Sementes para Canários</h4>
+              <p class="product-desc">Mistura selecionada para canários com boa aceitação e aporte nutricional para rotina equilibrada.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">22,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product-card" data-product data-category="cachorros" id="p24">
+            <div class="product-media" style="background-image:url('images/tapetehigienicocachorro.jpg')"></div>
+            <div class="product-body">
+              <button class="fav-btn" type="button" data-favorito aria-label="Favoritar"><img src="images/favorite.png" alt="Favoritar"></button>
+              <h4 class="product-title">Tapete Higiênico Cães</h4>
+              <p class="product-desc">Tapete com alta absorção e secagem rápida para higiene diária, ajudando a manter a casa limpa por mais tempo.</p>
+              <div class="product-price"><span class="price-currency">R$</span> <span class="price-value">64,90</span></div>
+              <div class="product-actions">
+                <button class="btn primary" type="button" data-carrinho>COMPRAR</button>
+              </div>
             </div>
           </article>
         </section>
       </main>
     </div>
 
+    <!-- Modal de Pesagem -->
+    <div class="weight-modal-overlay" id="weightModalOverlay">
+      <div class="weight-modal">
+        <div class="weight-modal-header">
+          <h3 class="weight-modal-title" id="weightModalTitle">Pesar Ração</h3>
+          <button class="weight-modal-close" type="button" id="weightModalClose" aria-label="Fechar">&times;</button>
+        </div>
+
+        <div class="weight-modal-tabs">
+          <button class="weight-tab-btn active" data-tab="by-weight">Por kg</button>
+          <button class="weight-tab-btn" data-tab="by-price">Por R$</button>
+        </div>
+
+        <div class="weight-modal-body">
+          <div class="weight-info">
+            <p class="weight-product-name" id="weightProductName">Ração SuperMix</p>
+            <div class="weight-pricing-display">
+              <span class="price-per-kg" id="pricePerKg">R$ 75,00 por kg</span>
+            </div>
+          </div>
+
+          <!-- TAB: Por kg -->
+          <div class="weight-tab-content active" data-tab="by-weight">
+            <div class="weight-input-group">
+              <label for="weightInputKg" class="weight-label">Quantidade (kg):</label>
+              <input 
+                type="number" 
+                id="weightInputKg" 
+                class="weight-input" 
+                min="0.1" 
+                max="100" 
+                step="0.1" 
+                placeholder="Digite o peso em kg"
+                value="1"
+              >
+            </div>
+
+            <div class="weight-total-price">
+              <span class="weight-total-label">Total:</span>
+              <span class="weight-total-value" id="weightTotalPrice">R$ 75,00</span>
+            </div>
+          </div>
+
+          <!-- TAB: Por R$ -->
+          <div class="weight-tab-content" data-tab="by-price">
+            <div class="weight-input-group">
+              <label for="weightInputPrice" class="weight-label">Valor em R$:</label>
+              <input 
+                type="number" 
+                id="weightInputPrice" 
+                class="weight-input" 
+                min="0.01" 
+                max="10000" 
+                step="0.01" 
+                placeholder="Digite o valor em reais"
+                value="75.00"
+              >
+            </div>
+
+            <div class="weight-total-price">
+              <span class="weight-total-label">Você receberá:</span>
+              <span class="weight-total-value" id="weightTotalWeight">1.00 kg</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="weight-modal-actions">
+          <button class="btn secondary" type="button" id="weightModalCancel">CANCELAR</button>
+          <button class="btn primary" type="button" id="weightModalAddCart">ADICIONAR AO CARRINHO</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <button class="chat-widget-button" id="chatWidgetBtn">
+      <img src="images/bolt.jpg" alt="BOLT" class="chat-widget-icon">
+    </button>
+    
+    <div class="chat-widget" id="chatWidget">
+        <div class="chat-header">
+          <h1>BOLT</h1>
+            <button class="chat-close-btn" id="chatCloseBtn">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Sua mensagem...">
+            <button class="chat-send-btn" id="chatSendBtn">→</button>
+        </div>
+    </div>
+
     <script src="js/app.js"></script>
+    <script src="js/consultarBot.js"></script>
   </body>
 </html>
