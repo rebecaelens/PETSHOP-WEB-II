@@ -1,6 +1,10 @@
 (() => {
   const AUTH_KEY = 'auth';
-  const API_BASE = 'http://localhost:3333/api';
+  const API_BASE =
+    window.PETSHOP_API_BASE ||
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:3333/api'
+      : 'https://petshop-web-ii.onrender.com/api');
 
   const getAuth = () => {
     try {
@@ -146,6 +150,7 @@
   });
 
   window.PetshopApi = {
+    apiBase: API_BASE,
     login,
     logout,
     me,

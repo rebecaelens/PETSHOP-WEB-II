@@ -12,6 +12,12 @@ const errorModalClose = document.querySelector("[data-senha-error-close]");
 const SIGNUP_EMAIL_KEY = 'signupEmail';
 const SIGNUP_CODE_KEY = 'signupCode';
 const api = window.PetshopApi || null;
+const API_BASE =
+  window.PETSHOP_API_BASE ||
+  api?.apiBase ||
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:3333/api'
+    : 'https://petshop-web-ii.onrender.com/api');
 
 const hintUpper = document.querySelector("[data-hint-upper]");
 const hintLower = document.querySelector("[data-hint-lower]");
@@ -150,7 +156,7 @@ if (form) {
       }
 
       try {
-        const response = await fetch('http://localhost:3333/api/auth/register-with-code', {
+        const response = await fetch(`${API_BASE}/auth/register-with-code`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
