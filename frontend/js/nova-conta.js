@@ -19,12 +19,6 @@ const RESEND_SECONDS = 30;
 const SIGNUP_EMAIL_KEY = 'signupEmail';
 const SIGNUP_CODE_KEY = 'signupCode';
 const api = window.PetshopApi || null;
-const API_BASE =
-  window.PETSHOP_API_BASE ||
-  api?.apiBase ||
-  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:3333/api'
-    : 'https://petshop-web-ii.onrender.com/api');
 
 let lastFocusedElement = null;
 let resendInterval = null;
@@ -159,7 +153,7 @@ if (novaContaForm) {
 
     try {
       if (!api) throw new Error('API indisponivel');
-      const sendResponse = await fetch(`${API_BASE}/auth/request-signup-code`, {
+      const sendResponse = await fetch('http://localhost:3333/api/auth/request-signup-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
@@ -233,7 +227,7 @@ if (codeForm) {
     }
 
     try {
-      const response = await fetch(`${API_BASE}/auth/verify-signup-code`, {
+      const response = await fetch('http://localhost:3333/api/auth/verify-signup-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, code })
@@ -277,7 +271,7 @@ if (resendButton) {
     if (!email) return;
 
     try {
-      const response = await fetch(`${API_BASE}/auth/request-signup-code`, {
+      const response = await fetch('http://localhost:3333/api/auth/request-signup-code', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })

@@ -8,37 +8,11 @@ const toAbsPath = (p) => {
   return path.join(process.cwd(), p);
 };
 
-const normalizeOrigin = (value) => {
-  const raw = String(value || '').trim();
-  if (!raw) return null;
-  if (raw === '*') return '*';
-
-  try {
-    return new URL(raw).origin;
-  } catch (_) {
-    return raw.replace(/\/+$/, '');
-  }
-};
-
-const parseCorsOrigins = (rawValue) => {
-  const raw = String(rawValue || '*');
-  const values = raw
-    .split(',')
-    .map((item) => normalizeOrigin(item))
-    .filter(Boolean);
-
-  if (!values.length) return ['*'];
-  return Array.from(new Set(values));
-};
-
-const corsOrigins = parseCorsOrigins(process.env.CORS_ORIGIN || '*');
-
 module.exports = {
   port: Number(process.env.PORT || 3333),
   nodeEnv: process.env.NODE_ENV || 'development',
   dbFile: toAbsPath(process.env.DB_FILE || './data/petshop.sqlite'),
-  corsOrigin: corsOrigins[0],
-  corsOrigins,
+  corsOrigin: process.env.CORS_ORIGIN || '*',
   email: {
     smtpHost: process.env.SMTP_HOST || '',
     smtpPort: Number(process.env.SMTP_PORT || 587),
