@@ -72,14 +72,21 @@ router.post('/request-signup-code', async (req, res, next) => {
     const codeHash = await bcrypt.hash(code, 10);
     const expiresAt = new Date(Date.now() + email.signupCodeExpiresMinutes * 60 * 1000).toISOString();
 
-    await db.run(
+    const insertResult = await db.run(
       'INSERT INTO signup_codes (email, code_hash, expires_at) VALUES (?, ?, ?)',
       emailValue,
       codeHash,
       expiresAt
     );
 
-    await sendSignupCodeEmail(emailValue, code);
+    try {
+      await sendSignupCodeEmail(emailValue, code);
+    } catch (sendErr) {
+      // Invalidate this code when SMTP fails so user is not blocked with unsent code.
+      await db.run('UPDATE signup_codes SET used_at = datetime(\'now\') WHERE id = ?', insertResult.lastID);
+      console.error('Falha ao enviar codigo por email:', sendErr);
+      return res.status(502).json({ message: 'Falha ao enviar email. Verifique o SMTP e tente novamente.' });
+    }
 
     return res.status(201).json({
       message: 'Codigo enviado para seu email'
