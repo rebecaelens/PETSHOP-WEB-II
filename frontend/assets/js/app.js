@@ -112,7 +112,7 @@ document.addEventListener("click", (event) => {
   const selectedCategory = (query.get('cat') || 'all').toLowerCase();
   const searchTerm = (query.get('q') || '').trim().toLowerCase();
 
-  const productCards = Array.from(document.querySelectorAll('[data-product]'));
+  const productsGrid = document.querySelector('.grid.products');
   const categoryLinks = Array.from(document.querySelectorAll('.category-list a'));
   const minPriceInput = document.querySelector('[data-filter-price-min]');
   const maxPriceInput = document.querySelector('[data-filter-price-max]');
@@ -182,6 +182,8 @@ document.addEventListener("click", (event) => {
   };
 
   const applyFilters = () => {
+    const productCards = Array.from(document.querySelectorAll('[data-product]'));
+
     productCards.forEach((card) => {
       const visible = matchesCategory(card) && matchesSearch(card) && matchesSidebarFilters(card);
       card.style.display = visible ? '' : 'none';
@@ -216,6 +218,20 @@ document.addEventListener("click", (event) => {
     const linkCategory = (new URL(href, window.location.origin).searchParams.get('cat') || 'all').toLowerCase();
     link.classList.toggle('is-active', linkCategory === selectedCategory);
   });
+
+  // Reaplica filtros quando os cards forem renderizados dinamicamente.
+  if (productsGrid && 'MutationObserver' in window) {
+    const observer = new MutationObserver(() => {
+      applyFilters();
+    });
+
+    observer.observe(productsGrid, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  document.addEventListener('petshop:products-rendered', applyFilters);
 })();
 
 (() => {

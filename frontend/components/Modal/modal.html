@@ -1,0 +1,64 @@
+<div class="weight-modal-overlay" id="weightModalOverlay">
+  <div class="weight-modal">
+    <div class="weight-modal-header">
+      <h3 class="weight-modal-title" id="weightModalTitle">Pesar Ração</h3>
+      <button class="weight-modal-close" type="button" id="weightModalClose" aria-label="Fechar">&times;</button>
+    </div>
+    <div class="weight-modal-tabs">
+      <button class="weight-tab-btn active" data-tab="by-weight">Por kg</button>
+      <button class="weight-tab-btn" data-tab="by-price">Por R$</button>
+    </div>
+    <div class="weight-modal-body">
+      <div class="weight-info">
+        <p class="weight-product-name" id="weightProductName">Ração SuperMix</p>
+        <div class="weight-pricing-display">
+          <span class="price-per-kg" id="pricePerKg">R$ 75,00 por kg</span>
+        </div>
+      </div>
+      <!-- TAB: Por kg -->
+      <div class="weight-tab-content active" data-tab="by-weight">
+        <div class="weight-input-group">
+          <label for="weightInputKg" class="weight-label">Quantidade (kg):</label>
+          <input 
+            type="number" 
+            id="weightInputKg" 
+            class="weight-input" 
+            min="0.1" 
+            max="100" 
+            step="0.1" 
+            placeholder="Digite o peso em kg"
+            value="1"
+          >
+        </div>
+        <div class="weight-total-price">
+          <span class="weight-total-label">Total:</span>
+          <span class="weight-total-value" id="weightTotalPrice">R$ 75,00</span>
+        </div>
+      </div>
+      <!-- TAB: Por R$ -->
+      <div class="weight-tab-content" data-tab="by-price">
+        <div class="weight-input-group">
+          <label for="weightInputPrice" class="weight-label">Valor em R$:</label>
+          <input 
+            type="number" 
+            id="weightInputPrice" 
+            class="weight-input" 
+            min="0.01" 
+            max="10000" 
+            step="0.01" 
+            placeholder="Digite o valor em reais"
+            value="75.00"
+          >
+        </div>
+        <div class="weight-total-price">
+          <span class="weight-total-label">Você receberá:</span>
+          <span class="weight-total-value" id="weightTotalWeight">1.00 kg</span>
+        </div>
+      </div>
+    </div>
+    <div class="weight-modal-actions">
+      <button class="btn secondary" type="button" id="weightModalCancel">CANCELAR</button>
+      <button class="btn primary" type="button" id="weightModalAddCart">ADICIONAR AO CARRINHO</button>
+    </div>
+  </div>
+</div>

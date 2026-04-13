@@ -162,47 +162,11 @@
     <script src="js/api.js"></script>
     <script>
       const productDatabase = {
-        p1: { name: 'Golden Premiun', price: 189.9, image: 'images/item2.png', desc: 'Uma ração seca completa e balanceada, desenvolvida para fornecer nutrição de qualidade para cães e gatos.' },
-        p2: { name: 'Ração SuperMix', price: 89.9, image: 'images/item3.png', desc: 'Ração seca completa e balanceada, formulada para oferecer nutrição adequada para cães e gatos.' },
-        p3: { name: 'Brinquedos para gatos', price: 79.9, image: 'images/item4.png', desc: 'Brinquedos desenvolvidos para estimular o instinto natural de caça e manter o pet ativo.' },
-        p4: { name: 'Focinheira para Cachorros', price: 89.9, image: 'images/item5.jpg', desc: 'Acessório essencial para manter seu pet seguro e confortável durante a caminhada.' },
-        p5: { name: 'Coleira Básica', price: 35.9, image: 'images/item1.png', desc: 'Acessório essencial para a identificação e segurança do pet no dia a dia.' },
-        p6: { name: 'Ração Filhotes', price: 169.9, image: 'images/Ração Filhotes.jpg', desc: 'Ração premium para filhotes com nutrientes essenciais para crescimento saudável.' },
-        p7: { name: 'Guia e Coleira Confort', price: 69.9, image: 'images/Guia e Coleira Confort.jpg', desc: 'Conjunto de guia e coleira com ajuste prático para passeios seguros e confortáveis.' },
-        p8: { name: 'Areia Higiênica Premium', price: 42.9, image: 'images/Areia Higiênica Premium.jpg', desc: 'Areia de alta absorção e controle de odor para manter a caixa limpa por mais tempo.' },
-        p9: { name: 'Arranhador Compacto', price: 119.9, image: 'images/Arranhador Compacto.jpg', desc: 'Arranhador compacto para estimular o comportamento natural dos gatos.' },
-        p10: { name: 'Mix de Sementes Premium', price: 34.9, image: 'images/Mix de Sementes Premium.png', desc: 'Seleção nutritiva de sementes para pássaros ornamentais com vitaminas e minerais.' },
-        p11: { name: 'Ração Flakes Tropical', price: 24.9, image: 'images/flakes.jpg', desc: 'Alimento em flocos para peixes tropicais, de fácil digestão e uso diário.' },
-        p12: { name: 'Kit Aquário Inicial', price: 349.9, image: 'images/kit-inicial.jpg', desc: 'Kit essencial para começar um aquário com acessórios básicos de manutenção.' },
-        p13: { name: 'Areia Sílica', price: 58.9, image: 'images/areiasilica.jpg', desc: 'Areia higiênica de sílica com alta absorção e ótimo controle de odores.' },
-        p14: { name: 'Ração Gatos Filhotes', price: 129.9, image: 'images/gatosfilhotes.jpg', desc: 'Fórmula para filhotes com nutrientes essenciais para crescimento saudável.' },
-        p15: { name: 'Petisco Dental', price: 32.9, image: 'images/petiscodental.jpg', desc: 'Snack funcional que auxilia na higiene bucal e redução de placa.' },
-        p16: { name: 'Petisco de Atum', price: 16.9, image: 'images/petiscosdeatum.jpg', desc: 'Petisco cremoso sabor atum, ideal como recompensa para gatos.' },
-        p17: { name: 'Petisco para Treino', price: 24.9, image: 'images/petiscotreino.jpg', desc: 'Petisco em pequenos pedaços para treinos e comandos no dia a dia.' },
-        p18: { name: 'Mix para Calopsita', price: 27.9, image: 'images/psita.jpg', desc: 'Composição balanceada de sementes selecionadas para calopsitas.' },
-        p19: { name: 'Ração Filhote Cães', price: 94.9, image: 'images/racaofilhote.jpg', desc: 'Alimento completo para fase de crescimento com proteínas e vitaminas.' },
-        p20: { name: 'Ração Gatos Castrados', price: 189.9, image: 'images/raçãogatoscastrados.jpg', desc: 'Fórmula para gatos castrados com controle de peso e trato urinário.' },
-        p21: { name: 'Ração para Kinguios', price: 29.9, image: 'images/raçãokinguios.jpg', desc: 'Alimento granulado para kinguios com suporte de coloração e digestão.' },
-        p22: { name: 'Ração Cães Sênior', price: 219.9, image: 'images/raçãosenior.png', desc: 'Nutrição para cães idosos com suporte para articulações e digestão leve.' },
-        p23: { name: 'Sementes para Canários', price: 22.9, image: 'images/sementescanarios.png', desc: 'Mistura selecionada para canários com boa aceitação e equilíbrio nutricional.' },
-        p24: { name: 'Tapete Higiênico Cães', price: 64.9, image: 'images/tapetehigienicocachorro.jpg', desc: 'Tapete com alta absorção e secagem rápida para higiene diária.' }
-      };
-
-      const normalizeText = (value) =>
-        String(value || '')
-          .normalize('NFD')
-          .replace(/[\u0300-\u036f]/g, '')
-          .toLowerCase()
-          .trim();
-
-      const findProductFromDatabase = (item) => {
-        const byId = productDatabase[item?.id];
-        if (byId) return byId;
-
-        const itemName = normalizeText(item?.name || item?.title);
-        if (!itemName) return null;
-
-        return Object.values(productDatabase).find((product) => normalizeText(product.name) === itemName) || null;
+        p1: { name: 'Golden Premiun', price: 240, image: 'images/item2.png', desc: 'Uma ração seca completa e balanceada, desenvolvida para fornecer nutrição de qualidade para cães e gatos.' },
+        p2: { name: 'Ração SuperMix', price: 100, image: 'images/item3.png', desc: 'Ração seca completa e balanceada, formulada para oferecer nutrição adequada para cães e gatos.' },
+        p3: { name: 'Brinquedos para gatos', price: 240, image: 'images/item4.png', desc: 'Brinquedos desenvolvidos para estimular o instinto natural de caça e manter o pet ativo.' },
+        p4: { name: 'Fucinheira para Cachorros', price: 240, image: 'images/item5.jpg', desc: 'Acessório essencial para manter seu pet seguro e confortável durante a caminhada.' },
+        p5: { name: 'Coleira Básica', price: 240, image: 'images/item1.png', desc: 'Acessório essencial para a identificação e segurança do pet no dia a dia.' }
       };
 
       const BASE_DELIVERY_FEE = 2;
@@ -344,10 +308,10 @@
       };
 
       const getCartItemViewData = (item) => {
-        const product = findProductFromDatabase(item) || {};
-        const name = product.name || item.name || item.title || 'Produto';
-        const desc = product.desc || item.desc || 'Produto adicionado ao carrinho.';
-        const image = product.image || item.image || 'images/cards.jpg';
+        const product = productDatabase[item.id] || {};
+        const name = item.name || item.title || product.name || 'Produto';
+        const desc = item.desc || product.desc || 'Produto adicionado ao carrinho.';
+        const image = item.image || product.image || 'images/cards.jpg';
         const unitPrice = Number.isFinite(Number(item.price)) ? Number(item.price) : Number(product.price) || 0;
 
         return { name, desc, image, unitPrice };
