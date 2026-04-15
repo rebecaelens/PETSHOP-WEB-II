@@ -37,6 +37,7 @@ module.exports = {
   port: Number(process.env.PORT || 3333),
   nodeEnv: process.env.NODE_ENV || 'development',
   dbFile: toAbsPath(process.env.DB_FILE || './data/petshop.sqlite'),
+  showSignupCodeInLog: String(process.env.SHOW_SIGNUP_CODE_IN_LOG || 'false').toLowerCase() === 'true',
   corsOrigin: corsOrigins[0],
   corsOrigins,
   email: {

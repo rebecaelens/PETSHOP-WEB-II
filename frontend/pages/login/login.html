@@ -10,12 +10,12 @@
       href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="../login/css/style.css" />
   </head>
   <body class="page-login">
     <header class="login-topbar">
       <div class="login-brand">
-        <img class="login-logo" src="images/logomr.png" alt="MR Racoes" />
+        <img class="login-logo" src="../carrinho/images/logomr.png" alt="MR Racoes" />
       </div>
       <div class="login-secure">
         <span class="login-secure-icon" aria-hidden="true">
@@ -39,7 +39,7 @@
           <div class="login-brand-tagline">Tudo para o seu Pet</div>
         </div>
 
-        <form class="login-form" action="principal.html" method="get">
+        <form class="login-form" action="../principal/principal.html" method="get">
           <input
             class="login-input"
             type="email"
@@ -87,7 +87,7 @@
           </div>
 
           <div class="login-forgot">
-            <a href="recuperar.html">Esqueci minha senha</a>
+            <a href="../recuperar/recuperar.html">Esqueci minha senha</a>
           </div>
 
           <button class="login-btn login-btn-muted" type="submit">Entrar</button>
@@ -96,12 +96,12 @@
             <span>Acesso Rapido com</span>
           </div>
 
-          <a class="login-btn login-btn-outline" href="nova-conta.html">Nova Conta</a>
+          <a class="login-btn login-btn-outline" href="../nova-conta/nova-conta.html">Nova Conta</a>
         </form>
       </section>
     </main>
-    <script src="js/password-toggle.js"></script>
-    <script src="js/api.js"></script>
+    <script src="../login/js/password-toggle.js"></script>
+    <script src="../login/js/api.js"></script>
     <script>
       const loginForm = document.querySelector('.login-form');
       const emailInput = document.querySelector('input[name="email"]');
@@ -125,7 +125,7 @@
           try {
             const user = await window.PetshopApi.login(email, password);
             localStorage.setItem('currentUser', user?.name || email.split('@')[0]);
-            window.location.href = 'principal.html';
+            window.location.href = '../principal/principal.html';
           } catch (err) {
             alert(err?.message || 'Nao foi possivel fazer login.');
           } finally {

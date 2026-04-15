@@ -10,11 +10,11 @@
     <header class="site-header">
       <div class="header-top container">
         <a href="principal.html" class="branding" aria-label="Voltar para o menu principal">
-          <img src="images/logomr.png" alt="MR Rações" class="logo-img" onerror="this.style.display='none'" />
+          <img src="../images/logomr.png" alt="MR Rações" class="logo-img" onerror="this.style.display='none'" />
           <div class="logo-badge">MR</div>
         </a>
         <div class="cart-header-title">
-          <img src="images/acesssec.png" alt="Acesso Seguro" class="secure-icon" />
+          <img src="../images/acesssec.png" alt="Acesso Seguro" class="secure-icon" />
           <span class="secure-text">Acesso Seguro</span>
         </div>
       </div>
@@ -110,7 +110,7 @@
             </form>
             <div class="delivery-total">
               <span class="delivery-total-label">
-                <img src="images/totalentr.png" alt="Total" class="delivery-total-icon" />
+                <img src="../images/totalentr.png" alt="Total" class="delivery-total-icon" />
                 Total
               </span>
               <strong id="delivery-total-price">R$ 2,00</strong>
@@ -133,7 +133,7 @@
             </div>
             <div class="summary-total">
               <span class="summary-total-label">
-                <img src="images/totalentr.png" alt="Total com a Entrega" class="summary-total-icon" />
+                <img src="../images/totalentr.png" alt="Total com a Entrega" class="summary-total-icon" />
                 Total com a Entrega
               </span>
               <strong id="total-price">R$ 0,00</strong>
@@ -162,11 +162,11 @@
     <script src="js/api.js"></script>
     <script>
       const productDatabase = {
-        p1: { name: 'Golden Premiun', price: 240, image: 'images/item2.png', desc: 'Uma ração seca completa e balanceada, desenvolvida para fornecer nutrição de qualidade para cães e gatos.' },
-        p2: { name: 'Ração SuperMix', price: 100, image: 'images/item3.png', desc: 'Ração seca completa e balanceada, formulada para oferecer nutrição adequada para cães e gatos.' },
-        p3: { name: 'Brinquedos para gatos', price: 240, image: 'images/item4.png', desc: 'Brinquedos desenvolvidos para estimular o instinto natural de caça e manter o pet ativo.' },
-        p4: { name: 'Fucinheira para Cachorros', price: 240, image: 'images/item5.jpg', desc: 'Acessório essencial para manter seu pet seguro e confortável durante a caminhada.' },
-        p5: { name: 'Coleira Básica', price: 240, image: 'images/item1.png', desc: 'Acessório essencial para a identificação e segurança do pet no dia a dia.' }
+        p1: { name: 'Golden Premiun', price: 240, image: '../images/item2.png', desc: 'Uma ração seca completa e balanceada, desenvolvida para fornecer nutrição de qualidade para cães e gatos.' },
+        p2: { name: 'Ração SuperMix', price: 100, image: '../images/item3.png', desc: 'Ração seca completa e balanceada, formulada para oferecer nutrição adequada para cães e gatos.' },
+        p3: { name: 'Brinquedos para gatos', price: 240, image: '../images/item4.png', desc: 'Brinquedos desenvolvidos para estimular o instinto natural de caça e manter o pet ativo.' },
+        p4: { name: 'Fucinheira para Cachorros', price: 240, image: '../images/item5.jpg', desc: 'Acessório essencial para manter seu pet seguro e confortável durante a caminhada.' },
+        p5: { name: 'Coleira Básica', price: 240, image: '../images/item1.png', desc: 'Acessório essencial para a identificação e segurança do pet no dia a dia.' }
       };
 
       const BASE_DELIVERY_FEE = 2;
@@ -311,7 +311,19 @@
         const product = productDatabase[item.id] || {};
         const name = item.name || item.title || product.name || 'Produto';
         const desc = item.desc || product.desc || 'Produto adicionado ao carrinho.';
-        const image = item.image || product.image || 'images/cards.jpg';
+        const resolveImagePath = (value) => {
+          const src = String(value || '').trim();
+          if (!src) return '../images/cards.jpg';
+          if (/^https?:\/\//i.test(src) || src.startsWith('data:') || src.startsWith('/')) {
+            return src;
+          }
+          if (src.startsWith('images/')) {
+            return `../${src}`;
+          }
+          return src;
+        };
+
+        const image = resolveImagePath(item.image || product.image);
         const unitPrice = Number.isFinite(Number(item.price)) ? Number(item.price) : Number(product.price) || 0;
 
         return { name, desc, image, unitPrice };
@@ -327,7 +339,7 @@
           cartContainer.classList.add('is-empty');
           container.innerHTML = `
             <section class="cart-empty-state" aria-label="Carrinho vazio">
-              <img src="images/carrinho.png" alt="Carrinho vazio" class="cart-empty-icon" />
+              <img src="../images/carrinho.png" alt="Carrinho vazio" class="cart-empty-icon" />
               <h2 class="cart-empty-title">Adicione produtos ao seu carrinho</h2>
               <p class="cart-empty-description">Que tal explorar nossas categorias ou buscar os produtos que estão na sua lista de desejos?</p>
               <a href="principal.html" class="btn primary cart-empty-action">Buscar</a>
@@ -368,13 +380,13 @@
                 <p>${view.desc}</p>
                 <div class="cart-product-controls">
                   ${item.isWeightBased ? 
-                    `<button class="qty-btn btn-remove" onclick="removeFromCart(${index})" title="Remover do carrinho"><img src="images/lixeira.png" alt="Remover" class="icon-trash"></button>` :
+                    `<button class="qty-btn btn-remove" onclick="removeFromCart(${index})" title="Remover do carrinho"><img src="../images/lixeira.png" alt="Remover" class="icon-trash"></button>` :
                     `<div class="qty-controller">
                        <button class="qty-btn qty-minus" onclick="updateQty(${index}, -1)" title="Diminuir quantidade">−</button>
                        <input type="number" value="${item.quantity}" readonly class="qty-input" />
                        <button class="qty-btn qty-plus" onclick="updateQty(${index}, 1)" title="Aumentar quantidade">+</button>
                      </div>
-                     <button class="btn-remove-qty" onclick="removeFromCart(${index})" title="Remover produto"><img src="images/lixeira.png" alt="Remover" class="icon-trash"></button>`
+                     <button class="btn-remove-qty" onclick="removeFromCart(${index})" title="Remover produto"><img src="../images/lixeira.png" alt="Remover" class="icon-trash"></button>`
                   }
                 </div>
               </div>
@@ -563,7 +575,10 @@
             return;
           }
 
-          alert('Seu pedido foi realizado com sucesso! Acompanhe o status na sua conta.');
+          const whatsappNumber = '5585998279694';
+          const whatsappMessage = encodeURIComponent('Ola! Acabei de confirmar meu pedido e quero acompanhar os detalhes.');
+          const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`;
+
           if (!isAuthenticated()) {
             localStorage.removeItem('cartItems');
           }
@@ -572,6 +587,8 @@
           updateCartBadge();
           btn.textContent = originalText;
           btn.disabled = false;
+
+          window.location.href = whatsappUrl;
         }, 1500);
       });
 

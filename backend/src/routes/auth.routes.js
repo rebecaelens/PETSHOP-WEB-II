@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const { z } = require('zod');
 const { getDb } = require('../db');
-const { email } = require('../config');
+const { email, showSignupCodeInLog } = require('../config');
 const { signAccessToken, signRefreshToken, verifyRefreshToken } = require('../utils/jwt');
 const { isEmailConfigured, sendSignupCodeEmail } = require('../utils/mailer');
 
@@ -81,6 +81,9 @@ router.post('/request-signup-code', async (req, res, next) => {
 
     try {
       await sendSignupCodeEmail(emailValue, code);
+      if (showSignupCodeInLog) {
+        console.log(`[DEBUG] Signup code for ${emailValue}: ${code}`);
+      }
     } catch (sendErr) {
       // Invalidate this code when SMTP fails so user is not blocked with unsent code.
       await db.run('UPDATE signup_codes SET used_at = datetime(\'now\') WHERE id = ?', insertResult.lastID);
