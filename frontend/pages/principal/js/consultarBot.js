@@ -1,3 +1,12 @@
+// Abrir chat automaticamente se vier de outra página com parâmetro especial
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('abrirChatbolt') === '1') {
+    setTimeout(() => {
+      openChatWidget();
+    }, 300); // pequeno delay para garantir que o DOM carregou
+  }
+});
 const chatWidget = document.getElementById('chatWidget');
 const chatWidgetBtn = document.getElementById('chatWidgetBtn');
 const chatCloseBtn = document.getElementById('chatCloseBtn');

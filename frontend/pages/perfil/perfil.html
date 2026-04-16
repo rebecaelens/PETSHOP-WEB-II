@@ -1,3 +1,14 @@
+    <!-- Modal de escolha de atendimento -->
+    <div id="modal-consulta" class="modal-consulta" style="display:none;position:fixed;z-index:1000;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);align-items:center;justify-content:center;">
+      <div style="background:#fff;padding:2rem 1.5rem;border-radius:12px;max-width:90vw;width:350px;box-shadow:0 2px 16px #0002;text-align:center;">
+        <h2 style="margin-bottom:1rem;font-size:1.2rem;">Quer utilizar o nosso chatbolt ou falar com um dos atendentes?</h2>
+        <div style="display:flex;gap:1rem;justify-content:center;">
+          <button id="btn-chatbolt" class="btn primary" style="flex:1;">Chatbolt</button>
+          <button id="btn-whatsapp" class="btn secondary" style="flex:1;">WhatsApp</button>
+        </div>
+        <button id="btn-fechar-modal-consulta" style="margin-top:1.5rem;background:none;border:none;color:#888;font-size:1rem;cursor:pointer;">Fechar</button>
+      </div>
+    </div>
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
@@ -67,10 +78,6 @@
             <span class="menu-icon"><img src="../images/chat.png" alt="Consultar" /></span>
             <span class="menu-text">Consultar</span>
           </a>
-          <a class="menu-item" href="precos.html">
-            <span class="menu-icon"><img src="../images/preço.png" alt="Preços" /></span>
-            <span class="menu-text">Preços</span>
-          </a>
           <a class="menu-item active" href="perfil.html">
             <span class="menu-icon"><img src="../images/user-black.png" alt="Perfil" /></span>
             <span class="menu-text">Perfil</span>
@@ -116,5 +123,36 @@
     <script src="js/api.js"></script>
     <script src="js/app.js"></script>
     <script src="js/perfil.js"></script>
+    <script>
+      // Modal de consulta: abre ao clicar em "Consultar" no menu lateral
+      document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('modal-consulta');
+        const btnChatbolt = document.getElementById('btn-chatbolt');
+        const btnWhatsapp = document.getElementById('btn-whatsapp');
+        const btnFechar = document.getElementById('btn-fechar-modal-consulta');
+        // Intercepta clique no menu Consultar
+        document.querySelectorAll('.menu-item').forEach(function(link) {
+          if (link.textContent.trim().includes('Consultar')) {
+            link.addEventListener('click', function(e) {
+              e.preventDefault();
+              modal.style.display = 'flex';
+            });
+          }
+        });
+        btnChatbolt.onclick = function() {
+          window.location.href = '../principal/principal.html?abrirChatbolt=1';
+        };
+        btnWhatsapp.onclick = function() {
+          window.open('https://wa.me/5585998279694', '_blank');
+        };
+        btnFechar.onclick = function() {
+          modal.style.display = 'none';
+        };
+        // Fecha modal ao clicar fora
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) modal.style.display = 'none';
+        });
+      });
+    </script>
   </body>
 </html>
