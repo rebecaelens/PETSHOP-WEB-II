@@ -1,5 +1,5 @@
 const nodemailer = require('nodemailer');
-const { email } = require('../config');
+const { email, showSignupCodeInLog } = require('../config');
 
 const isEmailConfigured = () => Boolean(email.smtpHost && email.smtpUser && email.smtpPass);
 
@@ -29,10 +29,16 @@ async function sendSignupCodeEmail(toEmail, code) {
   const transport = getTransporter();
   const expiresMinutes = email.signupCodeExpiresMinutes;
 
+  // Quando em modo dev/DEBUG (showSignupCodeInLog), incluímos o código
+  // também no assunto do email para facilitar a visualização na caixa de entrada.
+  const subject = showSignupCodeInLog
+    ? `Codigo de verificacao: ${code} - MR Racoes`
+    : 'Codigo de verificacao - MR Racoes';
+
   await transport.sendMail({
     from: email.fromEmail,
     to: toEmail,
-    subject: 'Codigo de verificacao - MR Racoes',
+    subject,
     text: `Seu codigo de verificacao e: ${code}. Ele expira em ${expiresMinutes} minutos.`,
     html: `
       <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #222;">
