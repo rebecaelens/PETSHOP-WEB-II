@@ -24,6 +24,8 @@ Preencha as variaveis SMTP no `.env` para envio real de codigo por e-mail:
 - `SMTP_PASS`
 - `SMTP_FROM`
 
+Se estiver usando Gmail, use um app password da conta e confirme que as mesmas variaveis existem no ambiente de producao do Render. O navegador pode mostrar um `204` no preflight `OPTIONS`; isso e normal e nao indica falha no envio.
+
 ## 3. Rodar
 
 ```bash

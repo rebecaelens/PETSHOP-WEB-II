@@ -5,21 +5,31 @@ const isEmailConfigured = () => Boolean(email.smtpHost && email.smtpUser && emai
 
 let transporter = null;
 
+function getTransportOptions() {
+  const options = {
+    host: email.smtpHost,
+    port: email.smtpPort,
+    secure: email.smtpSecure,
+    auth: {
+      user: email.smtpUser,
+      pass: email.smtpPass
+    }
+  };
+
+  if (String(email.smtpHost).toLowerCase() === 'smtp.gmail.com') {
+    options.service = 'gmail';
+  }
+
+  return options;
+}
+
 function getTransporter() {
   if (!isEmailConfigured()) {
     throw new Error('Servico de email nao configurado (SMTP_HOST/SMTP_USER/SMTP_PASS)');
   }
 
   if (!transporter) {
-    transporter = nodemailer.createTransport({
-      host: email.smtpHost,
-      port: email.smtpPort,
-      secure: email.smtpSecure,
-      auth: {
-        user: email.smtpUser,
-        pass: email.smtpPass
-      }
-    });
+    transporter = nodemailer.createTransport(getTransportOptions());
   }
 
   return transporter;

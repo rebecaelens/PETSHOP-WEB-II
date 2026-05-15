@@ -87,8 +87,24 @@ router.post('/request-signup-code', async (req, res, next) => {
     } catch (sendErr) {
       // Invalidate this code when SMTP fails so user is not blocked with unsent code.
       await db.run('UPDATE signup_codes SET used_at = datetime(\'now\') WHERE id = ?', insertResult.lastID);
-      console.error('Falha ao enviar codigo por email:', sendErr);
-      return res.status(502).json({ message: 'Falha ao enviar email. Verifique o SMTP e tente novamente.' });
+      console.error('Falha ao enviar codigo por email:', {
+        message: sendErr?.message,
+        code: sendErr?.code,
+        response: sendErr?.response,
+        command: sendErr?.command
+      });
+
+      let message = 'Falha ao enviar email. Verifique o SMTP e tente novamente.';
+
+      if (sendErr?.code === 'EAUTH') {
+        message = 'Falha na autenticacao SMTP. Verifique SMTP_USER e SMTP_PASS.';
+      } else if (sendErr?.code === 'ESOCKET') {
+        message = 'Falha na conexao SMTP. Verifique SMTP_HOST e SMTP_PORT.';
+      } else if (sendErr?.code === 'ECONNECTION') {
+        message = 'Nao foi possivel conectar no servidor SMTP.';
+      }
+
+      return res.status(502).json({ message });
     }
 
     return res.status(201).json({
